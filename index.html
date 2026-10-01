@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Share the Moment</title>
 
+  <!-- 📱 PWA / ホーム画面用設定 (Web App モード & アイコン指定) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="ShareMoment">
+  <!-- 🖼️ 【重要】ホーム画面に追加した際のアイコン画像URL（180x180px以上の正方形画像を推奨） -->
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w500">
+  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w500">
+
   <!-- 🖋️ 高級感のあるGoogle Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,7 +35,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 1. 最背面：大人っぽくシックで洗練されたくすみグラデーション背景 */
+    /* 🌈 最背面：大人っぽくシックで洗練されたくすみグラデーション背景 */
     body {
       font-family: var(--font-sans);
       min-height: 100vh;
@@ -49,7 +57,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* 🎬 2. 背景スライドショー層 */
+    /* 🎬 背景スライドショー層 */
     #bg-slideshow {
       position: fixed;
       top: 0;
@@ -97,6 +105,22 @@
       transition: all 0.3s ease;
     }
 
+    /* 画面切り替え時のスムーズアニメーションクラス */
+    .screen-view {
+      animation: fadeInSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeInSmooth {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
     .header-img {
       width: 100%;
       height: 110px;
@@ -133,7 +157,7 @@
       text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
     }
 
-    /* 📦 シャンパンゴールド調の枠で囲まれたチャットコンテナ */
+    /* 📦 チャットコンテナ */
     .chat-wrapper {
       position: relative;
       background: rgba(255, 255, 255, 0.25);
@@ -147,7 +171,7 @@
       overflow: hidden;
     }
 
-    /* ✨ 幻想的なシャンパンゴールドの光の粒子（気泡）アニメーション */
+    /* ✨ 光の粒子演出 */
     .glimmer-container {
       position: absolute;
       top: 0;
@@ -314,7 +338,7 @@
       padding-left: 0.4em;
     }
 
-    /* 🏷️️ 卓番号選択ボタン */
+    /* 🏷️ 卓番号選択ボタン */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 18px;
@@ -520,6 +544,7 @@
       overflow: hidden;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       border: 1px solid rgba(255, 255, 255, 0.6);
+      animation: fadeInSmooth 0.3s ease forwards;
     }
 
     .preview-item img {
@@ -668,7 +693,7 @@
   <div class="container">
     
     <!-- 画面1: 選択画面 -->
-    <div id="select-screen">
+    <div id="select-screen" class="screen-view">
       <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
       
       <div class="title-area">
@@ -676,9 +701,9 @@
         <h2>みんなの思い出を集めよう</h2>
       </div>
 
-      <!-- 📦 大人っぽいシャンパンゴールド調のチャットコンテナ -->
+      <!-- 📦 チャットコンテナ -->
       <div class="chat-wrapper">
-        <!-- ✨ 幻想的な光の粒子演出 -->
+        <!-- ✨ 光の粒子演出 -->
         <div class="glimmer-container">
           <div class="particle"></div>
           <div class="particle"></div>
@@ -729,7 +754,7 @@
         <input type="hidden" id="table-no" value="">
       </div>
 
-      <!-- ✏️ 任意ニックネーム入力欄 -->
+      <!-- ✏️️ 任意ニックネーム入力欄 -->
       <div class="input-group">
         <label for="user-name">お名前・ニックネーム（任意）</label>
         <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
@@ -756,7 +781,7 @@
       <div id="preview-grid"></div>
 
       <!-- 写真追加ボタン -->
-      <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()">写真を追加する</button>
+      <button id="add-btn" class="btn btn-add" onclick="triggerAddPhotos()">写真を追加する</button>
 
       <!-- アップロード開始ボタン -->
       <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始する</button>
@@ -804,8 +829,20 @@
   </div>
 
   <script>
-    // 🔗 【重要】デプロイしたGASの「ウェブアプリURL」をここに設定してください
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
+    // 🔗 【重要】デプロイしたGASの「ウェブアプリURL」を設定してください
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwqVSo4KByiRAtk8f2l7k1v7rI11U-f-mD-7C_1/exec";
+
+    // 📳 スマホのハプティック（振動）フィードバック制御
+    function vibrate(pattern = 15) {
+      if ('vibrate' in navigator) {
+        try {
+          navigator.vibrate(pattern);
+        } catch (e) {
+          // 非対応端末対策
+        }
+      }
+    }
+
     const bgImages = [
       'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
       'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
@@ -865,6 +902,7 @@
     }
 
     function openTableModal() {
+      vibrate(12);
       document.getElementById('table-modal').classList.add('active');
     }
 
@@ -874,11 +912,13 @@
 
     function closeTableModalOnOutside(e) {
       if (e.target.id === 'table-modal') {
+        vibrate(8);
         closeTableModal();
       }
     }
 
     function selectTableListItem(val, element) {
+      vibrate([15, 30, 15]); // 軽快な選択フィードバック
       document.getElementById('table-no').value = val;
       
       const triggerBtn = document.getElementById('table-trigger');
@@ -929,8 +969,10 @@
     const thankyouScreen = document.getElementById('thankyou-screen');
 
     function handleFileSelectClick() {
+      vibrate(15);
       const tableNo = tableNoInput.value;
       if (!tableNo) {
+        vibrate([30, 50, 30]); // エラー振動
         selectStatus.innerText = '卓番号を選択してください';
         selectStatus.style.color = '#e11d48';
         openTableModal();
@@ -940,10 +982,16 @@
       fileInput.click();
     }
 
+    function triggerAddPhotos() {
+      vibrate(15);
+      fileInput.click();
+    }
+
     fileInput.addEventListener('change', function(e) {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
       
+      vibrate(20);
       selectedFiles = selectedFiles.concat(files);
       goToConfirmScreen();
     });
@@ -954,21 +1002,30 @@
         return;
       }
       renderPreviews();
-      selectScreen.style.display = 'none';
-      confirmScreen.style.display = 'block';
-      thankyouScreen.style.display = 'none';
+      
+      switchScreen(selectScreen, confirmScreen);
       window.scrollTo(0, 0);
     }
 
     function goToSelectScreen() {
-      selectScreen.style.display = 'block';
-      confirmScreen.style.display = 'none';
-      thankyouScreen.style.display = 'none';
+      switchScreen(confirmScreen, selectScreen);
       fileInput.value = '';
       window.scrollTo(0, 0);
     }
 
+    /* 画面切り替えの極上滑らかトランジション関数 */
+    function switchScreen(fromEl, toEl) {
+      fromEl.style.display = 'none';
+      fromEl.classList.remove('screen-view');
+      
+      toEl.style.display = 'block';
+      // 再アニメーション用トリガー
+      void toEl.offsetWidth;
+      toEl.classList.add('screen-view');
+    }
+
     function resetAllSelection() {
+      vibrate(25);
       selectedFiles = [];
       fileInput.value = '';
       goToSelectScreen();
@@ -1002,6 +1059,7 @@
     }
 
     function removeFile(index) {
+      vibrate(20);
       selectedFiles.splice(index, 1);
       if (selectedFiles.length === 0) {
         goToSelectScreen();
@@ -1017,7 +1075,6 @@
       if (text) progressText.innerText = text;
     }
 
-    // 🌐 GASのAPI（doPost）へfetchで通信する関数
     function sendBatchToGas(batchData, tableNo, userName, targetFolderId) {
       const payload = {
         chunk: batchData,
@@ -1042,6 +1099,7 @@
     }
 
     async function startUpload() {
+      vibrate([20, 40, 20]); // 開始バイブ
       const tableNo = tableNoInput.value; 
       const userName = userNameInput.value.trim();
 
@@ -1080,10 +1138,11 @@
 
           if (currentChunkIndex === totalChunks) {
             updateProgress(100, `送信完了 (${totalPhotos}/${totalPhotos}枚)`);
+            vibrate([50, 100, 50, 100, 50]); // 成功時の歓喜振動パターン
+
             setTimeout(() => {
               progressContainer.style.display = 'none';
-              confirmScreen.style.display = 'none';
-              thankyouScreen.style.display = 'block';
+              switchScreen(confirmScreen, thankyouScreen);
               window.scrollTo(0, 0);
             }, 300);
 
@@ -1105,6 +1164,7 @@
         }
 
       } catch (err) {
+        vibrate([100, 50, 100]); // エラー振動
         progressContainer.style.display = 'none';
         showError('送信に失敗しました: ' + (err.message || err));
       }
@@ -1163,6 +1223,7 @@
     }
 
     function resetForm() {
+      vibrate(15);
       selectedFiles = [];
       previewGrid.innerHTML = '';
       uploadBtn.style.display = 'flex';
@@ -1174,11 +1235,10 @@
       progressContainer.style.display = 'none';
       updateProgress(0, '');
 
-      thankyouScreen.style.display = 'none';
-      confirmScreen.style.display = 'none';
-      selectScreen.style.display = 'block';
+      switchScreen(thankyouScreen, selectScreen);
       window.scrollTo(0, 0);
     }
   </script>
 </body>
+  
 </html>
