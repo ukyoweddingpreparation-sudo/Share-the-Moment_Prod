@@ -5,17 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Share the Moment</title>
 
-  <!-- 📱 PWA / ホーム画面用設定 (Web App モード & アイコン指定) -->
+  <!-- 📱 PWA / ホーム画面用設定 -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ShareMoment">
-  <!-- 🖼️ 【重要】ホーム画面に追加した際のアイコン画像URL（180x180px以上の正方形画像を推奨） -->
-  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w500">
-  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w500">
+  <meta name="mobile-web-app-capable" content="yes">
 
-  <!-- 🖋️ 高級感のあるGoogle Fonts -->
+  <!-- 🖼️ アイコン設定（1行目: iPhoneホーム用 / 2行目: ファビコン・Android用） -->
+  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1tQApnpOCKHq8ch3KFtiIxXV7WZYImOLU&sz=w500">
+  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1tQApnpOCKHq8ch3KFtiIxXV7WZYImOLU&sz=w500">
+
+  <!-- ⚡ 高速化・再起動時の読み込み対策 (プリコネクト & ドメイン事前解決) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://drive.google.com">
+  <link rel="dns-prefetch" href="https://drive.google.com">
+
+  <!-- 🖋️ Google Fonts (font-display=swap でレンダリング速度向上) -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -35,7 +41,7 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 最背面：大人っぽくシックで洗練されたくすみグラデーション背景 */
+    /* 🌈 最背面背景 */
     body {
       font-family: var(--font-sans);
       min-height: 100vh;
@@ -57,7 +63,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* 🎬 背景スライドショー層 */
+    /* 🎬 背景スライドショー */
     #bg-slideshow {
       position: fixed;
       top: 0;
@@ -87,7 +93,7 @@
       opacity: 0.50;
     }
 
-    /* 🌟 大枠（メインカード） */
+    /* 🌟 メインカード */
     .container {
       width: 100%;
       max-width: 380px;
@@ -105,7 +111,6 @@
       transition: all 0.3s ease;
     }
 
-    /* 画面切り替え時のスムーズアニメーションクラス */
     .screen-view {
       animation: fadeInSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
@@ -199,23 +204,11 @@
     .particle:nth-child(5) { left: 90%; width: 11px; height: 11px; animation-duration: 7.8s; animation-delay: 2.5s; }
 
     @keyframes floatSparkle {
-      0% {
-        transform: translateY(0) scale(0.6);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.75;
-      }
-      50% {
-        transform: translateY(-130px) scale(1.1);
-      }
-      80% {
-        opacity: 0.75;
-      }
-      100% {
-        transform: translateY(-260px) scale(0.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      20% { opacity: 0.75; }
+      50% { transform: translateY(-130px) scale(1.1); }
+      80% { opacity: 0.75; }
+      100% { transform: translateY(-260px) scale(0.5); opacity: 0; }
     }
 
     /* 💬 チャットエリア */
@@ -227,21 +220,26 @@
       gap: 12px;
     }
 
+    /* ⚡ チャット演出改善：初期状態で完全非表示（opacity:0）にし、アニメーションで順番に登場させる */
     .chat-row {
       display: flex;
       align-items: flex-start;
       gap: 8px;
       opacity: 0;
-      transform: translateY(12px);
-      animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      transform: translateY(14px);
+      animation: chatAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .chat-row:nth-child(1) { animation-delay: 0s; }
-    .chat-row:nth-child(2) { animation-delay: 2s; }
-    .chat-row:nth-child(3) { animation-delay: 4s; }
+    .chat-row:nth-child(1) { animation-delay: 0.2s; }
+    .chat-row:nth-child(2) { animation-delay: 2.2s; }
+    .chat-row:nth-child(3) { animation-delay: 4.2s; }
 
     @keyframes chatAppear {
-      to {
+      0% {
+        opacity: 0;
+        transform: translateY(14px);
+      }
+      100% {
         opacity: 1;
         transform: translateY(0);
       }
@@ -338,7 +336,6 @@
       padding-left: 0.4em;
     }
 
-    /* 🏷️ 卓番号選択ボタン */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 18px;
@@ -370,7 +367,7 @@
       font-weight: 700;
     }
 
-    /* 🪟 モーダルオーバーレイ */
+    /* 🪟 モーダル */
     .modal-overlay {
       position: fixed;
       top: 0;
@@ -467,7 +464,6 @@
       opacity: 1;
     }
 
-    /* ✏️ 入力フィールド */
     .text-input-field {
       width: 100%;
       padding: 10px 14px;
@@ -524,7 +520,6 @@
 
     input[type="file"] { display: none; }
 
-    /* 📱 プレビューエリア */
     #preview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -574,7 +569,6 @@
       backdrop-filter: blur(2px);
     }
 
-    /* 💎 ボタン */
     .btn {
       width: 100%;
       padding: 13px 16px;
@@ -605,10 +599,6 @@
       border: 1px solid rgba(255, 255, 255, 0.6);
       box-shadow: 0 6px 18px rgba(184, 134, 11, 0.25);
       margin-top: 6px;
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.95) 0%, rgba(184, 134, 11, 0.95) 100%);
     }
 
     .btn-add {
@@ -683,6 +673,33 @@
       display: block;
       line-height: 1;
     }
+
+    .pwa-prompt-banner {
+      display: none;
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--gold-border);
+      border-radius: 12px;
+      text-align: center;
+      font-size: 0.76rem;
+      color: #334155;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      animation: fadeInSmooth 0.5s ease forwards;
+    }
+
+    .pwa-prompt-btn {
+      margin-top: 6px;
+      padding: 6px 12px;
+      background: #8c7336;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -703,7 +720,6 @@
 
       <!-- 📦 チャットコンテナ -->
       <div class="chat-wrapper">
-        <!-- ✨ 光の粒子演出 -->
         <div class="glimmer-container">
           <div class="particle"></div>
           <div class="particle"></div>
@@ -712,9 +728,7 @@
           <div class="particle"></div>
         </div>
 
-        <!-- 💬 LINE風チャットエリア -->
         <div class="chat-container">
-          <!-- 1番目：左側（Ukyo様） -->
           <div class="chat-row">
             <img src="https://drive.google.com/thumbnail?id=1_bhJPsWxdp9qnhikiRLRtwqFyjpKTs1N&sz=w200" class="chat-avatar-img" alt="Ukyo">
             <div class="chat-content">
@@ -723,7 +737,6 @@
             </div>
           </div>
 
-          <!-- 2番目：右側（Karin様） -->
           <div class="chat-row chat-right">
             <img src="https://drive.google.com/thumbnail?id=17B-KT1giU8D3bfbvUQ3T7QfrT1UV58io&sz=w200" class="chat-avatar-img" alt="Karin">
             <div class="chat-content">
@@ -732,7 +745,6 @@
             </div>
           </div>
 
-          <!-- 3番目：左側（Ukyo & Karin様） -->
           <div class="chat-row">
             <img src="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w200" class="chat-avatar-img" alt="新郎新婦">
             <div class="chat-content">
@@ -754,7 +766,7 @@
         <input type="hidden" id="table-no" value="">
       </div>
 
-      <!-- ✏️️ 任意ニックネーム入力欄 -->
+      <!-- ✏️ 任意ニックネーム入力欄 -->
       <div class="input-group">
         <label for="user-name">お名前・ニックネーム（任意）</label>
         <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
@@ -767,6 +779,12 @@
       <input type="file" id="file-input" accept="image/*" multiple>
 
       <div id="select-status" style="font-size: 0.78rem; text-align: center; font-weight: 600; margin-top: 6px;"></div>
+
+      <!-- 📲 ホーム画面追加ガイドバナー -->
+      <div id="pwa-banner" class="pwa-prompt-banner">
+        <span id="pwa-banner-text">📲 ホーム画面に追加すると次回からすぐ開けます</span>
+        <button id="pwa-banner-btn" class="pwa-prompt-btn" style="display:none;" onclick="installPWA()">ホーム画面に追加</button>
+      </div>
     </div>
 
     <!-- 画面2: プレビュー確認＆アップロード画面 -->
@@ -777,19 +795,12 @@
       </div>
       <p class="subtitle" id="selected-summary" style="font-size: 0.8rem; text-align: center; color: #475569; margin-bottom: 10px;">全0枚の写真を選択中</p>
 
-      <!-- プレビュー表示エリア -->
       <div id="preview-grid"></div>
 
-      <!-- 写真追加ボタン -->
       <button id="add-btn" class="btn btn-add" onclick="triggerAddPhotos()">写真を追加する</button>
-
-      <!-- アップロード開始ボタン -->
       <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始する</button>
-      
-      <!-- リセットボタン -->
       <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()">最初から選び直す</button>
 
-      <!-- 📊 プログレスバー -->
       <div id="progress-container" class="progress-container">
         <div class="progress-bar-bg">
           <div id="progress-bar-fill" class="progress-bar-fill"></div>
@@ -822,24 +833,16 @@
   <!-- 🪟 卓番号選択モーダル -->
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
     <div class="modal-content">
-      <div class="table-list-container" id="table-list-container">
-        <!-- 縦並びリスト（卓A〜卓R） -->
-      </div>
+      <div class="table-list-container" id="table-list-container"></div>
     </div>
   </div>
 
   <script>
-    // 🔗 【重要】デプロイしたGASの「ウェブアプリURL」を設定してください
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwqVSo4KByiRAtk8f2l7k1v7rI11U-f-mD-7C_1/exec";
 
-    // 📳 スマホのハプティック（振動）フィードバック制御
     function vibrate(pattern = 15) {
       if ('vibrate' in navigator) {
-        try {
-          navigator.vibrate(pattern);
-        } catch (e) {
-          // 非対応端末対策
-        }
+        try { navigator.vibrate(pattern); } catch (e) {}
       }
     }
 
@@ -901,6 +904,43 @@
       });
     }
 
+    let deferredPrompt = null;
+
+    function initPWAInstaller() {
+      const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
+      if (isStandalone) return;
+
+      const banner = document.getElementById('pwa-banner');
+      const bannerText = document.getElementById('pwa-banner-text');
+      const bannerBtn = document.getElementById('pwa-banner-btn');
+      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+      if (isiOS) {
+        bannerText.innerHTML = "📲 画面下部アイコン <b style='color:#8c7336;'>[共有]</b> ➔ <b style='color:#8c7336;'>[ホーム画面に追加]</b> でアイコンを登録できます";
+        banner.style.display = 'block';
+      } else {
+        window.addEventListener('beforeinstallprompt', (e) => {
+          e.preventDefault();
+          deferredPrompt = e;
+          bannerText.innerText = "📲 ホーム画面にアプリを追加できます";
+          bannerBtn.style.display = 'inline-block';
+          banner.style.display = 'block';
+        });
+      }
+    }
+
+    function installPWA() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            document.getElementById('pwa-banner').style.display = 'none';
+          }
+          deferredPrompt = null;
+        });
+      }
+    }
+
     function openTableModal() {
       vibrate(12);
       document.getElementById('table-modal').classList.add('active');
@@ -918,7 +958,7 @@
     }
 
     function selectTableListItem(val, element) {
-      vibrate([15, 30, 15]); // 軽快な選択フィードバック
+      vibrate([15, 30, 15]);
       document.getElementById('table-no').value = val;
       
       const triggerBtn = document.getElementById('table-trigger');
@@ -945,6 +985,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initBgSlideshow();
       initTableList();
+      initPWAInstaller();
     });
 
     let selectedFiles = [];
@@ -972,7 +1013,7 @@
       vibrate(15);
       const tableNo = tableNoInput.value;
       if (!tableNo) {
-        vibrate([30, 50, 30]); // エラー振動
+        vibrate([30, 50, 30]);
         selectStatus.innerText = '卓番号を選択してください';
         selectStatus.style.color = '#e11d48';
         openTableModal();
@@ -1002,7 +1043,6 @@
         return;
       }
       renderPreviews();
-      
       switchScreen(selectScreen, confirmScreen);
       window.scrollTo(0, 0);
     }
@@ -1013,13 +1053,11 @@
       window.scrollTo(0, 0);
     }
 
-    /* 画面切り替えの極上滑らかトランジション関数 */
     function switchScreen(fromEl, toEl) {
       fromEl.style.display = 'none';
       fromEl.classList.remove('screen-view');
       
       toEl.style.display = 'block';
-      // 再アニメーション用トリガー
       void toEl.offsetWidth;
       toEl.classList.add('screen-view');
     }
@@ -1099,7 +1137,7 @@
     }
 
     async function startUpload() {
-      vibrate([20, 40, 20]); // 開始バイブ
+      vibrate([20, 40, 20]);
       const tableNo = tableNoInput.value; 
       const userName = userNameInput.value.trim();
 
@@ -1138,7 +1176,7 @@
 
           if (currentChunkIndex === totalChunks) {
             updateProgress(100, `送信完了 (${totalPhotos}/${totalPhotos}枚)`);
-            vibrate([50, 100, 50, 100, 50]); // 成功時の歓喜振動パターン
+            vibrate([50, 100, 50, 100, 50]);
 
             setTimeout(() => {
               progressContainer.style.display = 'none';
@@ -1164,7 +1202,7 @@
         }
 
       } catch (err) {
-        vibrate([100, 50, 100]); // エラー振動
+        vibrate([100, 50, 100]);
         progressContainer.style.display = 'none';
         showError('送信に失敗しました: ' + (err.message || err));
       }
@@ -1240,5 +1278,4 @@
     }
   </script>
 </body>
-  
 </html>
