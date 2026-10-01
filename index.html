@@ -11,17 +11,17 @@
   <meta name="apple-mobile-web-app-title" content="ShareMoment">
   <meta name="mobile-web-app-capable" content="yes">
 
-  <!-- 🖼️ アイコン設定（1行目: iPhoneホーム用 / 2行目: ファビコン・Android用） -->
-  <link rel="apple-touch-icon" href="https://drive.google.com/thumbnail?id=1tQApnpOCKHq8ch3KFtiIxXV7WZYImOLU&sz=w500">
-  <link rel="icon" type="image/png" href="https://drive.google.com/thumbnail?id=1tQApnpOCKHq8ch3KFtiIxXV7WZYImOLU&sz=w500">
+  <!-- 🖼️ 1. アプリ用アイコン -->
+  <link rel="apple-touch-icon" href="./App-icon.jpg">
+  <link rel="icon" type="image/jpeg" href="./App-icon.jpg">
 
-  <!-- ⚡ 高速化・再起動時の読み込み対策 (プリコネクト & ドメイン事前解決) -->
+  <!-- ⚡ 主要画像・フォントの事前ロード（超高速化） -->
+  <link rel="preload" as="image" href="./Upload-UI①.jpg">
+  <link rel="preload" as="image" href="./bg-resorce①.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://drive.google.com">
-  <link rel="dns-prefetch" href="https://drive.google.com">
 
-  <!-- 🖋️ Google Fonts (font-display=swap でレンダリング速度向上) -->
+  <!-- 🖋️ Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -211,7 +211,7 @@
       100% { transform: translateY(-260px) scale(0.5); opacity: 0; }
     }
 
-    /* 💬 チャットエリア */
+    /* 💬 チャットエリア（完全透明待機） */
     .chat-container {
       position: relative;
       z-index: 1;
@@ -220,7 +220,6 @@
       gap: 12px;
     }
 
-    /* ⚡ チャット演出改善：初期状態で完全非表示（opacity:0）にし、アニメーションで順番に登場させる */
     .chat-row {
       display: flex;
       align-items: flex-start;
@@ -711,7 +710,8 @@
     
     <!-- 画面1: 選択画面 -->
     <div id="select-screen" class="screen-view">
-      <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
+      <!-- 🖼️ 2. メインヘッダー画像 -->
+      <img src="./Upload-UI①.jpg" class="header-img" alt="ウェルカム画像">
       
       <div class="title-area">
         <span class="en-sub">SHARE YOUR MEMORIES</span>
@@ -729,24 +729,27 @@
         </div>
 
         <div class="chat-container">
+          <!-- 🖼️ 3. Ukyo様アバター -->
           <div class="chat-row">
-            <img src="https://drive.google.com/thumbnail?id=1_bhJPsWxdp9qnhikiRLRtwqFyjpKTs1N&sz=w200" class="chat-avatar-img" alt="Ukyo">
+            <img src="./Upload-UI③.jpg" class="chat-avatar-img" alt="Ukyo">
             <div class="chat-content">
               <span class="chat-name">Ukyo</span>
               <div class="chat-bubble">新郎新婦の写真は勿論、当日の会場の様子なども大歓迎！</div>
             </div>
           </div>
 
+          <!-- 🖼️ 4. Karin様アバター -->
           <div class="chat-row chat-right">
-            <img src="https://drive.google.com/thumbnail?id=17B-KT1giU8D3bfbvUQ3T7QfrT1UV58io&sz=w200" class="chat-avatar-img" alt="Karin">
+            <img src="./Upload-UI④.jpg" class="chat-avatar-img" alt="Karin">
             <div class="chat-content">
               <span class="chat-name">Karin</span>
               <div class="chat-bubble">懐かしの友人やご家族との写真もお待ちしております！！</div>
             </div>
           </div>
 
+          <!-- 🖼️ 5. 新郎新婦アバター -->
           <div class="chat-row">
-            <img src="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w200" class="chat-avatar-img" alt="新郎新婦">
+            <img src="./Upload-UI⑤.jpg" class="chat-avatar-img" alt="新郎新婦">
             <div class="chat-content">
               <span class="chat-name">Ukyo & Karin</span>
               <div class="chat-bubble">皆様の視点で切り取った大切な瞬間をお待ちしています✨</div>
@@ -823,7 +826,8 @@
       </div>
       <p class="subtitle" style="font-size: 0.82rem; text-align: center; color: #475569; margin-bottom: 14px; line-height: 1.6;">たくさんの素敵な写真を<br>ありがとうございました！</p>
       
-      <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
+      <!-- 🖼️ 6. 完了画面ヘッダー画像 -->
+      <img src="./Upload-UI②.jpg" class="header-img" alt="感謝画像">
 
       <button class="btn btn-primary" style="margin-top:14px;" onclick="resetForm()">続けてアップロードする</button>
     </div>
@@ -846,13 +850,14 @@
       }
     }
 
+    // 🖼️ 7. 背景スライドショー画像（GitHubローカル直リンク）
     const bgImages = [
-      'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
-      'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1ysDUL-Bs6JBRCx-dYirsOk0xN8WFp2TB&sz=w1000',
-      'https://drive.google.com/thumbnail?id=15_bPftkdb-MSojnwDst30yTwEma4vxL8&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1zL_uNkO9Vq1iZbOf4D9p7gqmRYjPPY-r&sz=w1000',
+      './bg-resorce①.jpg',
+      './bg-resorce②.jpg',
+      './bg-resorce③.jpg',
+      './bg-resorce④.jpg',
+      './bg-resorce⑤.jpg',
+      './bg-resorce⑥.jpg'
     ];
 
     const tables = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F', 'Table G', 'Table H', 'Table I', 'Table J', 'Table K', 'Table L', 'Table M', 'Table N', 'Table O', 'Table P', 'Table Q', 'Table R'];
