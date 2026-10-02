@@ -88,6 +88,43 @@
       opacity: 0.50;
     }
 
+    /* ☰ ハンバーガーメニューボタン（背景の画面左上あたりに固定配置） */
+    .menu-trigger {
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 100;
+      width: 42px;
+      height: 42px;
+      background: rgba(20, 26, 31, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid var(--gold-border);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-trigger:active {
+      transform: scale(0.92);
+      background: rgba(241, 196, 15, 0.25);
+      border-color: var(--gold-border-bright);
+    }
+
+    .menu-trigger span {
+      display: block;
+      width: 20px;
+      height: 2px;
+      background-color: #f1c40f;
+      border-radius: 2px;
+    }
+
     /* 🌟 大枠（ゴールド枠高級感カード） */
     .container {
       width: 100%;
@@ -104,43 +141,7 @@
       z-index: 1;
       overflow: hidden;
       transition: all 0.3s ease;
-    }
-
-    /* ☰ ハンバーガーメニューボタン（ゴールド枠） */
-    .menu-trigger {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      z-index: 10;
-      width: 38px;
-      height: 38px;
-      background: rgba(30, 39, 46, 0.6);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1.5px solid var(--gold-border);
-      border-radius: 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .menu-trigger:active {
-      transform: scale(0.92);
-      background: rgba(241, 196, 15, 0.2);
-      border-color: var(--gold-border-bright);
-    }
-
-    .menu-trigger span {
-      display: block;
-      width: 18px;
-      height: 2px;
-      background-color: #f1c40f;
-      border-radius: 2px;
+      margin-top: 28px; /* 左上ボタンと重ならないよう余白調整 */
     }
 
     .header-img {
@@ -174,47 +175,68 @@
       padding: 0 4px;
     }
 
-    /* 💬 LINE風動的メッセージエリア（ダークゴールドガラス調） */
+    /* 💬 LINEトーク風アバター＆動的チャットエリア */
     .chat-container {
-      height: 52px;
+      height: 60px;
       display: flex;
-      justify-content: center;
       align-items: center;
-      margin-bottom: 12px;
+      gap: 10px;
+      margin-bottom: 14px;
+      position: relative;
+      padding: 0 4px;
+    }
+
+    .chat-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 1.5px solid var(--gold-border);
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      flex-shrink: 0;
+      background: rgba(30, 39, 46, 0.8);
+    }
+
+    .chat-bubble-wrapper {
+      flex-grow: 1;
+      height: 100%;
       position: relative;
       overflow: hidden;
+      display: flex;
+      align-items: center;
     }
 
     .chat-bubble {
       position: absolute;
-      background: rgba(40, 50, 60, 0.75);
+      left: 6px;
+      background: rgba(40, 50, 60, 0.85);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--gold-border);
-      border-radius: 18px;
-      padding: 8px 14px;
-      font-size: 0.78rem;
+      border-radius: 14px;
+      border-top-left-radius: 4px;
+      padding: 8px 12px;
+      font-size: 0.76rem;
       font-weight: 600;
       color: #ffffff;
-      text-align: center;
       line-height: 1.35;
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-      width: 96%;
+      width: calc(100% - 8px);
       pointer-events: none;
     }
 
-    .chat-bubble::after {
+    /* LINE吹き出しの左三角しっぽ */
+    .chat-bubble::before {
       content: '';
       position: absolute;
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-      border-width: 6px 6px 0;
+      left: -6px;
+      top: 10px;
+      border-width: 5px 6px 5px 0;
       border-style: solid;
-      border-color: rgba(40, 50, 60, 0.75) transparent;
+      border-color: transparent rgba(40, 50, 60, 0.85) transparent transparent;
       display: block;
       width: 0;
     }
@@ -785,23 +807,27 @@
   <!-- 🎬 背景スライドショーエリア -->
   <div id="bg-slideshow"></div>
 
+  <!-- ☰ ハンバーガーボタン（スライド背景の左上固定配置） -->
+  <div class="menu-trigger" onclick="openSidebar()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+
   <div class="container">
-    
-    <!-- ☰ ハンバーガーボタン -->
-    <div class="menu-trigger" onclick="openSidebar()">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
 
     <!-- 画面1: 選択画面 -->
     <div id="select-screen">
       <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
       <h2>📸 みんなの思い出を集めよう！</h2>
 
-      <!-- 💬 LINE風動的メッセージエリア -->
+      <!-- 💬 LINE風アバター＆動的チャットエリア -->
       <div class="chat-container">
-        <div id="chat-bubble" class="chat-bubble"></div>
+        <!-- 新郎新婦アバターアイコン -->
+        <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="アバター">
+        <div class="chat-bubble-wrapper">
+          <div id="chat-bubble" class="chat-bubble"></div>
+        </div>
       </div>
 
       <!-- 🏷️ 卓番号選択（トリガーボタン） -->
@@ -946,9 +972,9 @@
     const tables = ['卓A', '卓B', '卓C', '卓D', '卓E', '卓F', '卓G', '卓H', '卓I', '卓J', '卓K', '卓L', '卓M', '卓N', '卓O', '卓P', '卓Q', '卓R'];
 
     const chatMessages = [
-      "新郎新婦の写真はもちろん、<br>当日の会場の様子なども大歓迎！",
-      "懐かしの友人やご家族との写真も<br>お待ちしております！！",
-      "皆様の視点で切り取った<br>大切な瞬間をお待ちしています✨"
+      "新郎新婦の写真はもちろん、当日の会場の様子なども大歓迎！",
+      "懐かしの友人やご家族との写真もお待ちしております！！",
+      "皆様の視点で切り取った大切な瞬間をお待ちしています✨"
     ];
 
     let currentMsgIdx = 0;
