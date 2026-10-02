@@ -19,24 +19,21 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Share the Moment</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Share Your Memories</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #f1c40f;
-      --primary-hover: #d4ac0d;
-      --accent-color: #e74c3c;
-      --gold-border: rgba(241, 196, 15, 0.6);
-      --gold-border-bright: rgba(255, 215, 0, 0.85);
-      --card-bg: rgba(30, 39, 46, 0.65);
-      --text-main: #ffffff;
-      --text-sub: #d2dae2;
-      --border-radius: 16px;
+      --primary-gold: #b89753;
+      --gold-light: #f7eedb;
+      --gold-border: #d2c197;
+      --text-main: #2b2b2b;
+      --text-sub: #788896;
+      --border-radius: 24px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 1. 最背面：動くダークオーロラグラデーション背景 */
+    /* 🌈 背景 */
     body {
       font-family: 'Noto Sans JP', sans-serif;
       min-height: 100vh;
@@ -47,18 +44,10 @@
       color: var(--text-main);
       position: relative;
       overflow-x: hidden;
-      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e272e);
-      background-size: 400% 400%;
-      animation: gradientBG 15s ease infinite;
+      background: #dfded9;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* 🎬 2. 背景スライドショー層 */
+    /* 🎬 背景スライドショー層 */
     #bg-slideshow {
       position: fixed;
       top: 0;
@@ -80,15 +69,14 @@
       background-position: center;
       opacity: 0;
       transition: opacity 2.0s ease-in-out;
-      filter: blur(2px);
-      mix-blend-mode: overlay;
+      filter: blur(1.5px);
     }
 
     .bg-slide.active {
-      opacity: 0.50;
+      opacity: 0.85;
     }
 
-    /* ☰ ハンバーガーメニューボタン（背景の画面左上あたりに固定配置） */
+    /* ☰ ハンバーガーメニューボタン（画面左上固定） */
     .menu-trigger {
       position: fixed;
       top: 16px;
@@ -96,10 +84,10 @@
       z-index: 100;
       width: 42px;
       height: 42px;
-      background: rgba(20, 26, 31, 0.7);
+      background: rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid var(--gold-border);
+      border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -107,346 +95,209 @@
       align-items: center;
       gap: 5px;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      transition: all 0.2s ease;
     }
 
     .menu-trigger:active {
       transform: scale(0.92);
-      background: rgba(241, 196, 15, 0.25);
-      border-color: var(--gold-border-bright);
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .menu-trigger span {
       display: block;
       width: 20px;
       height: 2px;
-      background-color: #f1c40f;
+      background-color: var(--primary-gold);
       border-radius: 2px;
     }
 
-    /* 🌟 大枠（ゴールド枠高級感カード） */
+    /* 🌟 メインコンテナ（透明感の高い白いすりガラス） */
     .container {
       width: 100%;
       max-width: 380px;
-      height: auto;
-      background: var(--card-bg) !important;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1.5px solid var(--gold-border);
+      background: rgba(255, 255, 255, 0.58) !important;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
       border-radius: var(--border-radius);
-      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 215, 0, 0.3);
-      padding: 18px 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+      padding: 16px;
       position: relative;
       z-index: 1;
       overflow: hidden;
-      transition: all 0.3s ease;
-      margin-top: 28px; /* 左上ボタンと重ならないよう余白調整 */
+      margin-top: 32px;
     }
 
     .header-img {
       width: 100%;
-      height: 110px;
+      height: 145px;
       object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      filter: brightness(1.05) contrast(0.95);
+      border-radius: 16px;
+      margin-bottom: 14px;
+    }
+
+    .title-english {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.28em;
+      color: #a88846;
+      text-align: center;
+      margin-bottom: 4px;
+      font-weight: 700;
     }
 
     h2 {
-      font-size: 1.15rem;
+      font-size: 1.22rem;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 8px;
-      color: #ffffff;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-    }
-
-    p.subtitle {
-      font-size: 0.78rem;
-      text-align: center;
-      color: var(--text-sub);
-      margin-bottom: 14px;
-      line-height: 1.4;
-      font-weight: 500;
+      margin-bottom: 16px;
+      color: #2b2b2b;
       letter-spacing: 0.02em;
-      padding: 0 4px;
     }
 
-    /* 💬 LINEトーク風アバター＆動的チャットエリア */
-    .chat-container {
-      height: 60px;
+    /* 💬 LINE風チャット枠 */
+    .chat-room {
+      background: rgba(255, 255, 255, 0.45);
+      border: 1.5px solid rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 14px 12px;
+      margin-bottom: 18px;
       display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .chat-row.right {
+      flex-direction: row-reverse;
+    }
+
+    .chat-avatar-wrapper {
+      display: flex;
+      flex-direction: column;
       align-items: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      position: relative;
-      padding: 0 4px;
     }
 
     .chat-avatar {
-      width: 42px;
-      height: 42px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      border: 1.5px solid var(--gold-border);
       object-fit: cover;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-      flex-shrink: 0;
-      background: rgba(30, 39, 46, 0.8);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
-    .chat-bubble-wrapper {
-      flex-grow: 1;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
+    .chat-sender-name {
+      font-size: 0.68rem;
+      color: #666666;
+      margin-bottom: 3px;
+      font-weight: 500;
     }
 
     .chat-bubble {
-      position: absolute;
-      left: 6px;
-      background: rgba(40, 50, 60, 0.85);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--gold-border);
+      max-width: 82%;
+      background: #ffffff;
       border-radius: 14px;
-      border-top-left-radius: 4px;
-      padding: 8px 12px;
+      padding: 9px 13px;
       font-size: 0.76rem;
-      font-weight: 600;
-      color: #ffffff;
-      line-height: 1.35;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-      opacity: 0;
-      transform: translateY(15px);
-      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
-      width: calc(100% - 8px);
-      pointer-events: none;
+      line-height: 1.45;
+      color: #2c2c2c;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
     }
 
-    /* LINE吹き出しの左三角しっぽ */
-    .chat-bubble::before {
-      content: '';
-      position: absolute;
-      left: -6px;
-      top: 10px;
-      border-width: 5px 6px 5px 0;
-      border-style: solid;
-      border-color: transparent rgba(40, 50, 60, 0.85) transparent transparent;
-      display: block;
-      width: 0;
-    }
-
-    .chat-bubble.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .chat-bubble.exit {
-      opacity: 0;
-      transform: translateY(-15px);
+    .chat-row.right .chat-bubble {
+      background: #d9f3c5; /* LINE風ライトグリーン */
     }
 
     .input-group {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       text-align: left;
     }
 
     .input-group label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.82rem;
       font-weight: 700;
-      margin-bottom: 6px;
-      color: #f1c40f;
-      padding-left: 0.4em;
-      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+      margin-bottom: 2px;
+      color: #2b2b2b;
     }
 
-    /* 🏷️ 初期状態のトリガーボタン（ゴールド枠） */
+    .input-sublabel {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    /* 🏷️ SELECT TABLE ドロップダウン */
     .table-trigger-btn {
       width: 100%;
-      padding: 12px 18px;
-      border: 1.5px solid var(--gold-border);
-      border-radius: 20px;
-      font-size: 0.95rem;
-      background: rgba(30, 39, 46, 0.5);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #ffffff;
+      padding: 13px 20px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 30px;
+      font-size: 0.92rem;
+      background: rgba(255, 255, 255, 0.75);
+      color: #1a202c;
       font-weight: 700;
+      letter-spacing: 0.05em;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
-    }
-
-    .table-trigger-btn:active {
-      transform: scale(0.98);
-      background: rgba(241, 196, 15, 0.15);
-      border-color: var(--gold-border-bright);
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
     }
 
     .table-trigger-btn.selected {
-      border-color: var(--gold-border-bright);
-      background: rgba(241, 196, 15, 0.2);
-      color: #f1c40f;
+      color: #2b2b2b;
     }
 
-    /* 🪟 モーダルオーバーレイ */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.25s ease-in-out;
-    }
-
-    .modal-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
-
-    /* 🪟 ダークゴールドモーダルコンテンツ */
-    .modal-content {
-      width: 100%;
-      max-width: 320px;
-      background: rgba(24, 30, 36, 0.92);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1.5px solid var(--gold-border);
-      border-radius: 18px;
-      padding: 12px 10px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
-      transform: scale(0.9) translateY(10px);
-      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .modal-overlay.active .modal-content {
-      transform: scale(1) translateY(0);
-    }
-
-    /* 📜 縦リスト型ドロップダウンアイテム */
-    .table-list-container {
-      max-height: 280px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 4px 2px;
-    }
-
-    .table-list-container::-webkit-scrollbar {
-      width: 5px;
-    }
-    .table-list-container::-webkit-scrollbar-thumb {
-      background: var(--gold-border);
-      border-radius: 4px;
-    }
-
-    .table-list-item {
-      padding: 11px 16px;
-      border-radius: 10px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.9);
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      margin-bottom: 2px;
-    }
-
-    .table-list-item:active {
-      background: rgba(241, 196, 15, 0.15);
-    }
-
-    .table-list-item.selected {
-      background: linear-gradient(135deg, rgba(241, 196, 15, 0.85) 0%, rgba(212, 172, 13, 0.85) 100%) !important;
-      color: #1e272e !important;
-      font-weight: 700;
-      box-shadow: 0 4px 14px rgba(241, 196, 15, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-    }
-
-    .check-mark {
-      display: inline-block;
-      width: 16px;
-      font-size: 0.85rem;
-      opacity: 0;
-    }
-
-    .table-list-item.selected .check-mark {
-      opacity: 1;
-    }
-
-    /* ✏️ 任意ニックネーム入力フィールド */
+    /* ✏️ お名前入力欄 */
     .text-input-field {
       width: 100%;
-      padding: 11px 14px;
-      border: 1.5px solid var(--gold-border);
-      border-radius: 12px;
+      padding: 12px 18px;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
       font-size: 0.88rem;
       outline: none;
-      background: rgba(30, 39, 46, 0.5) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #ffffff;
-      font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.65);
+      color: #2b2b2b;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
     }
 
     .text-input-field::placeholder {
-      color: #808e9b;
-      font-weight: 400;
+      color: #a0aec0;
     }
 
-    .text-input-field:focus {
-      border-color: var(--gold-border-bright);
-      background: rgba(30, 39, 46, 0.75) !important;
-    }
-
+    /* 📸 写真を選択するボタン（点線枠） */
     .file-select-area {
-      border: 2px dashed var(--gold-border);
-      border-radius: 12px;
-      padding: 14px;
+      border: 1.5px dashed var(--gold-border);
+      border-radius: 18px;
+      padding: 15px;
       text-align: center;
-      background: rgba(30, 39, 46, 0.4);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(255, 255, 255, 0.55);
       cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 6px;
+      margin-top: 16px;
       margin-bottom: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+      transition: all 0.2s ease;
     }
 
     .file-select-area:active {
-      background: rgba(241, 196, 15, 0.15);
-      border-color: var(--gold-border-bright);
+      background: rgba(255, 255, 255, 0.85);
       transform: scale(0.98);
     }
 
     .file-select-label {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: #f1c40f;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #a88846;
       pointer-events: none;
+      letter-spacing: 0.03em;
     }
 
     input[type="file"] { display: none; }
@@ -458,10 +309,9 @@
       gap: 8px;
       margin: 12px 0 14px;
       padding: 8px;
-      background: rgba(20, 25, 30, 0.5);
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      overflow: hidden;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
     .preview-item {
@@ -469,15 +319,12 @@
       aspect-ratio: 1;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
-      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .preview-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 7px;
     }
 
     .remove-btn {
@@ -495,75 +342,43 @@
       font-size: 11px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
-      z-index: 10;
-      backdrop-filter: blur(2px);
     }
 
     .btn {
       width: 100%;
       padding: 13px 16px;
       border-radius: 14px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      letter-spacing: 0.03em;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.2s ease;
       outline: none;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
     }
 
-    .btn:active {
-      transform: scale(0.97);
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-    }
-
-    /* 🌟 メインボタン（ゴールド高級ガラス） */
     .btn-primary {
-      background: linear-gradient(135deg, rgba(241, 196, 15, 0.75) 0%, rgba(212, 172, 13, 0.75) 100%);
-      color: #1e272e;
-      border: 1.5px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 6px 20px rgba(241, 196, 15, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 4px 14px rgba(184, 151, 83, 0.35);
       margin-top: 6px;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
-    }
-
-    .btn-primary:hover {
-      background: linear-gradient(135deg, rgba(241, 196, 15, 0.9) 0%, rgba(212, 172, 13, 0.9) 100%);
-      box-shadow: 0 8px 24px rgba(241, 196, 15, 0.45);
     }
 
     .btn-add {
-      background: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      margin-top: 0;
+      background: rgba(255, 255, 255, 0.8);
+      color: #a88846;
+      border: 1px solid var(--gold-border);
       margin-bottom: 10px;
     }
 
-    .btn-add:hover {
-      background: rgba(255, 255, 255, 0.35);
-    }
-
     .btn-secondary {
-      background: rgba(30, 39, 46, 0.6);
-      color: var(--text-sub);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      background: rgba(240, 240, 240, 0.8);
+      color: #666666;
+      border: 1px solid #ddd;
       margin-top: 10px;
-      font-size: 0.88rem;
-      padding: 10px 14px;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(30, 39, 46, 0.8);
-      color: #ffffff;
     }
 
     .progress-container {
@@ -574,170 +389,160 @@
 
     .progress-bar-bg {
       width: 100%;
-      height: 10px;
-      background: rgba(0, 0, 0, 0.4);
-      border-radius: 5px;
+      height: 8px;
+      background: rgba(200, 200, 200, 0.4);
+      border-radius: 4px;
       overflow: hidden;
-      margin-bottom: 8px;
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      margin-bottom: 6px;
     }
 
     .progress-bar-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #f1c40f, #f39c12);
-      border-radius: 5px;
+      background: var(--primary-gold);
+      border-radius: 4px;
       transition: width 0.3s ease;
     }
 
     .progress-info {
       display: flex;
       justify-content: space-between;
+      font-size: 0.78rem;
+      color: #a88846;
+      font-weight: 700;
+    }
+
+    #status { font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 700; }
+
+    #confirm-screen, #thankyou-screen, #history-screen { display: none; }
+    #thankyou-screen { text-align: center; }
+
+    /* 🪟 モーダル・サイドメニュー */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999;
+      display: flex;
+      justify-content: center;
       align-items: center;
-      font-size: 0.8rem;
-      color: #f1c40f;
+      padding: 20px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.25s ease;
+    }
+
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .modal-content {
+      width: 100%;
+      max-width: 320px;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 12px 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .table-list-container { max-height: 280px; overflow-y: auto; }
+    .table-list-item {
+      padding: 11px 16px;
+      border-radius: 10px;
+      font-size: 0.92rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .table-list-item.selected {
+      background: #f7eedb;
+      color: #a88846;
       font-weight: 700;
     }
 
-    #status {
-      font-size: 0.8rem;
-      text-align: center;
-      margin-top: 8px;
-      font-weight: 700;
-    }
-
-    #confirm-screen, #thankyou-screen, #history-screen {
-      display: none;
-    }
-
-    #thankyou-screen {
-      text-align: center;
-    }
-
-    .success-icon {
-      font-size: 3rem;
-      margin: 0 auto 10px auto;
-      display: block;
-      line-height: 1;
-    }
-
-    /* 🧭 スライドサイドメニュー UI（ゴールド枠ダークガラス） */
+    /* 🧭 スライドサイドメニュー UI */
     .sidebar-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 1000;
       opacity: 0;
       visibility: hidden;
-      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      transition: all 0.3s ease;
     }
 
-    .sidebar-overlay.active {
-      opacity: 1;
-      visibility: visible;
-    }
+    .sidebar-overlay.active { opacity: 1; visibility: visible; }
 
     .sidebar-drawer {
       position: fixed;
       top: 0;
       left: 0;
-      width: 270px;
+      width: 260px;
       height: 100%;
-      background: rgba(20, 26, 31, 0.92);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border-right: 1.5px solid var(--gold-border);
-      box-shadow: 12px 0 35px rgba(0, 0, 0, 0.6);
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-right: 1px solid var(--gold-border);
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.08);
       z-index: 1001;
       transform: translateX(-100%);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 26px 20px;
-      display: flex;
-      flex-direction: column;
+      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 24px 18px;
     }
 
-    .sidebar-overlay.active .sidebar-drawer {
-      transform: translateX(0);
-    }
+    .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
 
     .sidebar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 22px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
     }
 
-    .sidebar-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      color: #f1c40f;
-    }
-
-    .sidebar-close-btn {
-      width: 28px;
-      height: 28px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 13px;
-      font-weight: bold;
-      color: var(--text-sub);
-      cursor: pointer;
-    }
+    .sidebar-title { font-size: 1rem; font-weight: 700; color: #a88846; }
 
     .sidebar-menu-item {
-      padding: 13px 16px;
-      border-radius: 14px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      color: #ffffff;
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #333;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       cursor: pointer;
       margin-bottom: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      background: rgba(247, 238, 219, 0.4);
     }
 
-    .sidebar-menu-item:active {
-      transform: scale(0.97);
-      background: rgba(241, 196, 15, 0.2);
-      color: #f1c40f;
-      border-color: var(--gold-border-bright);
-    }
-
-    /* 📜 送信履歴表示カード UI */
+    /* 📜 送信履歴カード UI */
     .history-card {
-      background: rgba(30, 39, 46, 0.6);
+      background: #ffffff;
       border: 1px solid var(--gold-border);
       border-radius: 12px;
-      padding: 12px;
-      margin-bottom: 12px;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      padding: 10px;
+      margin-bottom: 10px;
     }
 
     .history-header {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 700;
-      color: #f1c40f;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
+      color: #a88846;
+      margin-bottom: 6px;
     }
 
     .history-thumb-grid {
@@ -750,56 +555,9 @@
       aspect-ratio: 1;
       border-radius: 6px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .history-thumb-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    /* 💡 メニュー用情報ポップアップ */
-    .info-modal-content {
-      width: 100%;
-      max-width: 320px;
-      background: rgba(24, 30, 36, 0.95);
-      backdrop-filter: blur(25px);
-      -webkit-backdrop-filter: blur(25px);
-      border: 1.5px solid var(--gold-border);
-      border-radius: 20px;
-      padding: 20px 18px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
-    }
-
-    .info-modal-title {
-      font-size: 1.05rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 14px;
-      color: #f1c40f;
-    }
-
-    .info-list {
-      font-size: 0.82rem;
-      line-height: 1.6;
-      color: var(--text-sub);
-      font-weight: 500;
-    }
-
-    .info-list li {
-      margin-bottom: 10px;
-      list-style-type: none;
-      padding-left: 1.4em;
-      position: relative;
-    }
-
-    .info-list li::before {
-      content: '✨';
-      position: absolute;
-      left: 0;
-      top: 0;
-    }
+    .history-thumb-item img { width: 100%; height: 100%; object-fit: cover; }
   </style>
 </head>
 <body>
@@ -807,7 +565,7 @@
   <!-- 🎬 背景スライドショーエリア -->
   <div id="bg-slideshow"></div>
 
-  <!-- ☰ ハンバーガーボタン（スライド背景の左上固定配置） -->
+  <!-- ☰ ハンバーガーボタン（画面左上に固定配置） -->
   <div class="menu-trigger" onclick="openSidebar()">
     <span></span>
     <span></span>
@@ -819,36 +577,66 @@
     <!-- 画面1: 選択画面 -->
     <div id="select-screen">
       <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
-      <h2>📸 みんなの思い出を集めよう！</h2>
+      
+      <div class="title-english">SHARE YOUR MEMORIES</div>
+      <h2>みんなの思い出を集めよう</h2>
 
-      <!-- 💬 LINE風アバター＆動的チャットエリア -->
-      <div class="chat-container">
-        <!-- 新郎新婦アバターアイコン -->
-        <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="アバター">
-        <div class="chat-bubble-wrapper">
-          <div id="chat-bubble" class="chat-bubble"></div>
+      <!-- 💬 画像通りのLINEチャット風エリア -->
+      <div class="chat-room">
+        <!-- メッセージ1 (Ukyo) -->
+        <div class="chat-row">
+          <div class="chat-avatar-wrapper">
+            <span class="chat-sender-name">Ukyo</span>
+            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo">
+          </div>
+          <div class="chat-bubble">
+            新郎新婦の写真はもちろん、当日の会場の様子なども大歓迎！
+          </div>
+        </div>
+
+        <!-- メッセージ2 (Karin) -->
+        <div class="chat-row right">
+          <div class="chat-avatar-wrapper">
+            <span class="chat-sender-name">Karin</span>
+            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Karin">
+          </div>
+          <div class="chat-bubble">
+            懐かしの友人やご家族との写真もお待ちしております！！
+          </div>
+        </div>
+
+        <!-- メッセージ3 (Ukyo & Karin) -->
+        <div class="chat-row">
+          <div class="chat-avatar-wrapper">
+            <span class="chat-sender-name">Ukyo & Karin</span>
+            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo & Karin">
+          </div>
+          <div class="chat-bubble">
+            皆様の視点で切り取った大切な瞬間をお待ちしています✨
+          </div>
         </div>
       </div>
 
-      <!-- 🏷️ 卓番号選択（トリガーボタン） -->
+      <!-- 🏷️ SELECT TABLE ドロップダウン -->
       <div class="input-group">
         <label>卓番号を選択してください</label>
+        <span class="input-sublabel">※QRコードが記載されているPOPをご確認ください</span>
         <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
-          <span id="table-trigger-text">選択してください</span>
-          <span style="font-size: 0.75rem; color: #f1c40f;">▼</span>
+          <span id="table-trigger-text">SELECT TABLE</span>
+          <span style="font-size: 0.75rem; color: #a0aec0;">▼</span>
         </div>
         <input type="hidden" id="table-no" value="">
       </div>
 
-      <!-- ✏️ 任意ニックネーム入力欄 -->
+      <!-- ✏️ お名前入力欄 -->
       <div class="input-group">
         <label for="user-name">お名前・ニックネーム（任意）</label>
         <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
       </div>
 
-      <!-- 写真選択エリア -->
+      <!-- 写真を選択するボタン -->
       <div class="file-select-area" onclick="handleFileSelectClick()">
-        <span class="file-select-label">📸 写真を選択する</span>
+        <span class="file-select-label">写真を選択する</span>
       </div>
       <input type="file" id="file-input" accept="image/*" multiple>
 
@@ -858,7 +646,7 @@
     <!-- 画面2: プレビュー確認＆アップロード画面 -->
     <div id="confirm-screen">
       <h2>📸 選択した写真の確認</h2>
-      <p class="subtitle" id="selected-summary">全0枚の写真を選択中</p>
+      <p class="subtitle" id="selected-summary" style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:10px;">全0枚の写真を選択中</p>
 
       <div id="preview-grid"></div>
 
@@ -881,9 +669,9 @@
  
     <!-- 画面3: アップロード完了画面 -->
     <div id="thankyou-screen">
-      <div class="success-icon">🎉</div>
+      <div style="font-size:2.5rem; margin-bottom:8px;">✨</div>
       <h2>アップロード完了！</h2>
-      <p class="subtitle">たくさんの素敵な写真を<br>ありがとうございました！</p>
+      <p style="font-size:0.85rem; color:#555; margin-bottom:14px;">たくさんの素敵な写真を<br>ありがとうございました！</p>
       
       <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
 
@@ -893,7 +681,7 @@
     <!-- 画面4: 送信履歴画面 -->
     <div id="history-screen">
       <h2>📜 送信履歴</h2>
-      <p class="subtitle">あなたがこれまでに送信した写真です</p>
+      <p style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:12px;">あなたがこれまでに送信した写真です</p>
 
       <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 12px;"></div>
 
@@ -907,7 +695,7 @@
     <div class="sidebar-drawer">
       <div class="sidebar-header">
         <span class="sidebar-title">メニュー</span>
-        <div class="sidebar-close-btn" onclick="closeSidebar()">✕</div>
+        <div style="cursor:pointer;" onclick="closeSidebar()">✕</div>
       </div>
       
       <div class="sidebar-menu-item" onclick="navigateFromSidebar('select')">
@@ -915,12 +703,6 @@
       </div>
       <div class="sidebar-menu-item" onclick="navigateFromSidebar('history')">
         <span>📜</span> 送信履歴を見る
-      </div>
-      <div class="sidebar-menu-item" onclick="navigateFromSidebar('tips')">
-        <span>💡</span> おすすめ撮影のヒント
-      </div>
-      <div class="sidebar-menu-item" onclick="navigateFromSidebar('guide')">
-        <span>📖</span> アプリの使い方
       </div>
     </div>
   </div>
@@ -932,75 +714,14 @@
     </div>
   </div>
 
-  <!-- 💡 撮影ヒント モーダル -->
-  <div id="tips-modal" class="modal-overlay" onclick="closeTipsModalOnOutside(event)">
-    <div class="info-modal-content">
-      <div class="info-modal-title">💡 おすすめの撮影ヒント</div>
-      <ul class="info-list">
-        <li>卓の仲間全員での笑顔の集合写真</li>
-        <li>新郎新婦の入場やケーキカットの瞬間</li>
-        <li>美味しそうな料理やドレスのアップショット</li>
-        <li>歓談中の自然な笑顔や乾杯のシーン</li>
-      </ul>
-      <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeTipsModal()">閉じる</button>
-    </div>
-  </div>
-
-  <!-- 📖 使い方ガイド モーダル -->
-  <div id="guide-modal" class="modal-overlay" onclick="closeGuideModalOnOutside(event)">
-    <div class="info-modal-content">
-      <div class="info-modal-title">📖 アプリの使い方</div>
-      <ul class="info-list" style="padding-left: 0;">
-        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 1:</strong> 卓番号を選びます（お名前入力は任意）。</li>
-        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 2:</strong> 「写真を選択する」から何枚でも選択できます。</li>
-        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 3:</strong> 送信完了後、何回でも続けて送信可能です！</li>
-      </ul>
-      <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeGuideModal()">閉じる</button>
-    </div>
-  </div>
-
   <script>
     const bgImages = [
       'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
       'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
       'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1ysDUL-Bs6JBRCx-dYirsOk0xN8WFp2TB&sz=w1000',
-      'https://drive.google.com/thumbnail?id=15_bPftkdb-MSojnwDst30yTwEma4vxL8&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1zL_uNkO9Vq1iZbOf4D9p7gqmRYjPPY-r&sz=w1000',
     ];
 
-    const tables = ['卓A', '卓B', '卓C', '卓D', '卓E', '卓F', '卓G', '卓H', '卓I', '卓J', '卓K', '卓L', '卓M', '卓N', '卓O', '卓P', '卓Q', '卓R'];
-
-    const chatMessages = [
-      "新郎新婦の写真はもちろん、当日の会場の様子なども大歓迎！",
-      "懐かしの友人やご家族との写真もお待ちしております！！",
-      "皆様の視点で切り取った大切な瞬間をお待ちしています✨"
-    ];
-
-    let currentMsgIdx = 0;
-
-    function initChatAnimation() {
-      const bubble = document.getElementById('chat-bubble');
-      if (!bubble) return;
-
-      function showNextMessage() {
-        bubble.innerHTML = chatMessages[currentMsgIdx];
-        bubble.classList.remove('exit');
-        bubble.classList.add('active');
-
-        setTimeout(() => {
-          bubble.classList.remove('active');
-          bubble.classList.add('exit');
-
-          setTimeout(() => {
-            currentMsgIdx = (currentMsgIdx + 1) % chatMessages.length;
-            showNextMessage();
-          }, 600);
-        }, 4000);
-      }
-
-      showNextMessage();
-    }
+    const tables = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F', 'Table G', 'Table H', 'Table O', 'Table P', 'Table Q', 'Table R'];
 
     function initBgSlideshow() {
       const slideshowContainer = document.getElementById('bg-slideshow');
@@ -1016,7 +737,6 @@
       if (bgImages.length > 1) {
         let currentIdx = 0;
         const slides = slideshowContainer.querySelectorAll('.bg-slide');
-        
         setInterval(() => {
           const nextIdx = (currentIdx + 1) % slides.length;
           slides[nextIdx].classList.add('active');
@@ -1032,58 +752,25 @@
       const container = document.getElementById('table-list-container');
       container.innerHTML = '';
 
-      const defaultItem = document.createElement('div');
-      defaultItem.className = 'table-list-item selected';
-      defaultItem.setAttribute('data-value', '');
-      defaultItem.innerHTML = `<span class="check-mark">✓</span><span>選択してください</span>`;
-      defaultItem.onclick = () => selectTableListItem('', defaultItem);
-      container.appendChild(defaultItem);
-
       tables.forEach(tableVal => {
         const item = document.createElement('div');
         item.className = 'table-list-item';
         item.setAttribute('data-value', tableVal);
-        item.innerHTML = `<span class="check-mark">✓</span><span>${tableVal}</span>`;
+        item.innerHTML = `<span>✓</span><span>${tableVal}</span>`;
         item.onclick = () => selectTableListItem(tableVal, item);
         container.appendChild(item);
       });
     }
 
-    /* 🧭 スライドサイドバー＆モーダル制御機能 */
-    function openSidebar() {
-      document.getElementById('sidebar-overlay').classList.add('active');
-    }
-
-    function closeSidebar() {
-      document.getElementById('sidebar-overlay').classList.remove('active');
-    }
-
-    function closeSidebarOnOutside(e) {
-      if (e.target.id === 'sidebar-overlay') {
-        closeSidebar();
-      }
-    }
+    function openSidebar() { document.getElementById('sidebar-overlay').classList.add('active'); }
+    function closeSidebar() { document.getElementById('sidebar-overlay').classList.remove('active'); }
+    function closeSidebarOnOutside(e) { if (e.target.id === 'sidebar-overlay') closeSidebar(); }
 
     function navigateFromSidebar(target) {
       closeSidebar();
-      if (target === 'select') {
-        goToSelectScreen();
-      } else if (target === 'history') {
-        goToHistoryScreen();
-      } else if (target === 'tips') {
-        openTipsModal();
-      } else if (target === 'guide') {
-        openGuideModal();
-      }
+      if (target === 'select') goToSelectScreen();
+      else if (target === 'history') goToHistoryScreen();
     }
-
-    function openTipsModal() { document.getElementById('tips-modal').classList.add('active'); }
-    function closeTipsModal() { document.getElementById('tips-modal').classList.remove('active'); }
-    function closeTipsModalOnOutside(e) { if (e.target.id === 'tips-modal') closeTipsModal(); }
-
-    function openGuideModal() { document.getElementById('guide-modal').classList.add('active'); }
-    function closeGuideModal() { document.getElementById('guide-modal').classList.remove('active'); }
-    function closeGuideModalOnOutside(e) { if (e.target.id === 'guide-modal') closeGuideModal(); }
 
     function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
     function closeTableModal() { document.getElementById('table-modal').classList.remove('active'); }
@@ -1091,32 +778,15 @@
 
     function selectTableListItem(val, element) {
       document.getElementById('table-no').value = val;
-      
-      const triggerBtn = document.getElementById('table-trigger');
-      const triggerText = document.getElementById('table-trigger-text');
-      
-      if (val) {
-        triggerText.innerText = `✨ ${val}`;
-        triggerBtn.classList.add('selected');
-      } else {
-        triggerText.innerText = '選択してください';
-        triggerBtn.classList.remove('selected');
-      }
-      
+      document.getElementById('table-trigger-text').innerText = val;
       document.querySelectorAll('.table-list-item').forEach(i => i.classList.remove('selected'));
       element.classList.add('selected');
-
-      document.getElementById('select-status').innerText = '';
-      
-      setTimeout(() => {
-        closeTableModal();
-      }, 180);
+      setTimeout(closeTableModal, 180);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
       initBgSlideshow();
       initTableList();
-      initChatAnimation();
     });
 
     let selectedFiles = [];
@@ -1145,7 +815,7 @@
       const tableNo = tableNoInput.value;
       if (!tableNo) {
         selectStatus.innerText = '⚠️ 卓番号を選択してください';
-        selectStatus.style.color = '#e74c3c';
+        selectStatus.style.color = '#c53030';
         openTableModal();
         return;
       }
@@ -1156,16 +826,11 @@
     fileInput.addEventListener('change', function(e) {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
-      
       selectedFiles = selectedFiles.concat(files);
       goToConfirmScreen();
     });
 
     function goToConfirmScreen() {
-      if (selectedFiles.length === 0) {
-        goToSelectScreen();
-        return;
-      }
       renderPreviews();
       selectScreen.style.display = 'none';
       confirmScreen.style.display = 'block';
@@ -1207,7 +872,6 @@
       selectedFiles.forEach((file, index) => {
         const item = document.createElement('div');
         item.className = 'preview-item';
-        
         const img = document.createElement('img');
         img.src = URL.createObjectURL(file);
         
@@ -1227,11 +891,8 @@
 
     function removeFile(index) {
       selectedFiles.splice(index, 1);
-      if (selectedFiles.length === 0) {
-        goToSelectScreen();
-      } else {
-        renderPreviews();
-      }
+      if (selectedFiles.length === 0) goToSelectScreen();
+      else renderPreviews();
     }
 
     function updateProgress(percent, text) {
@@ -1253,7 +914,6 @@
     function saveUploadHistory(tableNo, userName, fileDataArray) {
       try {
         const existingHistory = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
-        
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
         const thumbnails = fileDataArray.slice(0, 4).map(item => item.base64Data);
@@ -1269,7 +929,6 @@
 
         existingHistory.unshift(newRecord);
         if (existingHistory.length > 15) existingHistory.pop();
-
         localStorage.setItem('wedding_upload_history', JSON.stringify(existingHistory));
       } catch (e) {
         console.error('History save error:', e);
@@ -1279,18 +938,16 @@
     function renderHistoryList() {
       const container = document.getElementById('history-list-container');
       container.innerHTML = '';
-
       const historyData = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
 
       if (historyData.length === 0) {
-        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:var(--text-sub); padding: 20px 0;">まだアップロード履歴はありません✨</p>`;
+        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだアップロード履歴はありません✨</p>`;
         return;
       }
 
       historyData.forEach(item => {
         const card = document.createElement('div');
         card.className = 'history-card';
-
         const header = document.createElement('div');
         header.className = 'history-header';
         header.innerHTML = `<span>✨ ${item.tableNo} (${item.userName})</span><span>${item.date} [全${item.count}枚]</span>`;
@@ -1316,7 +973,6 @@
     async function startUpload() {
       const tableNo = tableNoInput.value; 
       const userName = userNameInput.value.trim();
-
       if (selectedFiles.length === 0 || !tableNo) return;
 
       uploadBtn.style.display = 'none';
@@ -1336,8 +992,7 @@
           selectedFiles.map(file => 
             resizeAndCompressImage(file, 2000, 0.85, () => {
               compressedCount++;
-              const currentPercent = (compressedCount / totalPhotos) * 30;
-              updateProgress(currentPercent, `最適化中 (${compressedCount}/${totalPhotos}枚)...`);
+              updateProgress((compressedCount / totalPhotos) * 30, `最適化中 (${compressedCount}/${totalPhotos}枚)...`);
             })
           )
         );
@@ -1366,15 +1021,11 @@
             });
           } else {
             const result = await sendBatchToGas(chunk, tableNo, userName, targetFolderId);
-            if (!result.success) {
-              throw new Error(result.error);
-            }
+            if (!result.success) throw new Error(result.error);
             
             targetFolderId = result.folderId;
             uploadedPhotoCount += currentBatchSize;
-
-            const sendPercent = 30 + (uploadedPhotoCount / totalPhotos) * 65;
-            updateProgress(sendPercent, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
+            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
           }
         }
 
@@ -1412,13 +1063,9 @@
             ctx.drawImage(img, 0, 0, width, height);
 
             const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            
             if (onProgress) onProgress();
 
-            resolve({
-              base64Data: dataUrl,
-              fileName: file.name
-            });
+            resolve({ base64Data: dataUrl, fileName: file.name });
           };
           img.onerror = (err) => reject(err);
           img.src = e.target.result;
@@ -1430,7 +1077,7 @@
 
     function showError(msg) {
       statusDiv.innerText = `⚠️ error: ${msg}`;
-      statusDiv.style.color = '#e74c3c';
+      statusDiv.style.color = '#c53030';
       uploadBtn.style.display = 'flex';
       addBtn.style.display = 'flex';
       resetBtn.style.display = 'flex';
