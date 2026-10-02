@@ -20,7 +20,85 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Share Your Memories</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gold: #b89753;
+      --gold-light: #f7eedb;
+      --gold-border: #d2c197;
+      --text-main: #2b2b2b;
+      --text-sub: #788896;
+      --border-radius: 24px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    /* 🌈 背景 */
+    body {
+      font-family: 'Noto Sans JP', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      color: var(--text-main);
+      position: relative;
+      overflow-x: hidden;
+      background: #dfded9;
+    }
+
+    /* 🎬 背景スライドショー層 */
+    #bg-slideshow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .bg-slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-size: cover;ご提示いただいたモーダル画像（**ダークネイビー背景**、**シックなゴールドの選択中ハイライト**、**ゴールドのスクロールバー**、**エレガントな明朝風フォント `Cinzel`**）のスタイルをそのままモーダル（卓番号選択画面）に適用いたしました！
+
+全体のデザインバランスを損なわないよう、モーダルの配色・フォント・角丸・影を再現しています。
+
+---
+
+### 📄 【モーダル選択画面デザイン更新版】`Index.html` 完全版コード
+
+`Code.gs` は変更不要です。以下のコードを `Index.html` に上書き保存してデプロイ（新バージョンを作成）を行ってください。
+
+```html
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <script>
+    // 🛡 Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
+    (function() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('authuser')) {
+          urlParams.delete('authuser');
+          const cleanQuery = urlParams.toString();
+          const cleanUrl = window.location.pathname + (cleanQuery ? '?' + cleanQuery : '');
+          window.location.replace(cleanUrl);
+        }
+      } catch (e) {
+        console.error('Session clearance skip:', e);
+      }
+    })();
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Share Your Memories</title>
+  <link href="[https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap](https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap)" rel="stylesheet">
   <style>
     :root {
       --primary-gold: #b89753;
@@ -234,7 +312,7 @@
       display: block;
     }
 
-    /* 🏷️ 卓番号ドロップダウン（初期表示グレー/選択後ゴールド） */
+    /* 🏷️ 卓番号ドロップダウン */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 20px;
@@ -418,16 +496,16 @@
     #confirm-screen, #thankyou-screen, #history-screen { display: none; }
     #thankyou-screen { text-align: center; }
 
-    /* 🪟 モーダル・サイドメニュー */
+    /* 🪟 モーダル（画像デザインの完全再現） */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 999;
       display: flex;
       justify-content: center;
@@ -443,27 +521,65 @@
     .modal-content {
       width: 100%;
       max-width: 320px;
-      background: #ffffff;
+      background: #1c2736; /* ダークネイビー背景 */
       border-radius: 20px;
-      padding: 12px 10px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+      padding: 20px 14px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
-    .table-list-container { max-height: 280px; overflow-y: auto; }
+    /* 📜 モーダル内のゴールドカスタムスクロールバー */
+    .table-list-container {
+      max-height: 280px;
+      overflow-y: auto;
+      padding-right: 6px;
+    }
+
+    .table-list-container::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .table-list-container::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    .table-list-container::-webkit-scrollbar-thumb {
+      background: #9b7937;
+      border-radius: 4px;
+    }
+
+    .table-modal-header {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      letter-spacing: 0.22em;
+      color: #e2e8f0;
+      padding: 8px 12px 14px;
+      font-weight: 600;
+    }
+
     .table-list-item {
-      padding: 11px 16px;
-      border-radius: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-family: 'Cinzel', serif;
       font-size: 0.92rem;
-      color: #333;
+      letter-spacing: 0.08em;
+      color: #e2e8f0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
       cursor: pointer;
+      margin-bottom: 4px;
+      transition: all 0.2s ease;
     }
+
+    /* 画像通りのハイライト表示 */
     .table-list-item.selected {
-      background: #f7eedb;
-      color: #a88846;
+      background: linear-gradient(135deg, #a48139 0%, #836323 100%);
+      color: #ffffff;
       font-weight: 700;
+      border: 1px solid rgba(255, 235, 170, 0.4);
+      box-shadow: 0 4px 15px rgba(164, 129, 57, 0.4);
     }
 
     /* 🧭 スライドサイドメニュー UI */
@@ -577,7 +693,7 @@
 
     <!-- 画面1: 選択画面 -->
     <div id="select-screen">
-      <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
+      <img src="[https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000](https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000)" class="header-img" alt="ウェルカム画像">
       
       <div class="title-english">SHARE YOUR MEMORIES</div>
       <h2>みんなの思い出を集めよう</h2>
@@ -588,7 +704,7 @@
         <div class="chat-row">
           <div class="chat-avatar-wrapper">
             <span class="chat-sender-name">Ukyo</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo">
+            <img src="[https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200](https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200)" class="chat-avatar" alt="Ukyo">
           </div>
           <div class="chat-bubble">
             新郎新婦の写真はもちろん、当日の会場の様子なども大歓迎！
@@ -599,7 +715,7 @@
         <div class="chat-row right">
           <div class="chat-avatar-wrapper">
             <span class="chat-sender-name">Karin</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Karin">
+            <img src="[https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200](https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200)" class="chat-avatar" alt="Karin">
           </div>
           <div class="chat-bubble">
             懐かしの友人やご家族との写真もお待ちしております！！
@@ -610,7 +726,7 @@
         <div class="chat-row">
           <div class="chat-avatar-wrapper">
             <span class="chat-sender-name">Ukyo & Karin</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo & Karin">
+            <img src="[https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200](https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200)" class="chat-avatar" alt="Ukyo & Karin">
           </div>
           <div class="chat-bubble">
             皆様の視点で切り取った大切な瞬間をお待ちしています✨
@@ -618,7 +734,7 @@
         </div>
       </div>
 
-      <!-- 🏷️ 卓番号ドロップダウン（初期表示: 選択してください） -->
+      <!-- 🏷️ 卓番号ドロップダウン -->
       <div class="input-group">
         <label>卓番号を選択してください</label>
         <span class="input-sublabel">※QRコードが記載されているPOPをご確認ください</span>
@@ -674,7 +790,7 @@
       <h2>アップロード完了！</h2>
       <p style="font-size:0.85rem; color:#555; margin-bottom:14px;">たくさんの素敵な写真を<br>ありがとうございました！</p>
       
-      <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
+      <img src="[https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000](https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000)" class="header-img" alt="感謝画像">
 
       <button class="btn btn-primary" style="margin-top:14px;" onclick="resetForm()">続けてアップロードする</button>
     </div>
@@ -708,18 +824,19 @@
     </div>
   </div>
 
-  <!-- 🪟 卓番号選択モーダル -->
+  <!-- 🪟 卓番号選択モーダル（ダークエレガント風再現） -->
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
     <div class="modal-content">
+      <div class="table-modal-header">SELECT TABLE</div>
       <div class="table-list-container" id="table-list-container"></div>
     </div>
   </div>
 
   <script>
     const bgImages = [
-      'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
-      'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
-      'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000',
+      '[https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000](https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000)',
+      '[https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000](https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000)',
+      '[https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000](https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000)',
     ];
 
     const tables = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F', 'Table G', 'Table H', 'Table O', 'Table P', 'Table Q', 'Table R'];
@@ -757,7 +874,7 @@
         const item = document.createElement('div');
         item.className = 'table-list-item';
         item.setAttribute('data-value', tableVal);
-        item.innerHTML = `<span>✓</span><span>${tableVal}</span>`;
+        item.innerHTML = `<span class="check-mark" style="visibility:hidden;">✓</span><span>${tableVal}</span>`;
         item.onclick = () => selectTableListItem(tableVal, item);
         container.appendChild(item);
       });
@@ -785,9 +902,17 @@
       triggerText.innerText = `✓ ${val}`;
       triggerBtn.classList.add('selected');
 
-      document.querySelectorAll('.table-list-item').forEach(i => i.classList.remove('selected'));
+      document.querySelectorAll('.table-list-item').forEach(i => {
+        i.classList.remove('selected');
+        const chk = i.querySelector('.check-mark');
+        if (chk) chk.style.visibility = 'hidden';
+      });
+
       element.classList.add('selected');
-      setTimeout(closeTableModal, 180);
+      const selectedChk = element.querySelector('.check-mark');
+      if (selectedChk) selectedChk.style.visibility = 'visible';
+
+      setTimeout(closeTableModal, 220);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -1109,5 +1234,7 @@
   </script>
 </body>
 </html>
+
+
 
 
