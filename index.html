@@ -1,49 +1,42 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+  <script>
+    // 🛡️ Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
+    (function() {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('authuser')) {
+          urlParams.delete('authuser');
+          const cleanQuery = urlParams.toString();
+          const cleanUrl = window.location.pathname + (cleanQuery ? '?' + cleanQuery : '');
+          window.location.replace(cleanUrl);
+        }
+      } catch (e) {
+        console.error('Session clearance skip:', e);
+      }
+    })();
+  </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Share the Moment</title>
-
-  <!-- 📱 PWA / ホーム画面用設定 -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Share the Moment">
-  <meta name="mobile-web-app-capable" content="yes">
-
-  <!-- 🖼️ 1. アプリ用アイコン -->
-  <link rel="apple-touch-icon" href="./App-icon.jpg">
-  <link rel="icon" type="image/jpeg" href="./App-icon.jpg">
-
-  <!-- ⚡ 主要画像・フォントの事前ロード（超高速化） -->
-  <link rel="preload" as="image" href="./Upload-UI①.jpg">
-  <link rel="preload" as="image" href="./bg-resorce①.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <!-- 🖋️ Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --font-serif: 'Shippori Mincho', serif;
-      --font-en: 'Cormorant Garamond', serif;
-      --font-sans: 'Noto Sans JP', sans-serif;
-      
-      --gold-accent: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
-      --gold-border: rgba(212, 175, 55, 0.45);
-      
-      --card-bg: rgba(255, 255, 255, 0.35);
-      --text-main: #1e293b;
-      --text-sub: #334155;
-      --border-radius: 18px;
+      --primary-color: #6c5ce7;
+      --primary-hover: #5a4bcf;
+      --accent-color: #ff7675;
+      --card-bg: rgba(255, 255, 255, 0.25);
+      --text-main: #1a202c;
+      --text-sub: #2d3748;
+      --border-radius: 16px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 最背面背景 */
+    /* 🌈 1. 最背面：動くオーロラグラデーション背景 */
     body {
-      font-family: var(--font-sans);
+      font-family: 'Noto Sans JP', sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -52,9 +45,9 @@
       color: var(--text-main);
       position: relative;
       overflow-x: hidden;
-      background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1);
+      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
       background-size: 400% 400%;
-      animation: gradientBG 18s ease infinite;
+      animation: gradientBG 15s ease infinite;
     }
 
     @keyframes gradientBG {
@@ -63,7 +56,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* 🎬 背景スライドショー */
+    /* 🎬 2. 背景スライドショー層 */
     #bg-slideshow {
       position: fixed;
       top: 0;
@@ -85,229 +78,140 @@
       background-position: center;
       opacity: 0;
       transition: opacity 2.0s ease-in-out;
-      filter: blur(2px);
+      filter: blur(1.5px);
       mix-blend-mode: soft-light;
     }
 
     .bg-slide.active {
-      opacity: 0.50;
+      opacity: 0.60;
     }
 
-    /* 🌟 メインカード */
+    /* 🌟 大枠（カード） */
     .container {
       width: 100%;
       max-width: 380px;
       height: auto;
       background: var(--card-bg) !important;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.4);
       border-radius: var(--border-radius);
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
-      padding: 20px 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      padding: 18px 16px;
       position: relative;
       z-index: 1;
       overflow: hidden;
       transition: all 0.3s ease;
     }
 
-    .screen-view {
-      animation: fadeInSmooth 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    /* ☰ ハンバーガーメニューボタン（画面左上配置） */
+    .menu-trigger {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      z-index: 10;
+      width: 38px;
+      height: 38px;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes fadeInSmooth {
-      from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+    .menu-trigger:active {
+      transform: scale(0.92);
+      background: rgba(255, 255, 255, 0.7);
+    }
+
+    .menu-trigger span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background-color: var(--text-main);
+      border-radius: 2px;
     }
 
     .header-img {
       width: 100%;
       height: 110px;
       object-fit: cover;
-      border-radius: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      filter: brightness(1.02) contrast(0.95);
-      border: 1px solid rgba(255, 255, 255, 0.7);
-    }
-
-    .title-area {
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .en-sub {
-      font-family: var(--font-en);
-      font-size: 0.85rem;
-      letter-spacing: 0.18em;
-      color: #8c7336;
-      text-transform: uppercase;
-      font-weight: 600;
-      display: block;
-      margin-bottom: 2px;
+      border-radius: 10px;
+      margin-bottom: 10px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      filter: brightness(1.1) contrast(0.9) opacity(0.92);
     }
 
     h2 {
-      font-family: var(--font-serif);
-      font-size: 1.22rem;
+      font-size: 1.15rem;
       font-weight: 700;
+      text-align: center;
+      margin-bottom: 8px;
       color: var(--text-main);
-      letter-spacing: 0.05em;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
+      text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
     }
 
-    /* 📦 チャットコンテナ */
-    .chat-wrapper {
-      position: relative;
-      background: rgba(255, 255, 255, 0.25);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid var(--gold-border);
-      border-radius: 14px;
-      padding: 12px 10px 14px;
-      margin-bottom: 18px;
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 15px rgba(212, 175, 55, 0.08);
-      overflow: hidden;
-    }
-
-    /* ✨ 光の粒子演出 */
-    .glimmer-container {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .particle {
-      position: absolute;
-      bottom: -20px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(255, 248, 220, 0.8) 0%, rgba(212, 175, 55, 0.2) 70%, transparent 100%);
-      box-shadow: 0 0 8px rgba(243, 229, 171, 0.6);
-      animation: floatSparkle 8s infinite ease-in-out;
-    }
-
-    .particle:nth-child(1) { left: 12%; width: 10px; height: 10px; animation-duration: 6.5s; animation-delay: 0s; }
-    .particle:nth-child(2) { left: 32%; width: 16px; height: 16px; animation-duration: 9.0s; animation-delay: 1.8s; }
-    .particle:nth-child(3) { left: 55%; width: 8px;  height: 8px;  animation-duration: 7.2s; animation-delay: 3.5s; }
-    .particle:nth-child(4) { left: 78%; width: 14px; height: 14px; animation-duration: 8.5s; animation-delay: 0.8s; }
-    .particle:nth-child(5) { left: 90%; width: 11px; height: 11px; animation-duration: 7.8s; animation-delay: 2.5s; }
-
-    @keyframes floatSparkle {
-      0% { transform: translateY(0) scale(0.6); opacity: 0; }
-      20% { opacity: 0.75; }
-      50% { transform: translateY(-130px) scale(1.1); }
-      80% { opacity: 0.75; }
-      100% { transform: translateY(-260px) scale(0.5); opacity: 0; }
-    }
-
-    /* 💬 チャットエリア（完全透明待機） */
+    /* 💬 LINE風動的メッセージエリア */
     .chat-container {
+      height: 52px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 12px;
       position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .chat-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      opacity: 0;
-      transform: translateY(14px);
-      animation: chatAppear 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    }
-
-    .chat-row:nth-child(1) { animation-delay: 0.2s; }
-    .chat-row:nth-child(2) { animation-delay: 2.2s; }
-    .chat-row:nth-child(3) { animation-delay: 4.2s; }
-
-    @keyframes chatAppear {
-      0% {
-        opacity: 0;
-        transform: translateY(14px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .chat-row.chat-right {
-      flex-direction: row-reverse;
-    }
-
-    .chat-avatar-img {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.5);
-      margin-top: 14px;
-    }
-
-    .chat-content {
-      display: flex;
-      flex-direction: column;
-      max-width: 85%;
-    }
-
-    .chat-name {
-      font-family: var(--font-serif);
-      font-size: 0.72rem;
-      font-weight: 600;
-      color: #475569;
-      margin-bottom: 3px;
-      padding-left: 2px;
-      letter-spacing: 0.05em;
-    }
-
-    .chat-right .chat-name {
-      text-align: right;
-      padding-right: 2px;
-      padding-left: 0;
+      overflow: hidden;
     }
 
     .chat-bubble {
-      position: relative;
-      background: rgba(255, 255, 255, 0.88);
+      position: absolute;
+      background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      padding: 9px 13px;
-      border-radius: 12px;
-      border-top-left-radius: 2px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      line-height: 1.5;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
       border: 1px solid rgba(255, 255, 255, 0.8);
+      border-radius: 18px;
+      padding: 8px 14px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-main);
+      text-align: center;
+      line-height: 1.35;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      opacity: 0;
+      transform: translateY(15px);
+      transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+      width: 96%;
+      pointer-events: none;
     }
 
-    .chat-right .chat-bubble {
-      background: rgba(212, 237, 208, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 12px;
-      border-top-right-radius: 2px;
-      border-top-left-radius: 12px;
-      color: #1e3a1e;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    .chat-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 6px 6px 0;
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.65) transparent;
+      display: block;
+      width: 0;
+    }
+
+    .chat-bubble.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .chat-bubble.exit {
+      opacity: 0;
+      transform: translateY(-15px);
     }
 
     .input-group {
@@ -317,65 +221,55 @@
 
     .input-group label {
       display: block;
-      font-size: 0.76rem;
+      font-size: 0.78rem;
       font-weight: 700;
       margin-bottom: 6px;
       color: var(--text-main);
       padding-left: 0.4em;
-      letter-spacing: 0.02em;
+      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
     }
 
-    .label-sub {
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: #64748b;
-      display: block;
-      margin-top: -3px;
-      margin-bottom: 6px;
-      padding-left: 0.4em;
-    }
-
+    /* 🏷️ 初期状態のトリガーボタン */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1.5px solid rgba(255, 255, 255, 0.7);
       border-radius: 20px;
-      font-size: 0.92rem;
-      background: rgba(255, 255, 255, 0.5);
+      font-size: 0.95rem;
+      background: rgba(255, 255, 255, 0.45);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       color: var(--text-main);
-      font-weight: 600;
+      font-weight: 700;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
-      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: all 0.2s ease;
     }
 
     .table-trigger-btn:active {
       transform: scale(0.98);
-      background: rgba(255, 255, 255, 0.75);
+      background: rgba(255, 255, 255, 0.65);
     }
 
     .table-trigger-btn.selected {
-      border-color: #d4af37;
-      background: rgba(255, 255, 255, 0.85);
-      color: #8c7336;
-      font-weight: 700;
+      border-color: rgba(35, 213, 171, 0.8);
+      background: rgba(255, 255, 255, 0.8);
+      color: #0d9488;
     }
 
-    /* 🪟 モーダル */
+    /* 🪟 モーダルオーバーレイ */
     .modal-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(15, 23, 42, 0.45);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       z-index: 999;
       display: flex;
       justify-content: center;
@@ -391,16 +285,17 @@
       visibility: visible;
     }
 
+    /* 🪟 ダークガラスモーダルコンテンツ */
     .modal-content {
       width: 100%;
       max-width: 320px;
-      background: rgba(30, 41, 59, 0.9);
+      background: rgba(45, 55, 72, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--gold-border);
+      border: 1px solid rgba(255, 255, 255, 0.25);
       border-radius: 18px;
-      padding: 12px 8px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      padding: 10px 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
       transform: scale(0.9) translateY(10px);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -409,6 +304,7 @@
       transform: scale(1) translateY(0);
     }
 
+    /* 📜 縦リスト型ドロップダウンアイテム */
     .table-list-container {
       max-height: 280px;
       overflow-y: auto;
@@ -417,18 +313,18 @@
     }
 
     .table-list-container::-webkit-scrollbar {
-      width: 4px;
+      width: 5px;
     }
     .table-list-container::-webkit-scrollbar-thumb {
-      background: rgba(212, 175, 55, 0.4);
+      background: rgba(255, 255, 255, 0.3);
       border-radius: 4px;
     }
 
     .table-list-item {
       padding: 11px 16px;
       border-radius: 10px;
-      font-size: 0.92rem;
-      font-weight: 500;
+      font-size: 0.95rem;
+      font-weight: 600;
       color: rgba(255, 255, 255, 0.9);
       display: flex;
       align-items: center;
@@ -436,8 +332,6 @@
       cursor: pointer;
       transition: all 0.15s ease;
       margin-bottom: 2px;
-      font-family: var(--font-en);
-      letter-spacing: 0.08em;
     }
 
     .table-list-item:active {
@@ -445,10 +339,10 @@
     }
 
     .table-list-item.selected {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.85) 0%, rgba(170, 124, 17, 0.85) 100%) !important;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.85) 0%, rgba(34, 211, 238, 0.85) 100%) !important;
       color: #ffffff !important;
       font-weight: 700;
-      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+      box-shadow: 0 4px 12px rgba(34, 211, 238, 0.35);
       border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
@@ -463,71 +357,71 @@
       opacity: 1;
     }
 
+    /* ✏️ 任意ニックネーム入力フィールド */
     .text-input-field {
       width: 100%;
       padding: 10px 14px;
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1.5px solid rgba(255, 255, 255, 0.6);
       border-radius: 12px;
       font-size: 0.88rem;
       outline: none;
-      background: rgba(255, 255, 255, 0.45) !important;
+      background: rgba(255, 255, 255, 0.4) !important;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       color: var(--text-main);
-      font-weight: 500;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      font-weight: 600;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       transition: all 0.2s ease;
     }
 
     .text-input-field::placeholder {
-      color: #94a3b8;
-      font-weight: 400;
+      color: #718096;
+      font-weight: 500;
     }
 
     .text-input-field:focus {
-      border-color: #d4af37;
-      background: rgba(255, 255, 255, 0.7) !important;
+      border-color: var(--primary-color);
+      background: rgba(255, 255, 255, 0.6) !important;
     }
 
     .file-select-area {
-      border: 1.5px dashed var(--gold-border);
+      border: 2px dashed rgba(108, 92, 231, 0.5);
       border-radius: 12px;
       padding: 14px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.35);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       cursor: pointer;
-      transition: all 0.25s ease;
-      margin-top: 8px;
+      transition: all 0.2s ease;
+      margin-top: 6px;
       margin-bottom: 8px;
     }
 
     .file-select-area:active {
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.6);
       transform: scale(0.98);
     }
 
     .file-select-label {
-      font-family: var(--font-serif);
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #8c7336;
-      letter-spacing: 0.05em;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--primary-color);
       pointer-events: none;
     }
 
     input[type="file"] { display: none; }
 
+    /* 📱 プレビューエリア */
     #preview-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       margin: 12px 0 14px;
       padding: 8px;
-      background: rgba(255, 255, 255, 0.22);
+      background: rgba(255, 255, 255, 0.18);
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.35);
       overflow: hidden;
     }
 
@@ -536,9 +430,8 @@
       aspect-ratio: 1;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      animation: fadeInSmooth 0.3s ease forwards;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      border: 1px solid rgba(255, 255, 255, 0.5);
     }
 
     .preview-item img {
@@ -554,16 +447,16 @@
       right: 4px;
       width: 20px;
       height: 20px;
-      background: rgba(225, 29, 72, 0.85);
+      background: rgba(255, 118, 117, 0.9);
       color: white;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
       z-index: 10;
       backdrop-filter: blur(2px);
     }
@@ -572,14 +465,14 @@
       width: 100%;
       padding: 13px 16px;
       border-radius: 14px;
-      font-size: 0.92rem;
-      font-weight: 600;
+      font-size: 0.95rem;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.03em;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       outline: none;
       backdrop-filter: blur(12px);
@@ -592,31 +485,44 @@
     }
 
     .btn-primary {
-      font-family: var(--font-serif);
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.85) 0%, rgba(184, 134, 11, 0.85) 100%);
-      color: #ffffff;
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 6px 18px rgba(184, 134, 11, 0.25);
+      background: rgba(162, 155, 254, 0.45);
+      color: #2d3748;
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 6px 18px rgba(162, 155, 254, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.9);
       margin-top: 6px;
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-primary:hover {
+      background: rgba(162, 155, 254, 0.65);
+      box-shadow: 0 8px 22px rgba(162, 155, 254, 0.35), inset 0 1px 2px rgba(255, 255, 255, 1);
     }
 
     .btn-add {
-      background: rgba(255, 255, 255, 0.55);
-      color: #475569;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      background: rgba(255, 255, 255, 0.5);
+      color: #4a3cb2;
+      border: 1.5px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8);
       margin-top: 0;
       margin-bottom: 10px;
     }
 
+    .btn-add:hover {
+      background: rgba(255, 255, 255, 0.7);
+    }
+
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.3);
-      color: #475569;
-      border: 1px solid rgba(255, 255, 255, 0.5);
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+      background: rgba(255, 255, 255, 0.25);
+      color: #334155;
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
       margin-top: 10px;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       padding: 10px 14px;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.4);
     }
 
     .progress-container {
@@ -627,9 +533,9 @@
 
     .progress-bar-bg {
       width: 100%;
-      height: 8px;
+      height: 10px;
       background: rgba(255, 255, 255, 0.4);
-      border-radius: 4px;
+      border-radius: 5px;
       overflow: hidden;
       margin-bottom: 8px;
     }
@@ -637,8 +543,8 @@
     .progress-bar-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #d4af37, #f3e5ab);
-      border-radius: 4px;
+      background: linear-gradient(90deg, var(--primary-color), #a29bfe);
+      border-radius: 5px;
       transition: width 0.3s ease;
     }
 
@@ -646,19 +552,19 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-main);
-      font-weight: 600;
+      font-weight: 700;
     }
 
     #status {
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       text-align: center;
       margin-top: 8px;
-      font-weight: 600;
+      font-weight: 700;
     }
 
-    #confirm-screen, #thankyou-screen {
+    #confirm-screen, #thankyou-screen, #history-screen {
       display: none;
     }
 
@@ -667,37 +573,190 @@
     }
 
     .success-icon {
-      font-size: 2.8rem;
+      font-size: 3rem;
       margin: 0 auto 10px auto;
       display: block;
       line-height: 1;
     }
 
-    .pwa-prompt-banner {
-      display: none;
-      margin-top: 12px;
-      padding: 10px 12px;
-      background: rgba(255, 255, 255, 0.6);
+    /* 🧭 ぬるっと滑らかに開くスライドサイドメニュー UI */
+    .sidebar-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.35);
       backdrop-filter: blur(10px);
-      border: 1px solid var(--gold-border);
-      border-radius: 12px;
-      text-align: center;
-      font-size: 0.76rem;
-      color: #334155;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-      animation: fadeInSmooth 0.5s ease forwards;
+      -webkit-backdrop-filter: blur(10px);
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.35s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    .pwa-prompt-btn {
-      margin-top: 6px;
-      padding: 6px 12px;
-      background: #8c7336;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.75rem;
-      font-weight: 600;
+    .sidebar-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sidebar-drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 270px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-right: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 12px 0 35px rgba(0, 0, 0, 0.22);
+      z-index: 1001;
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 26px 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-overlay.active .sidebar-drawer {
+      transform: translateX(0);
+    }
+
+    .sidebar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 22px;
+      padding-bottom: 12px;
+      border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+    }
+
+    .sidebar-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .sidebar-close-btn {
+      width: 28px;
+      height: 28px;
+      background: rgba(0, 0, 0, 0.06);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 13px;
+      font-weight: bold;
+      color: var(--text-sub);
       cursor: pointer;
+    }
+
+    .sidebar-menu-item {
+      padding: 13px 16px;
+      border-radius: 14px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      margin-bottom: 8px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .sidebar-menu-item:active {
+      transform: scale(0.97);
+      background: rgba(108, 92, 231, 0.18);
+      color: var(--primary-color);
+      border-color: rgba(108, 92, 231, 0.3);
+    }
+
+    /* 📜 送信履歴表示カード UI */
+    .history-card {
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+    }
+
+    .history-thumb-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .history-thumb-item {
+      aspect-ratio: 1;
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.6);
+    }
+
+    .history-thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* 💡 メニュー用情報ポップアップ */
+    .info-modal-content {
+      width: 100%;
+      max-width: 320px;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 20px 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-modal-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 14px;
+      color: var(--text-main);
+    }
+
+    .info-list {
+      font-size: 0.82rem;
+      line-height: 1.6;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    .info-list li {
+      margin-bottom: 10px;
+      list-style-type: none;
+      padding-left: 1.4em;
+      position: relative;
+    }
+
+    .info-list li::before {
+      content: '✨';
+      position: absolute;
+      left: 0;
+      top: 0;
     }
   </style>
 </head>
@@ -708,63 +767,29 @@
 
   <div class="container">
     
+    <!-- ☰ ハンバーガーボタン -->
+    <div class="menu-trigger" onclick="openSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
     <!-- 画面1: 選択画面 -->
-    <div id="select-screen" class="screen-view">
-      <!-- 🖼️ 2. メインヘッダー画像 -->
-      <img src="./Upload-UI①.jpg" class="header-img" alt="ウェルカム画像">
-      
-      <div class="title-area">
-        <span class="en-sub">SHARE YOUR MEMORIES</span>
-        <h2>みんなの思い出を集めよう</h2>
+    <div id="select-screen">
+      <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
+      <h2>📸 みんなの思い出を集めよう！</h2>
+
+      <!-- 💬 LINE風動的メッセージエリア -->
+      <div class="chat-container">
+        <div id="chat-bubble" class="chat-bubble"></div>
       </div>
 
-      <!-- 📦 チャットコンテナ -->
-      <div class="chat-wrapper">
-        <div class="glimmer-container">
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-          <div class="particle"></div>
-        </div>
-
-        <div class="chat-container">
-          <!-- 🖼️ 3. Ukyo様アバター -->
-          <div class="chat-row">
-            <img src="./Upload-UI③.jpg" class="chat-avatar-img" alt="Ukyo">
-            <div class="chat-content">
-              <span class="chat-name">Ukyo</span>
-              <div class="chat-bubble">新郎新婦の写真は勿論、当日の会場の様子なども大歓迎！</div>
-            </div>
-          </div>
-
-          <!-- 🖼️ 4. Karin様アバター -->
-          <div class="chat-row chat-right">
-            <img src="./Upload-UI④.jpg" class="chat-avatar-img" alt="Karin">
-            <div class="chat-content">
-              <span class="chat-name">Karin</span>
-              <div class="chat-bubble">懐かしの友人やご家族との写真もお待ちしております！！</div>
-            </div>
-          </div>
-
-          <!-- 🖼️ 5. 新郎新婦アバター -->
-          <div class="chat-row">
-            <img src="./Upload-UI⑤.jpg" class="chat-avatar-img" alt="新郎新婦">
-            <div class="chat-content">
-              <span class="chat-name">Ukyo & Karin</span>
-              <div class="chat-bubble">皆様の視点で切り取った大切な瞬間をお待ちしています✨</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 🏷️ 卓番号選択 -->
+      <!-- 🏷️ 卓番号選択（トリガーボタン） -->
       <div class="input-group">
         <label>卓番号を選択してください</label>
-        <span class="label-sub">※QRコードが記載されているPOPをご確認ください</span>
         <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
-          <span id="table-trigger-text">SELECT TABLE</span>
-          <span style="font-size: 0.7rem; color: #94a3b8;">▼</span>
+          <span id="table-trigger-text">選択してください</span>
+          <span style="font-size: 0.75rem; color: #718096;">▼</span>
         </div>
         <input type="hidden" id="table-no" value="">
       </div>
@@ -777,32 +802,23 @@
 
       <!-- 写真選択エリア -->
       <div class="file-select-area" onclick="handleFileSelectClick()">
-        <span class="file-select-label">写真を選択する</span>
+        <span class="file-select-label">📸 写真を選択する</span>
       </div>
       <input type="file" id="file-input" accept="image/*" multiple>
 
-      <div id="select-status" style="font-size: 0.78rem; text-align: center; font-weight: 600; margin-top: 6px;"></div>
-
-      <!-- 📲 ホーム画面追加ガイドバナー -->
-      <div id="pwa-banner" class="pwa-prompt-banner">
-        <span id="pwa-banner-text">📲 ホーム画面に追加すると次回からすぐ開けます</span>
-        <button id="pwa-banner-btn" class="pwa-prompt-btn" style="display:none;" onclick="installPWA()">ホーム画面に追加</button>
-      </div>
+      <div id="select-status" style="font-size: 0.8rem; text-align: center; font-weight: 700; margin-top: 6px;"></div>
     </div>
 
     <!-- 画面2: プレビュー確認＆アップロード画面 -->
     <div id="confirm-screen">
-      <div class="title-area">
-        <span class="en-sub">PREVIEW</span>
-        <h2>選択中の写真</h2>
-      </div>
-      <p class="subtitle" id="selected-summary" style="font-size: 0.8rem; text-align: center; color: #475569; margin-bottom: 10px;">全0枚の写真を選択中</p>
+      <h2>📸 選択した写真の確認</h2>
+      <p class="subtitle" id="selected-summary">全0枚の写真を選択中</p>
 
       <div id="preview-grid"></div>
 
-      <button id="add-btn" class="btn btn-add" onclick="triggerAddPhotos()">写真を追加する</button>
-      <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始する</button>
-      <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()">最初から選び直す</button>
+      <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()">➕ 写真を追加する</button>
+      <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始</button>
+      <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()">🔄 最初から選び直す</button>
 
       <div id="progress-container" class="progress-container">
         <div class="progress-bar-bg">
@@ -819,19 +835,48 @@
  
     <!-- 画面3: アップロード完了画面 -->
     <div id="thankyou-screen">
-      <div class="success-icon">✨</div>
-      <div class="title-area">
-        <span class="en-sub">THANK YOU</span>
-        <h2>アップロードが完了しました</h2>
-      </div>
-      <p class="subtitle" style="font-size: 0.82rem; text-align: center; color: #475569; margin-bottom: 14px; line-height: 1.6;">たくさんの素敵な写真を<br>ありがとうございました！</p>
+      <div class="success-icon">🎉</div>
+      <h2>アップロード完了！</h2>
+      <p class="subtitle">たくさんの素敵な写真を<br>ありがとうございました！</p>
       
-      <!-- 🖼️ 6. 完了画面ヘッダー画像 -->
-      <img src="./Upload-UI②.jpg" class="header-img" alt="感謝画像">
+      <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
 
       <button class="btn btn-primary" style="margin-top:14px;" onclick="resetForm()">続けてアップロードする</button>
     </div>
 
+    <!-- 画面4: 送信履歴画面 -->
+    <div id="history-screen">
+      <h2>📜 送信履歴</h2>
+      <p class="subtitle">あなたがこれまでに送信した写真です</p>
+
+      <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 12px;"></div>
+
+      <button class="btn btn-secondary" onclick="goToSelectScreen()">🏠 ホームに戻る</button>
+    </div>
+
+  </div>
+
+  <!-- 🧭 スライドサイドメニュー -->
+  <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebarOnOutside(event)">
+    <div class="sidebar-drawer">
+      <div class="sidebar-header">
+        <span class="sidebar-title">メニュー</span>
+        <div class="sidebar-close-btn" onclick="closeSidebar()">✕</div>
+      </div>
+      
+      <div class="sidebar-menu-item" onclick="navigateFromSidebar('select')">
+        <span>🏠</span> ホーム（写真送信）
+      </div>
+      <div class="sidebar-menu-item" onclick="navigateFromSidebar('history')">
+        <span>📜</span> 送信履歴を見る
+      </div>
+      <div class="sidebar-menu-item" onclick="navigateFromSidebar('tips')">
+        <span>💡</span> おすすめ撮影のヒント
+      </div>
+      <div class="sidebar-menu-item" onclick="navigateFromSidebar('guide')">
+        <span>📖</span> アプリの使い方
+      </div>
+    </div>
   </div>
 
   <!-- 🪟 卓番号選択モーダル -->
@@ -841,26 +886,75 @@
     </div>
   </div>
 
+  <!-- 💡 撮影ヒント モーダル -->
+  <div id="tips-modal" class="modal-overlay" onclick="closeTipsModalOnOutside(event)">
+    <div class="info-modal-content">
+      <div class="info-modal-title">💡 おすすめの撮影ヒント</div>
+      <ul class="info-list">
+        <li>卓の仲間全員での笑顔の集合写真</li>
+        <li>新郎新婦の入場やケーキカットの瞬間</li>
+        <li>美味しそうな料理やドレスのアップショット</li>
+        <li>歓談中の自然な笑顔や乾杯のシーン</li>
+      </ul>
+      <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeTipsModal()">閉じる</button>
+    </div>
+  </div>
+
+  <!-- 📖 使い方ガイド モーダル -->
+  <div id="guide-modal" class="modal-overlay" onclick="closeGuideModalOnOutside(event)">
+    <div class="info-modal-content">
+      <div class="info-modal-title">📖 アプリの使い方</div>
+      <ul class="info-list" style="padding-left: 0;">
+        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 1:</strong> 卓番号を選びます（お名前入力は任意）。</li>
+        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 2:</strong> 「写真を選択する」から何枚でも選択できます。</li>
+        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 3:</strong> 送信完了後、何回でも続けて送信可能です！</li>
+      </ul>
+      <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeGuideModal()">閉じる</button>
+    </div>
+  </div>
+
   <script>
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwqVSo4KByiRAtk8f2l7k1v7rI11U-f-mD-7C_1/exec";
-
-    function vibrate(pattern = 15) {
-      if ('vibrate' in navigator) {
-        try { navigator.vibrate(pattern); } catch (e) {}
-      }
-    }
-
-    // 🖼️ 7. 背景スライドショー画像（GitHubローカル直リンク）
     const bgImages = [
-      './bg-resorce①.jpg',
-      './bg-resorce②.jpg',
-      './bg-resorce③.jpg',
-      './bg-resorce④.jpg',
-      './bg-resorce⑤.jpg',
-      './bg-resorce⑥.jpg'
+      'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
+      'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
+      'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000',
+      'https://drive.google.com/thumbnail?id=1ysDUL-Bs6JBRCx-dYirsOk0xN8WFp2TB&sz=w1000',
+      'https://drive.google.com/thumbnail?id=15_bPftkdb-MSojnwDst30yTwEma4vxL8&sz=w1000',
+      'https://drive.google.com/thumbnail?id=1zL_uNkO9Vq1iZbOf4D9p7gqmRYjPPY-r&sz=w1000',
     ];
 
-    const tables = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F', 'Table G', 'Table H', 'Table I', 'Table J', 'Table K', 'Table L', 'Table M', 'Table N', 'Table O', 'Table P', 'Table Q', 'Table R'];
+    const tables = ['卓A', '卓B', '卓C', '卓D', '卓E', '卓F', '卓G', '卓H', '卓I', '卓J', '卓K', '卓L', '卓M', '卓N', '卓O', '卓P', '卓Q', '卓R'];
+
+    const chatMessages = [
+      "新郎新婦の写真はもちろん、<br>当日の会場の様子なども大歓迎！",
+      "懐かしの友人やご家族との写真も<br>お待ちしております！！",
+      "皆様の視点で切り取った<br>大切な瞬間をお待ちしています✨"
+    ];
+
+    let currentMsgIdx = 0;
+
+    function initChatAnimation() {
+      const bubble = document.getElementById('chat-bubble');
+      if (!bubble) return;
+
+      function showNextMessage() {
+        bubble.innerHTML = chatMessages[currentMsgIdx];
+        bubble.classList.remove('exit');
+        bubble.classList.add('active');
+
+        setTimeout(() => {
+          bubble.classList.remove('active');
+          bubble.classList.add('exit');
+
+          setTimeout(() => {
+            currentMsgIdx = (currentMsgIdx + 1) % chatMessages.length;
+            showNextMessage();
+          }, 600);
+        }, 4000);
+      }
+
+      showNextMessage();
+    }
 
     function initBgSlideshow() {
       const slideshowContainer = document.getElementById('bg-slideshow');
@@ -895,7 +989,7 @@
       const defaultItem = document.createElement('div');
       defaultItem.className = 'table-list-item selected';
       defaultItem.setAttribute('data-value', '');
-      defaultItem.innerHTML = `<span class="check-mark">✓</span><span>SELECT TABLE</span>`;
+      defaultItem.innerHTML = `<span class="check-mark">✓</span><span>選択してください</span>`;
       defaultItem.onclick = () => selectTableListItem('', defaultItem);
       container.appendChild(defaultItem);
 
@@ -909,71 +1003,57 @@
       });
     }
 
-    let deferredPrompt = null;
+    /* 🧭 スライドサイドバー＆モーダル制御機能 */
+    function openSidebar() {
+      document.getElementById('sidebar-overlay').classList.add('active');
+    }
 
-    function initPWAInstaller() {
-      const isStandalone = window.navigator.standalone || window.matchMedia('(display-mode: standalone)').matches;
-      if (isStandalone) return;
+    function closeSidebar() {
+      document.getElementById('sidebar-overlay').classList.remove('active');
+    }
 
-      const banner = document.getElementById('pwa-banner');
-      const bannerText = document.getElementById('pwa-banner-text');
-      const bannerBtn = document.getElementById('pwa-banner-btn');
-      const isiOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      if (isiOS) {
-        bannerText.innerHTML = "📲 画面下部アイコン <b style='color:#8c7336;'>[共有]</b> ➔ <b style='color:#8c7336;'>[ホーム画面に追加]</b> でアイコンを登録できます";
-        banner.style.display = 'block';
-      } else {
-        window.addEventListener('beforeinstallprompt', (e) => {
-          e.preventDefault();
-          deferredPrompt = e;
-          bannerText.innerText = "📲 ホーム画面にアプリを追加できます";
-          bannerBtn.style.display = 'inline-block';
-          banner.style.display = 'block';
-        });
+    function closeSidebarOnOutside(e) {
+      if (e.target.id === 'sidebar-overlay') {
+        closeSidebar();
       }
     }
 
-    function installPWA() {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            document.getElementById('pwa-banner').style.display = 'none';
-          }
-          deferredPrompt = null;
-        });
+    function navigateFromSidebar(target) {
+      closeSidebar();
+      if (target === 'select') {
+        goToSelectScreen();
+      } else if (target === 'history') {
+        goToHistoryScreen();
+      } else if (target === 'tips') {
+        openTipsModal();
+      } else if (target === 'guide') {
+        openGuideModal();
       }
     }
 
-    function openTableModal() {
-      vibrate(12);
-      document.getElementById('table-modal').classList.add('active');
-    }
+    function openTipsModal() { document.getElementById('tips-modal').classList.add('active'); }
+    function closeTipsModal() { document.getElementById('tips-modal').classList.remove('active'); }
+    function closeTipsModalOnOutside(e) { if (e.target.id === 'tips-modal') closeTipsModal(); }
 
-    function closeTableModal() {
-      document.getElementById('table-modal').classList.remove('active');
-    }
+    function openGuideModal() { document.getElementById('guide-modal').classList.add('active'); }
+    function closeGuideModal() { document.getElementById('guide-modal').classList.remove('active'); }
+    function closeGuideModalOnOutside(e) { if (e.target.id === 'guide-modal') closeGuideModal(); }
 
-    function closeTableModalOnOutside(e) {
-      if (e.target.id === 'table-modal') {
-        vibrate(8);
-        closeTableModal();
-      }
-    }
+    function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
+    function closeTableModal() { document.getElementById('table-modal').classList.remove('active'); }
+    function closeTableModalOnOutside(e) { if (e.target.id === 'table-modal') closeTableModal(); }
 
     function selectTableListItem(val, element) {
-      vibrate([15, 30, 15]);
       document.getElementById('table-no').value = val;
       
       const triggerBtn = document.getElementById('table-trigger');
       const triggerText = document.getElementById('table-trigger-text');
       
       if (val) {
-        triggerText.innerText = `✓ ${val}`;
+        triggerText.innerText = `✨ ${val}`;
         triggerBtn.classList.add('selected');
       } else {
-        triggerText.innerText = 'SELECT TABLE';
+        triggerText.innerText = '選択してください';
         triggerBtn.classList.remove('selected');
       }
       
@@ -990,7 +1070,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       initBgSlideshow();
       initTableList();
-      initPWAInstaller();
+      initChatAnimation();
     });
 
     let selectedFiles = [];
@@ -1013,14 +1093,13 @@
     const selectScreen = document.getElementById('select-screen');
     const confirmScreen = document.getElementById('confirm-screen');
     const thankyouScreen = document.getElementById('thankyou-screen');
+    const historyScreen = document.getElementById('history-screen');
 
     function handleFileSelectClick() {
-      vibrate(15);
       const tableNo = tableNoInput.value;
       if (!tableNo) {
-        vibrate([30, 50, 30]);
-        selectStatus.innerText = '卓番号を選択してください';
-        selectStatus.style.color = '#e11d48';
+        selectStatus.innerText = '⚠️ 卓番号を選択してください';
+        selectStatus.style.color = '#c53030';
         openTableModal();
         return;
       }
@@ -1028,16 +1107,10 @@
       fileInput.click();
     }
 
-    function triggerAddPhotos() {
-      vibrate(15);
-      fileInput.click();
-    }
-
     fileInput.addEventListener('change', function(e) {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
       
-      vibrate(20);
       selectedFiles = selectedFiles.concat(files);
       goToConfirmScreen();
     });
@@ -1048,27 +1121,32 @@
         return;
       }
       renderPreviews();
-      switchScreen(selectScreen, confirmScreen);
+      selectScreen.style.display = 'none';
+      confirmScreen.style.display = 'block';
+      thankyouScreen.style.display = 'none';
+      historyScreen.style.display = 'none';
       window.scrollTo(0, 0);
     }
 
     function goToSelectScreen() {
-      switchScreen(confirmScreen, selectScreen);
+      selectScreen.style.display = 'block';
+      confirmScreen.style.display = 'none';
+      thankyouScreen.style.display = 'none';
+      historyScreen.style.display = 'none';
       fileInput.value = '';
       window.scrollTo(0, 0);
     }
 
-    function switchScreen(fromEl, toEl) {
-      fromEl.style.display = 'none';
-      fromEl.classList.remove('screen-view');
-      
-      toEl.style.display = 'block';
-      void toEl.offsetWidth;
-      toEl.classList.add('screen-view');
+    function goToHistoryScreen() {
+      renderHistoryList();
+      selectScreen.style.display = 'none';
+      confirmScreen.style.display = 'none';
+      thankyouScreen.style.display = 'none';
+      historyScreen.style.display = 'block';
+      window.scrollTo(0, 0);
     }
 
     function resetAllSelection() {
-      vibrate(25);
       selectedFiles = [];
       fileInput.value = '';
       goToSelectScreen();
@@ -1102,7 +1180,6 @@
     }
 
     function removeFile(index) {
-      vibrate(20);
       selectedFiles.splice(index, 1);
       if (selectedFiles.length === 0) {
         goToSelectScreen();
@@ -1119,30 +1196,78 @@
     }
 
     function sendBatchToGas(batchData, tableNo, userName, targetFolderId) {
-      const payload = {
-        chunk: batchData,
-        tableNo: tableNo,
-        userName: userName,
-        targetFolderId: targetFolderId
-      };
+      return new Promise((resolve, reject) => {
+        google.script.run
+          .withSuccessHandler(res => resolve(res))
+          .withFailureHandler(err => reject(err))
+          .uploadBatchFiles(batchData, tableNo, userName, targetFolderId);
+      });
+    }
 
-      return fetch(GAS_WEB_APP_URL, {
-        method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(payload)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('ネットワークエラーが発生しました');
-        }
-        return response.json();
+    function saveUploadHistory(tableNo, userName, fileDataArray) {
+      try {
+        const existingHistory = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
+        
+        const now = new Date();
+        const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
+        const thumbnails = fileDataArray.slice(0, 4).map(item => item.base64Data);
+
+        const newRecord = {
+          id: Date.now(),
+          date: dateStr,
+          tableNo: tableNo,
+          userName: userName || '匿名',
+          count: fileDataArray.length,
+          thumbnails: thumbnails
+        };
+
+        existingHistory.unshift(newRecord);
+        if (existingHistory.length > 15) existingHistory.pop();
+
+        localStorage.setItem('wedding_upload_history', JSON.stringify(existingHistory));
+      } catch (e) {
+        console.error('History save error:', e);
+      }
+    }
+
+    function renderHistoryList() {
+      const container = document.getElementById('history-list-container');
+      container.innerHTML = '';
+
+      const historyData = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
+
+      if (historyData.length === 0) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:var(--text-sub); padding: 20px 0;">まだアップロード履歴はありません✨</p>`;
+        return;
+      }
+
+      historyData.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'history-card';
+
+        const header = document.createElement('div');
+        header.className = 'history-header';
+        header.innerHTML = `<span>✨ ${item.tableNo} (${item.userName})</span><span>${item.date} [全${item.count}枚]</span>`;
+
+        const thumbGrid = document.createElement('div');
+        thumbGrid.className = 'history-thumb-grid';
+
+        item.thumbnails.forEach(src => {
+          const thumbItem = document.createElement('div');
+          thumbItem.className = 'history-thumb-item';
+          const img = document.createElement('img');
+          img.src = src;
+          thumbItem.appendChild(img);
+          thumbGrid.appendChild(thumbItem);
+        });
+
+        card.appendChild(header);
+        card.appendChild(thumbGrid);
+        container.appendChild(card);
       });
     }
 
     async function startUpload() {
-      vibrate([20, 40, 20]);
       const tableNo = tableNoInput.value; 
       const userName = userNameInput.value.trim();
 
@@ -1171,6 +1296,8 @@
           )
         );
 
+        saveUploadHistory(tableNo, userName, fileDataArray);
+
         const CHUNK_SIZE = 3;
         const totalChunks = Math.ceil(fileDataArray.length / CHUNK_SIZE);
 
@@ -1181,11 +1308,10 @@
 
           if (currentChunkIndex === totalChunks) {
             updateProgress(100, `送信完了 (${totalPhotos}/${totalPhotos}枚)`);
-            vibrate([50, 100, 50, 100, 50]);
-
             setTimeout(() => {
               progressContainer.style.display = 'none';
-              switchScreen(confirmScreen, thankyouScreen);
+              confirmScreen.style.display = 'none';
+              thankyouScreen.style.display = 'block';
               window.scrollTo(0, 0);
             }, 300);
 
@@ -1207,7 +1333,6 @@
         }
 
       } catch (err) {
-        vibrate([100, 50, 100]);
         progressContainer.style.display = 'none';
         showError('送信に失敗しました: ' + (err.message || err));
       }
@@ -1258,15 +1383,14 @@
     }
 
     function showError(msg) {
-      statusDiv.innerText = `エラー: ${msg}`;
-      statusDiv.style.color = '#e11d48';
+      statusDiv.innerText = `⚠️ error: ${msg}`;
+      statusDiv.style.color = '#c53030';
       uploadBtn.style.display = 'flex';
       addBtn.style.display = 'flex';
       resetBtn.style.display = 'flex';
     }
 
     function resetForm() {
-      vibrate(15);
       selectedFiles = [];
       previewGrid.innerHTML = '';
       uploadBtn.style.display = 'flex';
@@ -1278,7 +1402,9 @@
       progressContainer.style.display = 'none';
       updateProgress(0, '');
 
-      switchScreen(thankyouScreen, selectScreen);
+      thankyouScreen.style.display = 'none';
+      confirmScreen.style.display = 'none';
+      selectScreen.style.display = 'block';
       window.scrollTo(0, 0);
     }
   </script>
