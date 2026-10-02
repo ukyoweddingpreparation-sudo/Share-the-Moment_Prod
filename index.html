@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <script>
-    // 🛡️ Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
+    // 🛡️️ Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
     (function() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -211,7 +211,7 @@
     }
 
     .chat-row.right .chat-bubble {
-      background: #d9f3c5; /* LINE風ライトグリーン */
+      background: #d9f3c5;
     }
 
     .input-group {
@@ -234,26 +234,27 @@
       display: block;
     }
 
-    /* 🏷️ SELECT TABLE ドロップダウン */
+    /* 🏷️ SELECT TABLE ドロップダウン（ゴールド枠＆チェック復元） */
     .table-trigger-btn {
       width: 100%;
-      padding: 13px 20px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      padding: 12px 20px;
+      border: 1.5px solid var(--gold-border);
       border-radius: 30px;
-      font-size: 0.92rem;
-      background: rgba(255, 255, 255, 0.75);
-      color: #1a202c;
+      font-size: 0.95rem;
+      background: #ffffff;
+      color: #a0aec0;
       font-weight: 700;
-      letter-spacing: 0.05em;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
       box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease;
     }
 
     .table-trigger-btn.selected {
-      color: #2b2b2b;
+      color: #b89753;
+      border-color: #b89753;
     }
 
     /* ✏️ お名前入力欄 */
@@ -581,7 +582,7 @@
       <div class="title-english">SHARE YOUR MEMORIES</div>
       <h2>みんなの思い出を集めよう</h2>
 
-      <!-- 💬 画像通りのLINEチャット風エリア -->
+      <!-- 💬 チャット風エリア -->
       <div class="chat-room">
         <!-- メッセージ1 (Ukyo) -->
         <div class="chat-row">
@@ -601,7 +602,7 @@
             <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Karin">
           </div>
           <div class="chat-bubble">
-            懐かしの友人やご家族との写真もお待ちしております！！
+            懐かしの友人やご家族との写真もお待しております！！
           </div>
         </div>
 
@@ -617,13 +618,13 @@
         </div>
       </div>
 
-      <!-- 🏷️ SELECT TABLE ドロップダウン -->
+      <!-- 🏷️ SELECT TABLE ドロップダウン（画像通り復元） -->
       <div class="input-group">
         <label>卓番号を選択してください</label>
         <span class="input-sublabel">※QRコードが記載されているPOPをご確認ください</span>
         <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
           <span id="table-trigger-text">SELECT TABLE</span>
-          <span style="font-size: 0.75rem; color: #a0aec0;">▼</span>
+          <span style="font-size: 0.75rem; color: #8899a6;">▼</span>
         </div>
         <input type="hidden" id="table-no" value="">
       </div>
@@ -778,7 +779,12 @@
 
     function selectTableListItem(val, element) {
       document.getElementById('table-no').value = val;
-      document.getElementById('table-trigger-text').innerText = val;
+      const triggerBtn = document.getElementById('table-trigger');
+      const triggerText = document.getElementById('table-trigger-text');
+      
+      triggerText.innerText = `✓ ${val}`;
+      triggerBtn.classList.add('selected');
+
       document.querySelectorAll('.table-list-item').forEach(i => i.classList.remove('selected'));
       element.classList.add('selected');
       setTimeout(closeTableModal, 180);
@@ -1103,3 +1109,6 @@
   </script>
 </body>
 </html>
+
+
+
