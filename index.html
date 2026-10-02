@@ -23,18 +23,20 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary-color: #6c5ce7;
-      --primary-hover: #5a4bcf;
-      --accent-color: #ff7675;
-      --card-bg: rgba(255, 255, 255, 0.25);
-      --text-main: #1a202c;
-      --text-sub: #2d3748;
+      --primary-color: #f1c40f;
+      --primary-hover: #d4ac0d;
+      --accent-color: #e74c3c;
+      --gold-border: rgba(241, 196, 15, 0.6);
+      --gold-border-bright: rgba(255, 215, 0, 0.85);
+      --card-bg: rgba(30, 39, 46, 0.65);
+      --text-main: #ffffff;
+      --text-sub: #d2dae2;
       --border-radius: 16px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 1. 最背面：動くオーロラグラデーション背景 */
+    /* 🌈 1. 最背面：動くダークオーロラグラデーション背景 */
     body {
       font-family: 'Noto Sans JP', sans-serif;
       min-height: 100vh;
@@ -45,7 +47,7 @@
       color: var(--text-main);
       position: relative;
       overflow-x: hidden;
-      background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1e272e);
       background-size: 400% 400%;
       animation: gradientBG 15s ease infinite;
     }
@@ -78,25 +80,25 @@
       background-position: center;
       opacity: 0;
       transition: opacity 2.0s ease-in-out;
-      filter: blur(1.5px);
-      mix-blend-mode: soft-light;
+      filter: blur(2px);
+      mix-blend-mode: overlay;
     }
 
     .bg-slide.active {
-      opacity: 0.60;
+      opacity: 0.50;
     }
 
-    /* 🌟 大枠（カード） */
+    /* 🌟 大枠（ゴールド枠高級感カード） */
     .container {
       width: 100%;
       max-width: 380px;
       height: auto;
       background: var(--card-bg) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.4);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid var(--gold-border);
       border-radius: var(--border-radius);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 215, 0, 0.3);
       padding: 18px 16px;
       position: relative;
       z-index: 1;
@@ -104,7 +106,7 @@
       transition: all 0.3s ease;
     }
 
-    /* ☰ ハンバーガーメニューボタン（画面左上配置） */
+    /* ☰ ハンバーガーメニューボタン（ゴールド枠） */
     .menu-trigger {
       position: absolute;
       top: 14px;
@@ -112,10 +114,10 @@
       z-index: 10;
       width: 38px;
       height: 38px;
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(30, 39, 46, 0.6);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.7);
+      border: 1.5px solid var(--gold-border);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -123,20 +125,21 @@
       align-items: center;
       gap: 4px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .menu-trigger:active {
       transform: scale(0.92);
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(241, 196, 15, 0.2);
+      border-color: var(--gold-border-bright);
     }
 
     .menu-trigger span {
       display: block;
       width: 18px;
       height: 2px;
-      background-color: var(--text-main);
+      background-color: #f1c40f;
       border-radius: 2px;
     }
 
@@ -146,8 +149,9 @@
       object-fit: cover;
       border-radius: 10px;
       margin-bottom: 10px;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-      filter: brightness(1.1) contrast(0.9) opacity(0.92);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      filter: brightness(1.05) contrast(0.95);
     }
 
     h2 {
@@ -155,11 +159,22 @@
       font-weight: 700;
       text-align: center;
       margin-bottom: 8px;
-      color: var(--text-main);
-      text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+      color: #ffffff;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
     }
 
-    /* 💬 LINE風動的メッセージエリア */
+    p.subtitle {
+      font-size: 0.78rem;
+      text-align: center;
+      color: var(--text-sub);
+      margin-bottom: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      padding: 0 4px;
+    }
+
+    /* 💬 LINE風動的メッセージエリア（ダークゴールドガラス調） */
     .chat-container {
       height: 52px;
       display: flex;
@@ -172,18 +187,18 @@
 
     .chat-bubble {
       position: absolute;
-      background: rgba(255, 255, 255, 0.65);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: rgba(40, 50, 60, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--gold-border);
       border-radius: 18px;
       padding: 8px 14px;
       font-size: 0.78rem;
-      font-weight: 700;
-      color: var(--text-main);
+      font-weight: 600;
+      color: #ffffff;
       text-align: center;
       line-height: 1.35;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
       opacity: 0;
       transform: translateY(15px);
       transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
@@ -199,7 +214,7 @@
       transform: translateX(-50%);
       border-width: 6px 6px 0;
       border-style: solid;
-      border-color: rgba(255, 255, 255, 0.65) transparent;
+      border-color: rgba(40, 50, 60, 0.75) transparent;
       display: block;
       width: 0;
     }
@@ -224,40 +239,41 @@
       font-size: 0.78rem;
       font-weight: 700;
       margin-bottom: 6px;
-      color: var(--text-main);
+      color: #f1c40f;
       padding-left: 0.4em;
-      text-shadow: 0 1px 2px rgba(255, 255, 255, 0.7);
+      text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
     }
 
-    /* 🏷️ 初期状態のトリガーボタン */
+    /* 🏷️ 初期状態のトリガーボタン（ゴールド枠） */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 18px;
-      border: 1.5px solid rgba(255, 255, 255, 0.7);
+      border: 1.5px solid var(--gold-border);
       border-radius: 20px;
       font-size: 0.95rem;
-      background: rgba(255, 255, 255, 0.45);
+      background: rgba(30, 39, 46, 0.5);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      color: var(--text-main);
+      color: #ffffff;
       font-weight: 700;
       display: flex;
       justify-content: space-between;
       align-items: center;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
       transition: all 0.2s ease;
     }
 
     .table-trigger-btn:active {
       transform: scale(0.98);
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(241, 196, 15, 0.15);
+      border-color: var(--gold-border-bright);
     }
 
     .table-trigger-btn.selected {
-      border-color: rgba(35, 213, 171, 0.8);
-      background: rgba(255, 255, 255, 0.8);
-      color: #0d9488;
+      border-color: var(--gold-border-bright);
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
     }
 
     /* 🪟 モーダルオーバーレイ */
@@ -267,9 +283,9 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.35);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
       z-index: 999;
       display: flex;
       justify-content: center;
@@ -285,17 +301,17 @@
       visibility: visible;
     }
 
-    /* 🪟 ダークガラスモーダルコンテンツ */
+    /* 🪟 ダークゴールドモーダルコンテンツ */
     .modal-content {
       width: 100%;
       max-width: 320px;
-      background: rgba(45, 55, 72, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: rgba(24, 30, 36, 0.92);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1.5px solid var(--gold-border);
       border-radius: 18px;
-      padding: 10px 8px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+      padding: 12px 10px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
       transform: scale(0.9) translateY(10px);
       transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
@@ -316,7 +332,7 @@
       width: 5px;
     }
     .table-list-container::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
+      background: var(--gold-border);
       border-radius: 4px;
     }
 
@@ -335,15 +351,15 @@
     }
 
     .table-list-item:active {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(241, 196, 15, 0.15);
     }
 
     .table-list-item.selected {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.85) 0%, rgba(34, 211, 238, 0.85) 100%) !important;
-      color: #ffffff !important;
+      background: linear-gradient(135deg, rgba(241, 196, 15, 0.85) 0%, rgba(212, 172, 13, 0.85) 100%) !important;
+      color: #1e272e !important;
       font-weight: 700;
-      box-shadow: 0 4px 12px rgba(34, 211, 238, 0.35);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 4px 14px rgba(241, 196, 15, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
     .check-mark {
@@ -360,36 +376,36 @@
     /* ✏️ 任意ニックネーム入力フィールド */
     .text-input-field {
       width: 100%;
-      padding: 10px 14px;
-      border: 1.5px solid rgba(255, 255, 255, 0.6);
+      padding: 11px 14px;
+      border: 1.5px solid var(--gold-border);
       border-radius: 12px;
       font-size: 0.88rem;
       outline: none;
-      background: rgba(255, 255, 255, 0.4) !important;
+      background: rgba(30, 39, 46, 0.5) !important;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      color: var(--text-main);
+      color: #ffffff;
       font-weight: 600;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       transition: all 0.2s ease;
     }
 
     .text-input-field::placeholder {
-      color: #718096;
-      font-weight: 500;
+      color: #808e9b;
+      font-weight: 400;
     }
 
     .text-input-field:focus {
-      border-color: var(--primary-color);
-      background: rgba(255, 255, 255, 0.6) !important;
+      border-color: var(--gold-border-bright);
+      background: rgba(30, 39, 46, 0.75) !important;
     }
 
     .file-select-area {
-      border: 2px dashed rgba(108, 92, 231, 0.5);
+      border: 2px dashed var(--gold-border);
       border-radius: 12px;
       padding: 14px;
       text-align: center;
-      background: rgba(255, 255, 255, 0.35);
+      background: rgba(30, 39, 46, 0.4);
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       cursor: pointer;
@@ -399,14 +415,15 @@
     }
 
     .file-select-area:active {
-      background: rgba(255, 255, 255, 0.6);
+      background: rgba(241, 196, 15, 0.15);
+      border-color: var(--gold-border-bright);
       transform: scale(0.98);
     }
 
     .file-select-label {
       font-size: 0.9rem;
       font-weight: 700;
-      color: var(--primary-color);
+      color: #f1c40f;
       pointer-events: none;
     }
 
@@ -419,9 +436,9 @@
       gap: 8px;
       margin: 12px 0 14px;
       padding: 8px;
-      background: rgba(255, 255, 255, 0.18);
+      background: rgba(20, 25, 30, 0.5);
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       overflow: hidden;
     }
 
@@ -430,8 +447,8 @@
       aspect-ratio: 1;
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+      border: 1px solid rgba(255, 255, 255, 0.3);
     }
 
     .preview-item img {
@@ -447,7 +464,7 @@
       right: 4px;
       width: 20px;
       height: 20px;
-      background: rgba(255, 118, 117, 0.9);
+      background: rgba(231, 76, 60, 0.9);
       color: white;
       border-radius: 50%;
       display: flex;
@@ -456,7 +473,7 @@
       font-size: 11px;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
       z-index: 10;
       backdrop-filter: blur(2px);
     }
@@ -481,48 +498,50 @@
 
     .btn:active {
       transform: scale(0.97);
-      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
+    /* 🌟 メインボタン（ゴールド高級ガラス） */
     .btn-primary {
-      background: rgba(162, 155, 254, 0.45);
-      color: #2d3748;
-      border: 1.5px solid rgba(255, 255, 255, 0.85);
-      box-shadow: 0 6px 18px rgba(162, 155, 254, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.9);
+      background: linear-gradient(135deg, rgba(241, 196, 15, 0.75) 0%, rgba(212, 172, 13, 0.75) 100%);
+      color: #1e272e;
+      border: 1.5px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 6px 20px rgba(241, 196, 15, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.9);
       margin-top: 6px;
-      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);
+      text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
     }
 
     .btn-primary:hover {
-      background: rgba(162, 155, 254, 0.65);
-      box-shadow: 0 8px 22px rgba(162, 155, 254, 0.35), inset 0 1px 2px rgba(255, 255, 255, 1);
+      background: linear-gradient(135deg, rgba(241, 196, 15, 0.9) 0%, rgba(212, 172, 13, 0.9) 100%);
+      box-shadow: 0 8px 24px rgba(241, 196, 15, 0.45);
     }
 
     .btn-add {
-      background: rgba(255, 255, 255, 0.5);
-      color: #4a3cb2;
-      border: 1.5px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06), inset 0 1px 1px rgba(255, 255, 255, 0.8);
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      border: 1.5px solid rgba(255, 255, 255, 0.4);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
       margin-top: 0;
       margin-bottom: 10px;
     }
 
     .btn-add:hover {
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(255, 255, 255, 0.35);
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.25);
-      color: #334155;
-      border: 1px solid rgba(255, 255, 255, 0.45);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      background: rgba(30, 39, 46, 0.6);
+      color: var(--text-sub);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       margin-top: 10px;
       font-size: 0.88rem;
       padding: 10px 14px;
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(30, 39, 46, 0.8);
+      color: #ffffff;
     }
 
     .progress-container {
@@ -534,16 +553,17 @@
     .progress-bar-bg {
       width: 100%;
       height: 10px;
-      background: rgba(255, 255, 255, 0.4);
+      background: rgba(0, 0, 0, 0.4);
       border-radius: 5px;
       overflow: hidden;
       margin-bottom: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .progress-bar-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, var(--primary-color), #a29bfe);
+      background: linear-gradient(90deg, #f1c40f, #f39c12);
       border-radius: 5px;
       transition: width 0.3s ease;
     }
@@ -553,7 +573,7 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.8rem;
-      color: var(--text-main);
+      color: #f1c40f;
       font-weight: 700;
     }
 
@@ -579,14 +599,14 @@
       line-height: 1;
     }
 
-    /* 🧭 ぬるっと滑らかに開くスライドサイドメニュー UI */
+    /* 🧭 スライドサイドメニュー UI（ゴールド枠ダークガラス） */
     .sidebar-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       z-index: 1000;
@@ -606,11 +626,11 @@
       left: 0;
       width: 270px;
       height: 100%;
-      background: rgba(255, 255, 255, 0.72);
+      background: rgba(20, 26, 31, 0.92);
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
-      border-right: 1px solid rgba(255, 255, 255, 0.7);
-      box-shadow: 12px 0 35px rgba(0, 0, 0, 0.22);
+      border-right: 1.5px solid var(--gold-border);
+      box-shadow: 12px 0 35px rgba(0, 0, 0, 0.6);
       z-index: 1001;
       transform: translateX(-100%);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -629,19 +649,19 @@
       align-items: center;
       margin-bottom: 22px;
       padding-bottom: 12px;
-      border-bottom: 1.5px solid rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.15);
     }
 
     .sidebar-title {
       font-size: 1.05rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: #f1c40f;
     }
 
     .sidebar-close-btn {
       width: 28px;
       height: 28px;
-      background: rgba(0, 0, 0, 0.06);
+      background: rgba(255, 255, 255, 0.1);
       border-radius: 50%;
       display: flex;
       justify-content: center;
@@ -657,28 +677,28 @@
       border-radius: 14px;
       font-size: 0.92rem;
       font-weight: 700;
-      color: var(--text-main);
+      color: #ffffff;
       display: flex;
       align-items: center;
       gap: 12px;
       cursor: pointer;
       margin-bottom: 8px;
-      background: rgba(255, 255, 255, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .sidebar-menu-item:active {
       transform: scale(0.97);
-      background: rgba(108, 92, 231, 0.18);
-      color: var(--primary-color);
-      border-color: rgba(108, 92, 231, 0.3);
+      background: rgba(241, 196, 15, 0.2);
+      color: #f1c40f;
+      border-color: var(--gold-border-bright);
     }
 
     /* 📜 送信履歴表示カード UI */
     .history-card {
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      background: rgba(30, 39, 46, 0.6);
+      border: 1px solid var(--gold-border);
       border-radius: 12px;
       padding: 12px;
       margin-bottom: 12px;
@@ -692,10 +712,10 @@
       align-items: center;
       font-size: 0.8rem;
       font-weight: 700;
-      color: var(--text-sub);
+      color: #f1c40f;
       margin-bottom: 8px;
       padding-bottom: 4px;
-      border-bottom: 1px dashed rgba(0, 0, 0, 0.1);
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.15);
     }
 
     .history-thumb-grid {
@@ -708,7 +728,7 @@
       aspect-ratio: 1;
       border-radius: 6px;
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
     .history-thumb-item img {
@@ -721,13 +741,13 @@
     .info-modal-content {
       width: 100%;
       max-width: 320px;
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      background: rgba(24, 30, 36, 0.95);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border: 1.5px solid var(--gold-border);
       border-radius: 20px;
       padding: 20px 18px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6);
     }
 
     .info-modal-title {
@@ -735,14 +755,14 @@
       font-weight: 700;
       text-align: center;
       margin-bottom: 14px;
-      color: var(--text-main);
+      color: #f1c40f;
     }
 
     .info-list {
       font-size: 0.82rem;
       line-height: 1.6;
       color: var(--text-sub);
-      font-weight: 600;
+      font-weight: 500;
     }
 
     .info-list li {
@@ -789,7 +809,7 @@
         <label>卓番号を選択してください</label>
         <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
           <span id="table-trigger-text">選択してください</span>
-          <span style="font-size: 0.75rem; color: #718096;">▼</span>
+          <span style="font-size: 0.75rem; color: #f1c40f;">▼</span>
         </div>
         <input type="hidden" id="table-no" value="">
       </div>
@@ -905,9 +925,9 @@
     <div class="info-modal-content">
       <div class="info-modal-title">📖 アプリの使い方</div>
       <ul class="info-list" style="padding-left: 0;">
-        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 1:</strong> 卓番号を選びます（お名前入力は任意）。</li>
-        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 2:</strong> 「写真を選択する」から何枚でも選択できます。</li>
-        <li style="padding-left: 1.6em;"><strong style="color:var(--primary-color)">Step 3:</strong> 送信完了後、何回でも続けて送信可能です！</li>
+        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 1:</strong> 卓番号を選びます（お名前入力は任意）。</li>
+        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 2:</strong> 「写真を選択する」から何枚でも選択できます。</li>
+        <li style="padding-left: 1.6em;"><strong style="color:#f1c40f">Step 3:</strong> 送信完了後、何回でも続けて送信可能です！</li>
       </ul>
       <button class="btn btn-primary" style="margin-top: 14px;" onclick="closeGuideModal()">閉じる</button>
     </div>
@@ -1099,7 +1119,7 @@
       const tableNo = tableNoInput.value;
       if (!tableNo) {
         selectStatus.innerText = '⚠️ 卓番号を選択してください';
-        selectStatus.style.color = '#c53030';
+        selectStatus.style.color = '#e74c3c';
         openTableModal();
         return;
       }
@@ -1384,7 +1404,7 @@
 
     function showError(msg) {
       statusDiv.innerText = `⚠️ error: ${msg}`;
-      statusDiv.style.color = '#c53030';
+      statusDiv.style.color = '#e74c3c';
       uploadBtn.style.display = 'flex';
       addBtn.style.display = 'flex';
       resetBtn.style.display = 'flex';
