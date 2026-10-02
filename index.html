@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <script>
-    // 🛡️️ Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
+    // 🛡 Googleアカウント認証ブロック・マルチログインキャッシュの自動リカバリ処理
     (function() {
       try {
         const urlParams = new URLSearchParams(window.location.search);
@@ -234,13 +234,13 @@
       display: block;
     }
 
-    /* 🏷️ SELECT TABLE ドロップダウン（ゴールド枠＆チェック復元） */
+    /* 🏷️ 卓番号ドロップダウン（初期表示グレー/選択後ゴールド） */
     .table-trigger-btn {
       width: 100%;
       padding: 12px 20px;
       border: 1.5px solid var(--gold-border);
       border-radius: 30px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       background: #ffffff;
       color: #a0aec0;
       font-weight: 700;
@@ -582,7 +582,7 @@
       <div class="title-english">SHARE YOUR MEMORIES</div>
       <h2>みんなの思い出を集めよう</h2>
 
-      <!-- 💬 チャット風エリア -->
+      <!-- 💬 LINE風チャット枠 -->
       <div class="chat-room">
         <!-- メッセージ1 (Ukyo) -->
         <div class="chat-row">
@@ -602,7 +602,7 @@
             <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Karin">
           </div>
           <div class="chat-bubble">
-            懐かしの友人やご家族との写真もお待しております！！
+            懐かしの友人やご家族との写真もお待ちしております！！
           </div>
         </div>
 
@@ -618,12 +618,12 @@
         </div>
       </div>
 
-      <!-- 🏷️ SELECT TABLE ドロップダウン（画像通り復元） -->
+      <!-- 🏷️ 卓番号ドロップダウン（初期表示: 選択してください） -->
       <div class="input-group">
         <label>卓番号を選択してください</label>
         <span class="input-sublabel">※QRコードが記載されているPOPをご確認ください</span>
         <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
-          <span id="table-trigger-text">SELECT TABLE</span>
+          <span id="table-trigger-text">選択してください</span>
           <span style="font-size: 0.75rem; color: #8899a6;">▼</span>
         </div>
         <input type="hidden" id="table-no" value="">
@@ -1109,6 +1109,5 @@
   </script>
 </body>
 </html>
-
 
 
