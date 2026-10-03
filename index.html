@@ -19,6 +19,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Share the Moment</title>
 
+  <!-- 📱 ホーム画面追加時のアプリアイコン設定 -->
+  <!-- ※ 実際の画像ファイルの拡張子（.png や .jpg）に合わせて変更してください -->
+  <link rel="apple-touch-icon" href="./App-icon②.png">
+  <link rel="icon" href="./App-icon②.png">
+  <!-- フルスクリーン（アプリ風）表示にするための設定 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wedding">
+
   <!-- 🖋 高速化＆全フォント統合 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -327,7 +336,8 @@
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q','Table R'];
 
     // ★★★ここにGASで新しくデプロイしたWebアプリのURLを貼り付けてください★★★
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/ここにURLを貼り付け/exec";
+
     window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
 
     function initBgSlideshow() {
