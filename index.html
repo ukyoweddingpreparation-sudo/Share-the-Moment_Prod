@@ -19,8 +19,15 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Share Your Memories</title>
+  <title>Share the Memonts</title>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <!-- Google Fonts サーバーとの事前接続（読み込み高速化） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- 見出し用英語(Cinzel)、高級感のある日本語(Shippori Mincho)、読みやすい日本語(Noto Sans JP)をまとめて読み込む -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">  
   <style>
     :root {
       --primary-gold: #b89753;
@@ -35,7 +42,7 @@
 
     /* 🌈 背景 */
     body {
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: var(--font-sans);
       min-height: 100vh;
       display: flex;
       justify-content: center;
@@ -44,7 +51,15 @@
       color: var(--text-main);
       position: relative;
       overflow-x: hidden;
-      background: #dfded9;
+      background: linear-gradient(-45deg, #e2d1c3, #d5c5c8, #b8c6db, #cbd5e1);
+      background-size: 400% 400%;
+      animation: gradientBG 18s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     /* 🎬 背景スライドショー層 */
@@ -69,7 +84,8 @@
       background-position: center;
       opacity: 0;
       transition: opacity 2.0s ease-in-out;
-      filter: blur(1.5px);
+      filter: blur(2px);
+      mix-blend-mode: soft-light;
     }
 
     .bg-slide.active {
@@ -120,6 +136,8 @@
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1.5px solid rgba(255, 255, 255, 0.85);
+      border-radius: 16px; /* 角を丸くするとより今っぽくなります */
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 影を足すとさらに浮き上がって見えます */
       border-radius: var(--border-radius);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
       padding: 16px;
@@ -134,6 +152,14 @@
       height: 145px;
       object-fit: cover;
       border-radius: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      filter: brightness(1.02) contrast(0.95);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+    }
+
+    .title-area {
+      text-align: center;
       margin-bottom: 14px;
     }
 
@@ -163,8 +189,63 @@
       border-radius: 20px;
       padding: 14px 12px;
       margin-bottom: 18px;
-      display: flex;
-      flex-direction: column;
+　　　 box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 15px rgba(212, 175, 55, 0.08);
+      overflow: hidden;
+    }
+
+    /* ✨ 5. 幻想的なシャンパンゴールドの光の粒子（気泡）アニメーション */
+    .glimmer-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      bottom: -20px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 248, 220, 0.8) 0%, rgba(212, 175, 55, 0.2) 70%, transparent 100%);
+      box-shadow: 0 0 8px rgba(243, 229, 171, 0.6);
+      animation: floatSparkle 8s infinite ease-in-out;
+    }
+
+    .particle:nth-child(1) { left: 12%; width: 10px; height: 10px; animation-duration: 6.5s; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 32%; width: 16px; height: 16px; animation-duration: 9.0s; animation-delay: 1.8s; }
+    .particle:nth-child(3) { left: 55%; width: 8px;  height: 8px;  animation-duration: 7.2s; animation-delay: 3.5s; }
+    .particle:nth-child(4) { left: 78%; width: 14px; height: 14px; animation-duration: 8.5s; animation-delay: 0.8s; }
+    .particle:nth-child(5) { left: 90%; width: 11px; height: 11px; animation-duration: 7.8s; animation-delay: 2.5s; }
+
+    @keyframes floatSparkle {
+      0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0;
+      }
+      20% {
+        opacity: 0.75;
+      }
+      50% {
+        transform: translateY(-130px) scale(1.1);
+      }
+      80% {
+        opacity: 0.75;
+      }
+      100% {
+        transform: translateY(-260px) scale(0.5);
+        opacity: 0;
+      }
+    }
+
+    /* 💬 チャットエリア */
+    .chat-container {
+      position: relative;
+      z-index: 1;
+    display: flex;
+    flex-direction: column;      
       gap: 12px;
     }
 
@@ -172,6 +253,20 @@
       display: flex;
       align-items: flex-start;
       gap: 8px;
+      opacity: 0;
+      transform: translateY(12px);
+      animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    .chat-row:nth-child(1) { animation-delay: 0s; }
+    .chat-row:nth-child(2) { animation-delay: 2s; }
+    .chat-row:nth-child(3) { animation-delay: 4s; }
+
+    @keyframes chatAppear {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .chat-row.right {
@@ -189,6 +284,17 @@
       height: 34px;
       border-radius: 50%;
       object-fit: cover;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
+      flex-shrink: 0;
+      background: rgba(255, 255, 255, 0.5);
+      margin-top: 14px;
+    }
+
+    .chat-content {
+      display: flex;
+      flex-direction: column;
+      max-width: 85%;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
 
@@ -200,18 +306,32 @@
     }
 
     .chat-bubble {
-      max-width: 82%;
-      background: #ffffff;
-      border-radius: 14px;
+      position: relative;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       padding: 9px 13px;
-      font-size: 0.76rem;
-      line-height: 1.45;
-      color: #2c2c2c;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+      border-radius: 12px;
+      border-top-left-radius: 2px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      line-height: 1.5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid rgba(255, 255, 255, 0.8);
     }
 
-    .chat-row.right .chat-bubble {
-      background: #d9f3c5;
+    /* 🟢 右側（Karin様）の上品な大人シャンパンゴールドグリーン調の吹き出し */
+    .chat-right .chat-bubble {
+      background: rgba(212, 237, 208, 0.92);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-radius: 12px;
+      border-top-right-radius: 2px;
+      border-top-left-radius: 12px;
+      color: #1e3a1e;
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
     }
 
     .input-group {
@@ -223,8 +343,10 @@
       display: block;
       font-size: 0.82rem;
       font-weight: 700;
-      margin-bottom: 2px;
-      color: #2b2b2b;
+      margin-bottom: 6px;
+      color: var(--text-main);
+      padding-left: 0.4em;
+      letter-spacing: 0.02em;
     }
 
     .input-sublabel {
@@ -232,6 +354,9 @@
       color: var(--text-sub);
       margin-bottom: 8px;
       display: block;
+      margin-top: -3px;
+      margin-bottom: 6px;
+      padding-left: 0.4em;
     }
 
     /* 🏷️ 卓番号ドロップダウン */
