@@ -19,28 +19,33 @@
   </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Share the Memonts</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <title>Share the Moment</title>
 
-  <!-- Google Fonts サーバーとの事前接続（読み込み高速化） -->
+  <!-- 🖋 高速化＆全フォント統合 (Cinzel, Cormorant Garamond, Shippori Mincho, Noto Sans JP) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <!-- 見出し用英語(Cinzel)、高級感のある日本語(Shippori Mincho)、読みやすい日本語(Noto Sans JP)をまとめて読み込む -->
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Noto+Sans+JP:wght@400;500;700&family=Shippori+Mincho:wght@500;600;700&display=swap" rel="stylesheet">  
   <style>
     :root {
+      /* フォント変数 */
+      --font-title: 'Cinzel', serif;
+      --font-serif: 'Shippori Mincho', serif;
+      --font-en: 'Cormorant Garamond', serif;
+      --font-sans: 'Noto Sans JP', sans-serif;
+      
+      /* カラー変数 */
       --primary-gold: #b89753;
-      --gold-light: #f7eedb;
-      --gold-border: #d2c197;
+      --gold-accent: linear-gradient(135deg, #d4af37 0%, #f3e5ab 50%, #aa7c11 100%);
+      --gold-border: rgba(212, 175, 55, 0.45);
       --text-main: #2b2b2b;
-      --text-sub: #788896;
-      --border-radius: 24px;
+      --text-sub: #64748b;
+      --border-radius: 20px;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
-    /* 🌈 背景 */
+    /* 🌈 最背面：大人っぽくシックで洗練されたくすみグラデーション背景 (①の機能) */
     body {
       font-family: var(--font-sans);
       min-height: 100vh;
@@ -88,11 +93,9 @@
       mix-blend-mode: soft-light;
     }
 
-    .bg-slide.active {
-      opacity: 0.85;
-    }
+    .bg-slide.active { opacity: 0.6; }
 
-    /* ☰ ハンバーガーメニューボタン（画面左上固定） */
+    /* ☰ ハンバーガーメニューボタン（②の機能・デザイン最適化） */
     .menu-trigger {
       position: fixed;
       top: 16px;
@@ -100,10 +103,10 @@
       z-index: 100;
       width: 42px;
       height: 42px;
-      background: rgba(255, 255, 255, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(255, 255, 255, 0.9);
       border-radius: 12px;
       display: flex;
       flex-direction: column;
@@ -114,12 +117,7 @@
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
       transition: all 0.2s ease;
     }
-
-    .menu-trigger:active {
-      transform: scale(0.92);
-      background: rgba(255, 255, 255, 0.9);
-    }
-
+    .menu-trigger:active { transform: scale(0.92); }
     .menu-trigger span {
       display: block;
       width: 20px;
@@ -128,7 +126,7 @@
       border-radius: 2px;
     }
 
-    /* 🌟 メインコンテナ（透明感の高い白いすりガラス） */
+    /* 🌟 大枠メインカード (①と②のグラスモーフィズム最適化統合) */
     .container {
       width: 100%;
       max-width: 380px;
@@ -136,740 +134,375 @@
       backdrop-filter: blur(25px);
       -webkit-backdrop-filter: blur(25px);
       border: 1.5px solid rgba(255, 255, 255, 0.85);
-      border-radius: 16px; /* 角を丸くするとより今っぽくなります */
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); /* 影を足すとさらに浮き上がって見えます */
       border-radius: var(--border-radius);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
-      padding: 16px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      padding: 20px 16px;
       position: relative;
       z-index: 1;
       overflow: hidden;
-      margin-top: 32px;
+      margin-top: 20px;
     }
 
     .header-img {
       width: 100%;
-      height: 145px;
+      height: 120px;
       object-fit: cover;
-      border-radius: 16px;
-      margin-bottom: 12px;
+      border-radius: 14px;
+      margin-bottom: 14px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      filter: brightness(1.02) contrast(0.95);
       border: 1px solid rgba(255, 255, 255, 0.7);
     }
 
-    .title-area {
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .title-english {
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.28em;
-      color: #a88846;
-      text-align: center;
-      margin-bottom: 4px;
+    .title-area { text-align: center; margin-bottom: 14px; }
+    
+    .en-sub {
+      font-family: var(--font-title);
+      font-size: 0.9rem;
+      letter-spacing: 0.22em;
+      color: var(--primary-gold);
+      text-transform: uppercase;
       font-weight: 700;
+      display: block;
+      margin-bottom: 4px;
     }
 
     h2 {
-      font-size: 1.22rem;
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
       font-weight: 700;
-      text-align: center;
-      margin-bottom: 16px;
-      color: #2b2b2b;
-      letter-spacing: 0.02em;
+      color: var(--text-main);
+      letter-spacing: 0.05em;
     }
 
-    /* 💬 LINE風チャット枠 */
-    .chat-room {
-      background: rgba(255, 255, 255, 0.45);
-      border: 1.5px solid rgba(255, 255, 255, 0.8);
-      border-radius: 20px;
-      padding: 14px 12px;
+    /* 📦 シャンパンゴールド調のチャットコンテナ (①の機能) */
+    .chat-wrapper {
+      position: relative;
+      background: rgba(255, 255, 255, 0.35);
+      border: 1px solid var(--gold-border);
+      border-radius: 16px;
+      padding: 14px 10px;
       margin-bottom: 18px;
-　　　 box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 4px 15px rgba(212, 175, 55, 0.08);
+      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8);
       overflow: hidden;
     }
 
-    /* ✨ 5. 幻想的なシャンパンゴールドの光の粒子（気泡）アニメーション */
+    /* ✨ 光の粒子（気泡）アニメーション (①の機能) */
     .glimmer-container {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
     }
-
     .particle {
-      position: absolute;
-      bottom: -20px;
-      border-radius: 50%;
+      position: absolute; bottom: -20px; border-radius: 50%;
       background: radial-gradient(circle, rgba(255, 248, 220, 0.8) 0%, rgba(212, 175, 55, 0.2) 70%, transparent 100%);
-      box-shadow: 0 0 8px rgba(243, 229, 171, 0.6);
       animation: floatSparkle 8s infinite ease-in-out;
     }
-
-    .particle:nth-child(1) { left: 12%; width: 10px; height: 10px; animation-duration: 6.5s; animation-delay: 0s; }
+    .particle:nth-child(1) { left: 12%; width: 10px; height: 10px; animation-duration: 6.5s; }
     .particle:nth-child(2) { left: 32%; width: 16px; height: 16px; animation-duration: 9.0s; animation-delay: 1.8s; }
     .particle:nth-child(3) { left: 55%; width: 8px;  height: 8px;  animation-duration: 7.2s; animation-delay: 3.5s; }
     .particle:nth-child(4) { left: 78%; width: 14px; height: 14px; animation-duration: 8.5s; animation-delay: 0.8s; }
-    .particle:nth-child(5) { left: 90%; width: 11px; height: 11px; animation-duration: 7.8s; animation-delay: 2.5s; }
 
     @keyframes floatSparkle {
-      0% {
-        transform: translateY(0) scale(0.6);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.75;
-      }
-      50% {
-        transform: translateY(-130px) scale(1.1);
-      }
-      80% {
-        opacity: 0.75;
-      }
-      100% {
-        transform: translateY(-260px) scale(0.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(0) scale(0.6); opacity: 0; }
+      20% { opacity: 0.75; }
+      50% { transform: translateY(-130px) scale(1.1); }
+      80% { opacity: 0.75; }
+      100% { transform: translateY(-260px) scale(0.5); opacity: 0; }
     }
 
-    /* 💬 チャットエリア */
-    .chat-container {
-      position: relative;
-      z-index: 1;
-    display: flex;
-    flex-direction: column;      
-      gap: 12px;
-    }
-
+    /* 💬 チャットエリア (①のアニメーション継承) */
+    .chat-container { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
     .chat-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      opacity: 0;
-      transform: translateY(12px);
+      display: flex; align-items: flex-start; gap: 8px; opacity: 0; transform: translateY(12px);
       animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
-
     .chat-row:nth-child(1) { animation-delay: 0s; }
-    .chat-row:nth-child(2) { animation-delay: 2s; }
-    .chat-row:nth-child(3) { animation-delay: 4s; }
+    .chat-row:nth-child(2) { animation-delay: 1.5s; }
+    .chat-row:nth-child(3) { animation-delay: 3s; }
 
-    @keyframes chatAppear {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes chatAppear { to { opacity: 1; transform: translateY(0); } }
+
+    .chat-row.chat-right { flex-direction: row-reverse; }
+    .chat-avatar-img {
+      width: 32px; height: 32px; border-radius: 50%; object-fit: cover;
+      border: 1.5px solid rgba(255, 255, 255, 0.9); margin-top: 14px;
     }
-
-    .chat-row.right {
-      flex-direction: row-reverse;
-    }
-
-    .chat-avatar-wrapper {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .chat-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      object-fit: cover;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
-      border: 1.5px solid rgba(255, 255, 255, 0.9);
-      flex-shrink: 0;
-      background: rgba(255, 255, 255, 0.5);
-      margin-top: 14px;
-    }
-
-    .chat-content {
-      display: flex;
-      flex-direction: column;
-      max-width: 85%;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    .chat-sender-name {
-      font-size: 0.68rem;
-      color: #666666;
-      margin-bottom: 3px;
-      font-weight: 500;
-    }
-
+    .chat-content { display: flex; flex-direction: column; max-width: 85%; }
+    .chat-name { font-family: var(--font-serif); font-size: 0.72rem; font-weight: 600; color: #475569; margin-bottom: 3px; }
+    .chat-right .chat-name { text-align: right; }
+    
     .chat-bubble {
-      position: relative;
-      background: rgba(255, 255, 255, 0.88);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 9px 13px;
-      border-radius: 12px;
-      border-top-left-radius: 2px;
-      font-size: 0.78rem;
-      font-weight: 500;
-      color: var(--text-sub);
-      line-height: 1.5;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      background: #ffffff; padding: 9px 13px; border-radius: 12px; border-top-left-radius: 2px;
+      font-size: 0.78rem; font-weight: 500; color: #333; line-height: 1.5;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05); border: 1px solid rgba(255, 255, 255, 0.8);
     }
-
-    /* 🟢 右側（Karin様）の上品な大人シャンパンゴールドグリーン調の吹き出し */
     .chat-right .chat-bubble {
-      background: rgba(212, 237, 208, 0.92);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      border-radius: 12px;
-      border-top-right-radius: 2px;
-      border-top-left-radius: 12px;
-      color: #1e3a1e;
-      border: 1px solid rgba(255, 255, 255, 0.8);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      background: rgba(212, 237, 208, 0.95); border-top-right-radius: 2px; border-top-left-radius: 12px;
     }
 
-    .input-group {
-      margin-bottom: 14px;
-      text-align: left;
-    }
+    /* フォーム要素 */
+    .input-group { margin-bottom: 14px; text-align: left; }
+    .input-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
+    .label-sub { font-size: 0.7rem; color: var(--text-sub); display: block; margin-bottom: 6px; }
 
-    .input-group label {
-      display: block;
-      font-size: 0.82rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-main);
-      padding-left: 0.4em;
-      letter-spacing: 0.02em;
-    }
-
-    .input-sublabel {
-      font-size: 0.7rem;
-      color: var(--text-sub);
-      margin-bottom: 8px;
-      display: block;
-      margin-top: -3px;
-      margin-bottom: 6px;
-      padding-left: 0.4em;
-    }
-
-    /* 🏷️ 卓番号ドロップダウン */
-    .table-trigger-btn {
-      width: 100%;
-      padding: 12px 20px;
-      border: 1.5px solid var(--gold-border);
-      border-radius: 30px;
-      font-size: 0.92rem;
-      background: #ffffff;
-      color: #a0aec0;
-      font-weight: 700;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.03);
+    .table-trigger-btn, .text-input-field {
+      width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9);
+      border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.65);
+      color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
       transition: all 0.2s ease;
     }
+    .table-trigger-btn { display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600; }
+    .table-trigger-btn.selected { border-color: var(--primary-gold); color: var(--primary-gold); }
+    .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 0.85); }
+    .text-input-field::placeholder { color: #94a3b8; }
 
-    .table-trigger-btn.selected {
-      color: #b89753;
-      border-color: #b89753;
-    }
-
-    /* ✏️ お名前入力欄 */
-    .text-input-field {
-      width: 100%;
-      padding: 12px 18px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      border-radius: 20px;
-      font-size: 0.88rem;
-      outline: none;
-      background: rgba(255, 255, 255, 0.65);
-      color: #2b2b2b;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
-    }
-
-    .text-input-field::placeholder {
-      color: #a0aec0;
-    }
-
-    /* 📸 写真を選択するボタン（点線枠） */
     .file-select-area {
-      border: 1.5px dashed var(--gold-border);
-      border-radius: 18px;
-      padding: 15px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.55);
-      cursor: pointer;
-      margin-top: 16px;
-      margin-bottom: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-      transition: all 0.2s ease;
+      border: 1.5px dashed var(--gold-border); border-radius: 14px; padding: 15px;
+      text-align: center; background: rgba(255, 255, 255, 0.5); cursor: pointer;
+      margin: 10px 0; transition: all 0.2s ease;
     }
-
-    .file-select-area:active {
-      background: rgba(255, 255, 255, 0.85);
-      transform: scale(0.98);
-    }
-
-    .file-select-label {
-      font-size: 0.92rem;
-      font-weight: 600;
-      color: #a88846;
-      pointer-events: none;
-      letter-spacing: 0.03em;
-    }
-
+    .file-select-area:active { transform: scale(0.98); background: rgba(255, 255, 255, 0.8); }
+    .file-select-label { font-family: var(--font-serif); font-size: 0.95rem; font-weight: 700; color: var(--primary-gold); }
     input[type="file"] { display: none; }
 
-    /* 📱 プレビューエリア */
+    /* プレビューグリッド */
     #preview-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin: 12px 0 14px;
-      padding: 8px;
-      background: rgba(255, 255, 255, 0.5);
-      border-radius: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 12px 0;
+      padding: 8px; background: rgba(255, 255, 255, 0.4); border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.6);
     }
-
-    .preview-item {
-      position: relative;
-      aspect-ratio: 1;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-
-    .preview-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
+    .preview-item { position: relative; aspect-ratio: 1; border-radius: 8px; overflow: hidden; }
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; }
     .remove-btn {
-      position: absolute;
-      top: 4px;
-      right: 4px;
-      width: 20px;
-      height: 20px;
-      background: rgba(231, 76, 60, 0.9);
-      color: white;
-      border-radius: 50%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 11px;
-      font-weight: bold;
-      cursor: pointer;
+      position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+      background: rgba(225, 29, 72, 0.9); color: white; border-radius: 50%;
+      display: flex; justify-content: center; align-items: center; font-size: 10px; cursor: pointer;
     }
 
+    /* ボタン群 */
     .btn {
-      width: 100%;
-      padding: 13px 16px;
-      border-radius: 14px;
-      font-size: 0.92rem;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 8px;
-      transition: all 0.2s ease;
-      outline: none;
+      width: 100%; padding: 13px 16px; border-radius: 14px; font-size: 0.92rem;
+      font-weight: 700; cursor: pointer; display: flex; justify-content: center; align-items: center;
+      gap: 8px; transition: all 0.2s ease; outline: none; border: none;
     }
-
+    .btn:active { transform: scale(0.97); }
     .btn-primary {
-      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%);
-      color: #ffffff;
-      border: none;
-      box-shadow: 0 4px 14px rgba(184, 151, 83, 0.35);
-      margin-top: 6px;
+      font-family: var(--font-serif); background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%);
+      color: #ffffff; box-shadow: 0 6px 15px rgba(184, 151, 83, 0.3); margin-top: 6px;
     }
-
     .btn-add {
-      background: rgba(255, 255, 255, 0.8);
-      color: #a88846;
-      border: 1px solid var(--gold-border);
-      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.7); color: var(--primary-gold);
+      border: 1px solid var(--gold-border); margin-bottom: 10px;
     }
+    .btn-secondary { background: rgba(255, 255, 255, 0.4); color: #475569; border: 1px solid rgba(255, 255, 255, 0.6); margin-top: 10px; }
 
-    .btn-secondary {
-      background: rgba(240, 240, 240, 0.8);
-      color: #666666;
-      border: 1px solid #ddd;
-      margin-top: 10px;
-    }
-
-    .progress-container {
-      display: none;
-      margin: 14px 0 8px;
-      text-align: center;
-    }
-
-    .progress-bar-bg {
-      width: 100%;
-      height: 8px;
-      background: rgba(200, 200, 200, 0.4);
-      border-radius: 4px;
-      overflow: hidden;
-      margin-bottom: 6px;
-    }
-
-    .progress-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: var(--primary-gold);
-      border-radius: 4px;
-      transition: width 0.3s ease;
-    }
-
-    .progress-info {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      color: #a88846;
-      font-weight: 700;
-    }
-
+    /* プログレスバー */
+    .progress-container { display: none; margin: 14px 0 8px; }
+    .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; width: 0%; background: var(--gold-accent); border-radius: 4px; transition: width 0.3s; }
+    .progress-info { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); }
+    
     #status { font-size: 0.8rem; text-align: center; margin-top: 8px; font-weight: 700; }
-
     #confirm-screen, #thankyou-screen, #history-screen { display: none; }
-    #thankyou-screen { text-align: center; }
 
-    /* 🪟 モーダル（ダークネイビー・エレガントスタイル） */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.55);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      z-index: 999;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.25s ease;
-    }
-
-    .modal-overlay.active { opacity: 1; visibility: visible; }
-
-    .modal-content {
-      width: 100%;
-      max-width: 320px;
-      background: #1c2736;
-      border-radius: 20px;
-      padding: 20px 14px;
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .table-list-container {
-      max-height: 280px;
-      overflow-y: auto;
-      padding-right: 6px;
-    }
-
-    .table-list-container::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    .table-list-container::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-    }
-
-    .table-list-container::-webkit-scrollbar-thumb {
-      background: #9b7937;
-      border-radius: 4px;
-    }
-
-    .table-modal-header {
-      font-family: 'Cinzel', serif;
-      font-size: 0.85rem;
-      letter-spacing: 0.22em;
-      color: #e2e8f0;
-      padding: 8px 12px 14px;
-      font-weight: 600;
-    }
-
-    .table-list-item {
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-family: 'Cinzel', serif;
-      font-size: 0.92rem;
-      letter-spacing: 0.08em;
-      color: #e2e8f0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-bottom: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .table-list-item.selected {
-      background: linear-gradient(135deg, #a48139 0%, #836323 100%);
-      color: #ffffff;
-      font-weight: 700;
-      border: 1px solid rgba(255, 235, 170, 0.4);
-      box-shadow: 0 4px 15px rgba(164, 129, 57, 0.4);
-    }
-
-    /* 🧭 スライドサイドメニュー UI */
+    /* 🪟 サイドバー (②の機能) */
     .sidebar-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.3);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 1000;
-      opacity: 0;
-      visibility: hidden;
-      transition: all 0.3s ease;
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.35); backdrop-filter: blur(5px); z-index: 1000;
+      opacity: 0; visibility: hidden; transition: all 0.3s ease;
     }
-
     .sidebar-overlay.active { opacity: 1; visibility: visible; }
-
     .sidebar-drawer {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 260px;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-right: 1px solid var(--gold-border);
-      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.08);
-      z-index: 1001;
-      transform: translateX(-100%);
-      transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-      padding: 24px 18px;
+      position: fixed; top: 0; left: 0; width: 260px; height: 100%;
+      background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px);
+      box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001;
+      transform: translateX(-100%); transition: transform 0.35s ease; padding: 24px 18px;
     }
-
     .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
-
-    .sidebar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-
-    .sidebar-title { font-size: 1rem; font-weight: 700; color: #a88846; }
-
+    .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
+    .sidebar-title { font-family: var(--font-title); font-size: 1.1rem; color: var(--primary-gold); font-weight: 700; }
     .sidebar-menu-item {
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: #333;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: pointer;
-      margin-bottom: 8px;
-      background: rgba(247, 238, 219, 0.4);
+      padding: 14px; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #333;
+      display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 8px;
+      background: rgba(247, 238, 219, 0.5); border: 1px solid rgba(212, 175, 55, 0.1);
     }
 
-    /* 📜 送信履歴カード UI */
+    /* 📜 送信履歴カード (②の機能・デザイン最適化) */
     .history-card {
-      background: #ffffff;
-      border: 1px solid var(--gold-border);
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 10px;
+      background: rgba(255, 255, 255, 0.7); border: 1px solid rgba(255, 255, 255, 0.9);
+      border-radius: 14px; padding: 12px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
-
-    .history-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.78rem;
-      font-weight: 700;
-      color: #a88846;
-      margin-bottom: 6px;
-    }
-
-    .history-thumb-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 6px;
-    }
-
-    .history-thumb-item {
-      aspect-ratio: 1;
-      border-radius: 6px;
-      overflow: hidden;
-    }
-
+    .history-header { display: flex; justify-content: space-between; font-size: 0.78rem; font-weight: 700; color: var(--primary-gold); margin-bottom: 8px; }
+    .history-thumb-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .history-thumb-item { aspect-ratio: 1; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.5); }
     .history-thumb-item img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* 🪟 モーダル (①のダークエレガントデザイン) */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(15, 23, 42, 0.45); backdrop-filter: blur(10px); z-index: 999;
+      display: flex; justify-content: center; align-items: center; padding: 20px;
+      opacity: 0; visibility: hidden; transition: all 0.25s ease;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+    .modal-content {
+      width: 100%; max-width: 320px; background: rgba(30, 41, 59, 0.95);
+      border: 1px solid var(--gold-border); border-radius: 18px; padding: 12px 8px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4); transform: scale(0.9); transition: all 0.25s;
+    }
+    .modal-overlay.active .modal-content { transform: scale(1); }
+    .table-modal-header {
+      font-family: var(--font-title); font-size: 0.85rem; letter-spacing: 0.2em;
+      color: #e2e8f0; text-align: center; padding: 8px 0 12px; font-weight: 700;
+    }
+    .table-list-container { max-height: 280px; overflow-y: auto; padding: 0 4px; }
+    .table-list-container::-webkit-scrollbar { width: 4px; }
+    .table-list-container::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 4px; }
+    .table-list-item {
+      padding: 12px 16px; border-radius: 10px; font-family: var(--font-en); font-size: 0.92rem;
+      color: rgba(255, 255, 255, 0.9); display: flex; align-items: center; gap: 10px;
+      cursor: pointer; margin-bottom: 2px; letter-spacing: 0.08em;
+    }
+    .table-list-item.selected {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.85) 0%, rgba(170, 124, 17, 0.85) 100%);
+      color: #ffffff; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.3);
+    }
   </style>
 </head>
 <body>
 
-  <!-- 🎬 背景スライドショーエリア -->
+  <!-- 🎬 背景スライドショー -->
   <div id="bg-slideshow"></div>
 
-  <!-- ☰ ハンバーガーボタン（画面左上に固定配置） -->
+  <!-- ☰ サイドバー呼出ボタン -->
   <div class="menu-trigger" onclick="openSidebar()">
-    <span></span>
-    <span></span>
-    <span></span>
+    <span></span><span></span><span></span>
   </div>
 
-  <div class="container">
-
-    <!-- 画面1: 選択画面 -->
-    <div id="select-screen">
-      <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
-      
-      <div class="title-english">SHARE YOUR MEMORIES</div>
-      <h2>みんなの思い出を集めよう</h2>
-
-      <!-- 💬 LINE風チャット枠 -->
-      <div class="chat-room">
-        <!-- メッセージ1 (Ukyo) -->
-        <div class="chat-row">
-          <div class="chat-avatar-wrapper">
-            <span class="chat-sender-name">Ukyo</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo">
-          </div>
-          <div class="chat-bubble">
-            新郎新婦の写真はもちろん、当日の会場の様子なども大歓迎！
-          </div>
-        </div>
-
-        <!-- メッセージ2 (Karin) -->
-        <div class="chat-row right">
-          <div class="chat-avatar-wrapper">
-            <span class="chat-sender-name">Karin</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Karin">
-          </div>
-          <div class="chat-bubble">
-            懐かしの友人やご家族との写真もお待ちしております！！
-          </div>
-        </div>
-
-        <!-- メッセージ3 (Ukyo & Karin) -->
-        <div class="chat-row">
-          <div class="chat-avatar-wrapper">
-            <span class="chat-sender-name">Ukyo & Karin</span>
-            <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w200" class="chat-avatar" alt="Ukyo & Karin">
-          </div>
-          <div class="chat-bubble">
-            皆様の視点で切り取った大切な瞬間をお待ちしています✨
-          </div>
-        </div>
-      </div>
-
-      <!-- 🏷️ 卓番号ドロップダウン（初期表示: 選択してください） -->
-      <div class="input-group">
-        <label>卓番号を選択してください</label>
-        <span class="input-sublabel">※QRコードが記載されているPOPをご確認ください</span>
-        <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
-          <span id="table-trigger-text">選択してください</span>
-          <span style="font-size: 0.75rem; color: #8899a6;">▼</span>
-        </div>
-        <input type="hidden" id="table-no" value="">
-      </div>
-
-      <!-- ✏️ お名前入力欄 -->
-      <div class="input-group">
-        <label for="user-name">お名前・ニックネーム（任意）</label>
-        <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
-      </div>
-
-      <!-- 写真を選択するボタン -->
-      <div class="file-select-area" onclick="handleFileSelectClick()">
-        <span class="file-select-label">写真を選択する</span>
-      </div>
-      <input type="file" id="file-input" accept="image/*" multiple>
-
-      <div id="select-status" style="font-size: 0.8rem; text-align: center; font-weight: 700; margin-top: 6px;"></div>
-    </div>
-
-    <!-- 画面2: プレビュー確認＆アップロード画面 -->
-    <div id="confirm-screen">
-      <h2>📸 選択した写真の確認</h2>
-      <p class="subtitle" id="selected-summary" style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:10px;">全0枚の写真を選択中</p>
-
-      <div id="preview-grid"></div>
-
-      <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()">➕ 写真を追加する</button>
-      <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始</button>
-      <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()">🔄 最初から選び直す</button>
-
-      <div id="progress-container" class="progress-container">
-        <div class="progress-bar-bg">
-          <div id="progress-bar-fill" class="progress-bar-fill"></div>
-        </div>
-        <div class="progress-info">
-          <span id="progress-text">準備中...</span>
-          <span id="progress-percent">0%</span>
-        </div>
-      </div>
-
-      <div id="status"></div>
-    </div>
- 
-    <!-- 画面3: アップロード完了画面 -->
-    <div id="thankyou-screen">
-      <div style="font-size:2.5rem; margin-bottom:8px;">✨</div>
-      <h2>アップロード完了！</h2>
-      <p style="font-size:0.85rem; color:#555; margin-bottom:14px;">たくさんの素敵な写真を<br>ありがとうございました！</p>
-      
-      <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
-
-      <button class="btn btn-primary" style="margin-top:14px;" onclick="resetForm()">続けてアップロードする</button>
-    </div>
-
-    <!-- 画面4: 送信履歴画面 -->
-    <div id="history-screen">
-      <h2>📜 送信履歴</h2>
-      <p style="text-align:center; font-size:0.8rem; color:#666; margin-bottom:12px;">あなたがこれまでに送信した写真です</p>
-
-      <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 12px;"></div>
-
-      <button class="btn btn-secondary" onclick="goToSelectScreen()">🏠 ホームに戻る</button>
-    </div>
-
-  </div>
-
-  <!-- 🧭 スライドサイドメニュー -->
+  <!-- 🧭 サイドバーメニュー -->
   <div id="sidebar-overlay" class="sidebar-overlay" onclick="closeSidebarOnOutside(event)">
     <div class="sidebar-drawer">
       <div class="sidebar-header">
-        <span class="sidebar-title">メニュー</span>
-        <div style="cursor:pointer;" onclick="closeSidebar()">✕</div>
+        <span class="sidebar-title">MENU</span>
+        <div style="cursor:pointer; font-size:1.2rem; color:#888;" onclick="closeSidebar()">✕</div>
       </div>
-      
-      <div class="sidebar-menu-item" onclick="navigateFromSidebar('select')">
-        <span>🏠</span> ホーム（写真送信）
+      <div class="sidebar-menu-item" onclick="navigate('select')">
+        <span>📸</span> 写真を送信する
       </div>
-      <div class="sidebar-menu-item" onclick="navigateFromSidebar('history')">
+      <div class="sidebar-menu-item" onclick="navigate('history')">
         <span>📜</span> 送信履歴を見る
       </div>
     </div>
   </div>
 
-  <!-- 🪟 卓番号選択モーダル（ダークエレガント風再現） -->
+  <div class="container">
+    <!-- 📱 画面1: 選択画面 -->
+    <div id="select-screen">
+      <img src="https://drive.google.com/thumbnail?id=1JqZ8FqLIO35DZ4mPEajCY2_EHIqd1aW7&sz=w1000" class="header-img" alt="ウェルカム画像">
+      
+      <div class="title-area">
+        <span class="en-sub">SHARE YOUR MEMORIES</span>
+        <h2>みんなの思い出を集めよう</h2>
+      </div>
+
+      <div class="chat-wrapper">
+        <div class="glimmer-container">
+          <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+        </div>
+        <div class="chat-container">
+          <div class="chat-row">
+            <img src="https://drive.google.com/thumbnail?id=1_bhJPsWxdp9qnhikiRLRtwqFyjpKTs1N&sz=w200" class="chat-avatar-img" alt="Ukyo">
+            <div class="chat-content">
+              <span class="chat-name">Ukyo</span>
+              <div class="chat-bubble">新郎新婦の写真は勿論、当日の会場の様子なども大歓迎！</div>
+            </div>
+          </div>
+          <div class="chat-row chat-right">
+            <img src="https://drive.google.com/thumbnail?id=17B-KT1giU8D3bfbvUQ3T7QfrT1UV58io&sz=w200" class="chat-avatar-img" alt="Karin">
+            <div class="chat-content">
+              <span class="chat-name">Karin</span>
+              <div class="chat-bubble">懐かしの友人やご家族との写真もお待ちしております！！</div>
+            </div>
+          </div>
+          <div class="chat-row">
+            <img src="https://drive.google.com/thumbnail?id=1pXPKqqM8DspWbFksiScSvGevz8guC3VP&sz=w200" class="chat-avatar-img" alt="新郎新婦">
+            <div class="chat-content">
+              <span class="chat-name">Ukyo & Karin</span>
+              <div class="chat-bubble">皆様の視点で切り取った大切な瞬間をお待ちしています✨</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>テーブル番号を選択してください</label>
+        <span class="label-sub">※QRコードが記載されているPOPをご確認ください</span>
+        <div id="table-trigger" class="table-trigger-btn" onclick="openTableModal()">
+          <span id="table-trigger-text">SELECT TABLE</span>
+          <span style="font-size: 0.7rem; color: #94a3b8;">▼</span>
+        </div>
+        <input type="hidden" id="table-no" value="">
+      </div>
+
+      <div class="input-group">
+        <label for="user-name">お名前・ニックネーム（任意）</label>
+        <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
+      </div>
+
+      <div class="file-select-area" onclick="handleFileSelectClick()">
+        <span class="file-select-label">写真を選択する</span>
+      </div>
+      <input type="file" id="file-input" accept="image/*" multiple>
+      <div id="select-status" style="font-size: 0.8rem; text-align: center; font-weight: 700; margin-top: 6px;"></div>
+    </div>
+
+    <!-- 📱 画面2: プレビュー確認＆アップロード画面 -->
+    <div id="confirm-screen">
+      <div class="title-area">
+        <span class="en-sub">PREVIEW</span>
+        <h2>選択中の写真</h2>
+      </div>
+      <p id="selected-summary" style="font-size: 0.85rem; text-align: center; color: var(--text-sub); margin-bottom: 10px;"></p>
+
+      <div id="preview-grid"></div>
+
+      <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()">写真を追加する</button>
+      <button id="upload-btn" class="btn btn-primary" onclick="startUpload()">アップロードを開始する</button>
+      <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()">最初から選び直す</button>
+
+      <div id="progress-container" class="progress-container">
+        <div class="progress-bar-bg"><div id="progress-bar-fill" class="progress-bar-fill"></div></div>
+        <div class="progress-info"><span id="progress-text">準備中...</span><span id="progress-percent">0%</span></div>
+      </div>
+      <div id="status"></div>
+    </div>
+ 
+    <!-- 📱 画面3: アップロード完了画面 -->
+    <div id="thankyou-screen" style="text-align: center;">
+      <div style="font-size: 2.8rem; margin: 10px 0; line-height: 1;">✨</div>
+      <div class="title-area">
+        <span class="en-sub">THANK YOU</span>
+        <h2>アップロード完了</h2>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-sub); margin-bottom: 14px; line-height: 1.6;">たくさんの素敵な写真を<br>ありがとうございました！</p>
+      <img src="https://drive.google.com/thumbnail?id=1xuTyZlSttMN46dxrlWwfypKR0s7j-Om_&sz=w1000" class="header-img" alt="感謝画像">
+      <button class="btn btn-primary" style="margin-top:14px;" onclick="navigate('select', true)">続けてアップロードする</button>
+    </div>
+
+    <!-- 📱 画面4: 送信履歴画面 -->
+    <div id="history-screen">
+      <div class="title-area">
+        <span class="en-sub">HISTORY</span>
+        <h2>送信履歴</h2>
+      </div>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">あなたがこれまでに送信した写真です</p>
+      <div id="history-list-container" style="max-height: 380px; overflow-y: auto; margin-bottom: 14px;"></div>
+      <button class="btn btn-secondary" onclick="navigate('select')">ホームに戻る</button>
+    </div>
+
+  </div>
+
+  <!-- 🪟 卓番号選択モーダル -->
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
     <div class="modal-content">
       <div class="table-modal-header">SELECT TABLE</div>
@@ -878,28 +511,33 @@
   </div>
 
   <script>
+    // --- 初期化処理 ---
     const bgImages = [
       'https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000',
       'https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000',
       'https://drive.google.com/thumbnail?id=13TCg8N2eu08Jxqc4_DH2AUz1PUEqb_aj&sz=w1000',
+      'https://drive.google.com/thumbnail?id=1ysDUL-Bs6JBRCx-dYirsOk0xN8WFp2TB&sz=w1000',
+      'https://drive.google.com/thumbnail?id=15_bPftkdb-MSojnwDst30yTwEma4vxL8&sz=w1000',
+      'https://drive.google.com/thumbnail?id=1zL_uNkO9Vq1iZbOf4D9p7gqmRYjPPY-r&sz=w1000'
     ];
+    const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q','Table R'];
 
-    const tables = ['Table A', 'Table B', 'Table C', 'Table D', 'Table E', 'Table F', 'Table G', 'Table H', 'Table O', 'Table P', 'Table Q', 'Table R'];
+    window.addEventListener('DOMContentLoaded', () => {
+      initBgSlideshow();
+      initTableList();
+    });
 
     function initBgSlideshow() {
-      const slideshowContainer = document.getElementById('bg-slideshow');
-      if (!bgImages || bgImages.length === 0) return;
-
+      const container = document.getElementById('bg-slideshow');
       bgImages.forEach((url, idx) => {
         const slide = document.createElement('div');
         slide.className = 'bg-slide' + (idx === 0 ? ' active' : '');
         slide.style.backgroundImage = `url('${url}')`;
-        slideshowContainer.appendChild(slide);
+        container.appendChild(slide);
       });
-
       if (bgImages.length > 1) {
         let currentIdx = 0;
-        const slides = slideshowContainer.querySelectorAll('.bg-slide');
+        const slides = container.querySelectorAll('.bg-slide');
         setInterval(() => {
           const nextIdx = (currentIdx + 1) % slides.length;
           slides[nextIdx].classList.add('active');
@@ -913,248 +551,168 @@
 
     function initTableList() {
       const container = document.getElementById('table-list-container');
-      container.innerHTML = '';
-
       tables.forEach(tableVal => {
         const item = document.createElement('div');
         item.className = 'table-list-item';
-        item.setAttribute('data-value', tableVal);
         item.innerHTML = `<span class="check-mark" style="visibility:hidden;">✓</span><span>${tableVal}</span>`;
-        item.onclick = () => selectTableListItem(tableVal, item);
+        item.onclick = () => {
+          document.getElementById('table-no').value = tableVal;
+          document.getElementById('table-trigger-text').innerText = `✓ ${tableVal}`;
+          document.getElementById('table-trigger').classList.add('selected');
+          
+          document.querySelectorAll('.table-list-item').forEach(i => {
+            i.classList.remove('selected');
+            i.querySelector('.check-mark').style.visibility = 'hidden';
+          });
+          item.classList.add('selected');
+          item.querySelector('.check-mark').style.visibility = 'visible';
+          document.getElementById('select-status').innerText = '';
+          setTimeout(() => document.getElementById('table-modal').classList.remove('active'), 200);
+        };
         container.appendChild(item);
       });
     }
 
+    // --- モーダル・サイドバー・ナビゲーション ---
     function openSidebar() { document.getElementById('sidebar-overlay').classList.add('active'); }
     function closeSidebar() { document.getElementById('sidebar-overlay').classList.remove('active'); }
     function closeSidebarOnOutside(e) { if (e.target.id === 'sidebar-overlay') closeSidebar(); }
-
-    function navigateFromSidebar(target) {
-      closeSidebar();
-      if (target === 'select') goToSelectScreen();
-      else if (target === 'history') goToHistoryScreen();
-    }
-
-    function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
-    function closeTableModal() { document.getElementById('table-modal').classList.remove('active'); }
-    function closeTableModalOnOutside(e) { if (e.target.id === 'table-modal') closeTableModal(); }
-
-    function selectTableListItem(val, element) {
-      document.getElementById('table-no').value = val;
-      const triggerBtn = document.getElementById('table-trigger');
-      const triggerText = document.getElementById('table-trigger-text');
-      
-      triggerText.innerText = `✓ ${val}`;
-      triggerBtn.classList.add('selected');
-
-      document.querySelectorAll('.table-list-item').forEach(i => {
-        i.classList.remove('selected');
-        const chk = i.querySelector('.check-mark');
-        if (chk) chk.style.visibility = 'hidden';
-      });
-
-      element.classList.add('selected');
-      const selectedChk = element.querySelector('.check-mark');
-      if (selectedChk) selectedChk.style.visibility = 'visible';
-
-      setTimeout(closeTableModal, 220);
-    }
-
-    window.addEventListener('DOMContentLoaded', () => {
-      initBgSlideshow();
-      initTableList();
-    });
-
-    let selectedFiles = [];
-
-    const fileInput = document.getElementById('file-input');
-    const previewGrid = document.getElementById('preview-grid');
-    const uploadBtn = document.getElementById('upload-btn');
-    const addBtn = document.getElementById('add-btn');
-    const resetBtn = document.getElementById('reset-btn');
-    const statusDiv = document.getElementById('status');
-    const selectStatus = document.getElementById('select-status');
-    const tableNoInput = document.getElementById('table-no');
-    const userNameInput = document.getElementById('user-name');
-    const selectedSummary = document.getElementById('selected-summary');
-    const progressContainer = document.getElementById('progress-container');
-    const progressBarFill = document.getElementById('progress-bar-fill');
-    const progressText = document.getElementById('progress-text');
-    const progressPercent = document.getElementById('progress-percent');
     
-    const selectScreen = document.getElementById('select-screen');
-    const confirmScreen = document.getElementById('confirm-screen');
-    const thankyouScreen = document.getElementById('thankyou-screen');
-    const historyScreen = document.getElementById('history-screen');
+    function openTableModal() { document.getElementById('table-modal').classList.add('active'); }
+    function closeTableModalOnOutside(e) { if (e.target.id === 'table-modal') document.getElementById('table-modal').classList.remove('active'); }
 
+    function navigate(screenName, isReset = false) {
+      closeSidebar();
+      if(isReset) resetAllSelection();
+      
+      document.getElementById('select-screen').style.display = (screenName === 'select') ? 'block' : 'none';
+      document.getElementById('confirm-screen').style.display = (screenName === 'confirm') ? 'block' : 'none';
+      document.getElementById('thankyou-screen').style.display = (screenName === 'thankyou') ? 'block' : 'none';
+      document.getElementById('history-screen').style.display = (screenName === 'history') ? 'block' : 'none';
+      
+      if (screenName === 'history') renderHistoryList();
+      window.scrollTo(0, 0);
+    }
+
+    // --- 写真選択・プレビュー・履歴 ---
+    let selectedFiles = [];
+    const fileInput = document.getElementById('file-input');
+    
     function handleFileSelectClick() {
-      const tableNo = tableNoInput.value;
-      if (!tableNo) {
-        selectStatus.innerText = '⚠️ 卓番号を選択してください';
-        selectStatus.style.color = '#c53030';
+      if (!document.getElementById('table-no').value) {
+        const msg = document.getElementById('select-status');
+        msg.innerText = '⚠️ テーブル番号を選択してください';
+        msg.style.color = '#c53030';
         openTableModal();
         return;
       }
-      selectStatus.innerText = '';
       fileInput.click();
     }
 
-    fileInput.addEventListener('change', function(e) {
+    fileInput.addEventListener('change', (e) => {
       const files = Array.from(e.target.files);
       if (files.length === 0) return;
       selectedFiles = selectedFiles.concat(files);
-      goToConfirmScreen();
-    });
-
-    function goToConfirmScreen() {
       renderPreviews();
-      selectScreen.style.display = 'none';
-      confirmScreen.style.display = 'block';
-      thankyouScreen.style.display = 'none';
-      historyScreen.style.display = 'none';
-      window.scrollTo(0, 0);
-    }
-
-    function goToSelectScreen() {
-      selectScreen.style.display = 'block';
-      confirmScreen.style.display = 'none';
-      thankyouScreen.style.display = 'none';
-      historyScreen.style.display = 'none';
-      fileInput.value = '';
-      window.scrollTo(0, 0);
-    }
-
-    function goToHistoryScreen() {
-      renderHistoryList();
-      selectScreen.style.display = 'none';
-      confirmScreen.style.display = 'none';
-      thankyouScreen.style.display = 'none';
-      historyScreen.style.display = 'block';
-      window.scrollTo(0, 0);
-    }
+      navigate('confirm');
+    });
 
     function resetAllSelection() {
       selectedFiles = [];
       fileInput.value = '';
-      goToSelectScreen();
+      document.getElementById('preview-grid').innerHTML = '';
+      document.getElementById('upload-btn').style.display = 'flex';
+      document.getElementById('add-btn').style.display = 'flex';
+      document.getElementById('reset-btn').style.display = 'flex';
+      document.getElementById('progress-container').style.display = 'none';
+      document.getElementById('status').innerText = '';
+      navigate('select');
     }
 
     function renderPreviews() {
-      previewGrid.innerHTML = '';
-      const userName = userNameInput.value.trim();
+      const grid = document.getElementById('preview-grid');
+      grid.innerHTML = '';
+      const userName = document.getElementById('user-name').value.trim();
       const userDisplay = userName ? ` (${userName}様)` : '';
-      selectedSummary.innerText = `${tableNoInput.value}${userDisplay} （全${selectedFiles.length}枚選択中）`;
+      document.getElementById('selected-summary').innerText = `${document.getElementById('table-no').value}${userDisplay} （全${selectedFiles.length}枚選択中）`;
 
       selectedFiles.forEach((file, index) => {
         const item = document.createElement('div');
         item.className = 'preview-item';
         const img = document.createElement('img');
         img.src = URL.createObjectURL(file);
-        
         const removeBtn = document.createElement('div');
         removeBtn.className = 'remove-btn';
         removeBtn.innerHTML = '✕';
         removeBtn.onclick = (e) => {
           e.stopPropagation();
-          removeFile(index);
+          selectedFiles.splice(index, 1);
+          if (selectedFiles.length === 0) resetAllSelection();
+          else renderPreviews();
         };
-        
         item.appendChild(img);
         item.appendChild(removeBtn);
-        previewGrid.appendChild(item);
-      });
-    }
-
-    function removeFile(index) {
-      selectedFiles.splice(index, 1);
-      if (selectedFiles.length === 0) goToSelectScreen();
-      else renderPreviews();
-    }
-
-    function updateProgress(percent, text) {
-      const safePercent = Math.min(Math.max(Math.round(percent), 0), 100);
-      progressBarFill.style.width = safePercent + '%';
-      progressPercent.innerText = safePercent + '%';
-      if (text) progressText.innerText = text;
-    }
-
-    function sendBatchToGas(batchData, tableNo, userName, targetFolderId) {
-      return new Promise((resolve, reject) => {
-        google.script.run
-          .withSuccessHandler(res => resolve(res))
-          .withFailureHandler(err => reject(err))
-          .uploadBatchFiles(batchData, tableNo, userName, targetFolderId);
+        grid.appendChild(item);
       });
     }
 
     function saveUploadHistory(tableNo, userName, fileDataArray) {
       try {
-        const existingHistory = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
+        const history = JSON.parse(localStorage.getItem('wedding_history') || '[]');
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-        const thumbnails = fileDataArray.slice(0, 4).map(item => item.base64Data);
-
-        const newRecord = {
-          id: Date.now(),
-          date: dateStr,
-          tableNo: tableNo,
-          userName: userName || '匿名',
-          count: fileDataArray.length,
-          thumbnails: thumbnails
-        };
-
-        existingHistory.unshift(newRecord);
-        if (existingHistory.length > 15) existingHistory.pop();
-        localStorage.setItem('wedding_upload_history', JSON.stringify(existingHistory));
-      } catch (e) {
-        console.error('History save error:', e);
-      }
+        history.unshift({
+          id: Date.now(), date: dateStr, tableNo: tableNo,
+          userName: userName || '匿名', count: fileDataArray.length,
+          thumbnails: fileDataArray.slice(0, 4).map(f => f.base64Data)
+        });
+        if (history.length > 15) history.pop();
+        localStorage.setItem('wedding_history', JSON.stringify(history));
+      } catch (e) { console.error('History save error:', e); }
     }
 
     function renderHistoryList() {
       const container = document.getElementById('history-list-container');
       container.innerHTML = '';
-      const historyData = JSON.parse(localStorage.getItem('wedding_upload_history') || '[]');
-
-      if (historyData.length === 0) {
-        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだアップロード履歴はありません✨</p>`;
+      const history = JSON.parse(localStorage.getItem('wedding_history') || '[]');
+      if (history.length === 0) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだ送信履歴はありません✨</p>`;
         return;
       }
-
-      historyData.forEach(item => {
+      history.forEach(item => {
         const card = document.createElement('div');
         card.className = 'history-card';
-        const header = document.createElement('div');
-        header.className = 'history-header';
-        header.innerHTML = `<span>✨ ${item.tableNo} (${item.userName})</span><span>${item.date} [全${item.count}枚]</span>`;
-
-        const thumbGrid = document.createElement('div');
-        thumbGrid.className = 'history-thumb-grid';
-
+        card.innerHTML = `<div class="history-header"><span>✨ ${item.tableNo} (${item.userName})</span><span>${item.date} [全${item.count}枚]</span></div>`;
+        const grid = document.createElement('div');
+        grid.className = 'history-thumb-grid';
         item.thumbnails.forEach(src => {
-          const thumbItem = document.createElement('div');
-          thumbItem.className = 'history-thumb-item';
-          const img = document.createElement('img');
-          img.src = src;
-          thumbItem.appendChild(img);
-          thumbGrid.appendChild(thumbItem);
+          const thumb = document.createElement('div');
+          thumb.className = 'history-thumb-item';
+          thumb.innerHTML = `<img src="${src}">`;
+          grid.appendChild(thumb);
         });
-
-        card.appendChild(header);
-        card.appendChild(thumbGrid);
+        card.appendChild(grid);
         container.appendChild(card);
       });
     }
 
+    // --- アップロード処理 ---
+    function updateProgress(percent, text) {
+      const p = Math.min(Math.max(Math.round(percent), 0), 100);
+      document.getElementById('progress-bar-fill').style.width = p + '%';
+      document.getElementById('progress-percent').innerText = p + '%';
+      if (text) document.getElementById('progress-text').innerText = text;
+    }
+
     async function startUpload() {
-      const tableNo = tableNoInput.value; 
-      const userName = userNameInput.value.trim();
+      const tableNo = document.getElementById('table-no').value;
+      const userName = document.getElementById('user-name').value.trim();
       if (selectedFiles.length === 0 || !tableNo) return;
 
-      uploadBtn.style.display = 'none';
-      addBtn.style.display = 'none';
-      resetBtn.style.display = 'none';
-      progressContainer.style.display = 'block';
+      document.getElementById('upload-btn').style.display = 'none';
+      document.getElementById('add-btn').style.display = 'none';
+      document.getElementById('reset-btn').style.display = 'none';
+      document.getElementById('progress-container').style.display = 'block';
 
       const totalPhotos = selectedFiles.length;
       let compressedCount = 0;
@@ -1163,122 +721,60 @@
 
       try {
         updateProgress(0, `最適化中 (0/${totalPhotos}枚)...`);
+        const fileDataArray = await Promise.all(selectedFiles.map(file => 
+          new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              const img = new Image();
+              img.onload = () => {
+                let w = img.width, h = img.height;
+                if (w > h) { if (w > 2000) { h = Math.round(h * 2000 / w); w = 2000; } }
+                else { if (h > 2000) { w = Math.round(w * 2000 / h); h = 2000; } }
+                const cvs = document.createElement('canvas'); cvs.width = w; cvs.height = h;
+                cvs.getContext('2d').drawImage(img, 0, 0, w, h);
+                compressedCount++;
+                updateProgress((compressedCount / totalPhotos) * 30, `最適化中 (${compressedCount}/${totalPhotos}枚)...`);
+                resolve({ base64Data: cvs.toDataURL('image/jpeg', 0.85), fileName: file.name });
+              };
+              img.onerror = reject; img.src = e.target.result;
+            };
+            reader.onerror = reject; reader.readAsDataURL(file);
+          })
+        ));
 
-        const fileDataArray = await Promise.all(
-          selectedFiles.map(file => 
-            resizeAndCompressImage(file, 2000, 0.85, () => {
-              compressedCount++;
-              updateProgress((compressedCount / totalPhotos) * 30, `最適化中 (${compressedCount}/${totalPhotos}枚)...`);
-            })
-          )
-        );
-
+        // 履歴をローカルに保存
         saveUploadHistory(tableNo, userName, fileDataArray);
 
         const CHUNK_SIZE = 3;
-        const totalChunks = Math.ceil(fileDataArray.length / CHUNK_SIZE);
-
         for (let i = 0; i < fileDataArray.length; i += CHUNK_SIZE) {
           const chunk = fileDataArray.slice(i, i + CHUNK_SIZE);
-          const currentChunkIndex = Math.floor(i / CHUNK_SIZE) + 1;
-          const currentBatchSize = chunk.length; 
-
-          if (currentChunkIndex === totalChunks) {
+          
+          if (i + CHUNK_SIZE >= fileDataArray.length) {
             updateProgress(100, `送信完了 (${totalPhotos}/${totalPhotos}枚)`);
-            setTimeout(() => {
-              progressContainer.style.display = 'none';
-              confirmScreen.style.display = 'none';
-              thankyouScreen.style.display = 'block';
-              window.scrollTo(0, 0);
-            }, 300);
-
-            sendBatchToGas(chunk, tableNo, userName, targetFolderId).catch(err => {
-              console.error('Background upload error:', err);
-            });
+            setTimeout(() => navigate('thankyou'), 300);
+            google.script.run.uploadBatchFiles(chunk, tableNo, userName, targetFolderId);
           } else {
-            const result = await sendBatchToGas(chunk, tableNo, userName, targetFolderId);
-            if (!result.success) throw new Error(result.error);
-            
-            targetFolderId = result.folderId;
-            uploadedPhotoCount += currentBatchSize;
+            const res = await new Promise((resolve, reject) => {
+              google.script.run.withSuccessHandler(resolve).withFailureHandler(reject).uploadBatchFiles(chunk, tableNo, userName, targetFolderId);
+            });
+            if (!res.success) throw new Error(res.error);
+            targetFolderId = res.folderId;
+            uploadedPhotoCount += chunk.length;
             updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
           }
         }
-
       } catch (err) {
-        progressContainer.style.display = 'none';
-        showError('送信に失敗しました: ' + (err.message || err));
+        document.getElementById('progress-container').style.display = 'none';
+        const st = document.getElementById('status');
+        st.innerText = `⚠️ エラー: ${err.message || err}`;
+        st.style.color = '#c53030';
+        document.getElementById('upload-btn').style.display = 'flex';
+        document.getElementById('add-btn').style.display = 'flex';
+        document.getElementById('reset-btn').style.display = 'flex';
       }
-    }
-
-    function resizeAndCompressImage(file, maxSideLength, quality, onProgress) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            let width = img.width;
-            let height = img.height;
-
-            if (width > height) {
-              if (width > maxSideLength) {
-                height = Math.round((height * maxSideLength) / width);
-                width = maxSideLength;
-              }
-            } else {
-              if (height > maxSideLength) {
-                width = Math.round((width * maxSideLength) / height);
-                height = maxSideLength;
-              }
-            }
-
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-
-            const dataUrl = canvas.toDataURL('image/jpeg', quality);
-            if (onProgress) onProgress();
-
-            resolve({ base64Data: dataUrl, fileName: file.name });
-          };
-          img.onerror = (err) => reject(err);
-          img.src = e.target.result;
-        };
-        reader.onerror = (err) => reject(err);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function showError(msg) {
-      statusDiv.innerText = `⚠️ error: ${msg}`;
-      statusDiv.style.color = '#c53030';
-      uploadBtn.style.display = 'flex';
-      addBtn.style.display = 'flex';
-      resetBtn.style.display = 'flex';
-    }
-
-    function resetForm() {
-      selectedFiles = [];
-      previewGrid.innerHTML = '';
-      uploadBtn.style.display = 'flex';
-      addBtn.style.display = 'flex';
-      resetBtn.style.display = 'flex';
-      fileInput.value = ''; 
-      statusDiv.innerText = '';
-      selectStatus.innerText = '';
-      progressContainer.style.display = 'none';
-      updateProgress(0, '');
-
-      thankyouScreen.style.display = 'none';
-      confirmScreen.style.display = 'none';
-      selectScreen.style.display = 'block';
-      window.scrollTo(0, 0);
     }
   </script>
 </body>
 </html>
-
 
 
