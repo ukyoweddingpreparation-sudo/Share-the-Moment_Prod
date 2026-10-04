@@ -117,8 +117,18 @@
     .input-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
     .label-sub { font-size: 0.7rem; color: var(--text-sub); display: block; margin-bottom: 6px; }
 
-    /* 🏷️ 必須バッジのスタイル */
-    .required-badge { background: #e11d48; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; margin-left: 6px; vertical-align: middle; font-weight: 600; }
+    /* 🏷️ 必須バッジのスタイル（デザイン・位置調整版） */
+    .required-badge { 
+      background: #e11d48; 
+      color: white; 
+      padding: 3px 7px; 
+      border-radius: 6px; 
+      font-size: 0.65rem; 
+      margin-left: 8px; 
+      font-weight: 700; 
+      display: inline-block; 
+      letter-spacing: 0.05em; 
+    }
 
     .table-trigger-btn, .text-input-field {
       width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
@@ -285,7 +295,10 @@
 
       <!-- 📝 メッセージ入力時に出現するお名前確認欄（必須） -->
       <div class="input-group" id="confirm-name-group" style="display: none; margin-top: 14px; margin-bottom: 18px; animation: chatAppear 0.3s forwards;">
-        <label for="confirm-user-name">お名前・ニックネーム <span class="required-badge">必須</span></label>
+        <!-- display: flex; align-items: center; を指定して縦位置をピタッと合わせます -->
+        <label for="confirm-user-name" style="display: flex; align-items: center;">
+          お名前・ニックネーム <span class="required-badge">必須</span>
+        </label>
         <input type="text" id="confirm-user-name" class="text-input-field" placeholder="メッセージ送信のためお名前をご記入ください" maxlength="20">
       </div>
       
@@ -386,7 +399,7 @@
 
     // ★★★ここにGASで新しくデプロイしたWebアプリのURLを貼り付けてください★★★
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
-    
+
     window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
 
     function initBgSlideshow() {
@@ -469,7 +482,7 @@
       navigate('confirm');
     });
 
-    // 🔗 名前入力の同期・条件付き表示機能（新機能）
+    // 🔗 名前入力の同期・条件付き表示機能
     const homeNameInput = document.getElementById('user-name');
     const confirmNameInput = document.getElementById('confirm-user-name');
     const userMessageInput = document.getElementById('user-message');
@@ -637,3 +650,5 @@
   </script>
 </body>
 </html>
+
+
