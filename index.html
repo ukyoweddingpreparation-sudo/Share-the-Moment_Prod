@@ -76,7 +76,7 @@
     .en-sub { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.22em; color: var(--primary-gold); font-weight: 700; display: block; margin-bottom: 4px; }
     h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.05em; }
 
-    /* 💬 チャットエリア（気泡アニメーション追加） */
+    /* 💬 チャットエリア（気泡アニメーション） */
     .chat-wrapper { position: relative; background: rgba(255, 255, 255, 0.35); border: 1px solid var(--gold-border); border-radius: 16px; padding: 14px 10px; margin-bottom: 18px; box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8); overflow: hidden; }
     
     /* 🥂 シャンパンゴールドの気泡エフェクト */
@@ -116,6 +116,9 @@
     .input-group { margin-bottom: 14px; text-align: left; }
     .input-group label { display: block; font-size: 0.78rem; font-weight: 700; margin-bottom: 4px; color: var(--text-main); }
     .label-sub { font-size: 0.7rem; color: var(--text-sub); display: block; margin-bottom: 6px; }
+
+    /* 🏷️ 必須バッジのスタイル */
+    .required-badge { background: #e11d48; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.65rem; margin-left: 6px; vertical-align: middle; font-weight: 600; }
 
     .table-trigger-btn, .text-input-field {
       width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
@@ -217,9 +220,7 @@
 
       <div class="chat-wrapper">
         <!-- 🥂 シャンパン気泡 -->
-        <div class="bubbles">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-        </div>
+        <div class="bubbles"><span></span><span></span><span></span><span></span><span></span><span></span></div>
         <div class="chat-container">
           <div class="chat-row">
             <img src="https://drive.google.com/thumbnail?id=1_bhJPsWxdp9qnhikiRLRtwqFyjpKTs1N&sz=w200" class="chat-avatar-img" alt="Ukyo">
@@ -255,6 +256,7 @@
         <input type="hidden" id="table-no" value="">
       </div>
 
+      <!-- 📝 ホーム画面のお名前欄 -->
       <div class="input-group">
         <label for="user-name">お名前・ニックネーム（任意）</label>
         <input type="text" id="user-name" class="text-input-field" placeholder="例：山田 太郎 / たろう" maxlength="20">
@@ -276,14 +278,22 @@
       <div id="preview-grid"></div>
 
       <!-- 📝 メッセージ入力欄 -->
-      <div class="input-group" style="margin-top: 18px; margin-bottom: 18px;">
+      <div class="input-group" style="margin-top: 18px; margin-bottom: 0;">
         <label for="user-message">お祝いメッセージ（任意）</label>
         <textarea id="user-message" class="text-input-field" placeholder="新郎新婦へのメッセージがあればご記入ください" maxlength="100"></textarea>
       </div>
 
-      <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()"><span class="material-symbols-rounded">add</span>写真を追加する</button>
-      <button id="upload-btn" class="btn btn-primary" onclick="startUpload()"><span class="material-symbols-rounded">cloud_upload</span>アップロードを開始する</button>
-      <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()"><span class="material-symbols-rounded">refresh</span>最初から選び直す</button>
+      <!-- 📝 メッセージ入力時に出現するお名前確認欄（必須） -->
+      <div class="input-group" id="confirm-name-group" style="display: none; margin-top: 14px; margin-bottom: 18px; animation: chatAppear 0.3s forwards;">
+        <label for="confirm-user-name">お名前・ニックネーム <span class="required-badge">必須</span></label>
+        <input type="text" id="confirm-user-name" class="text-input-field" placeholder="メッセージ送信のためお名前をご記入ください" maxlength="20">
+      </div>
+      
+      <div style="margin-top: 18px;">
+        <button id="add-btn" class="btn btn-add" onclick="document.getElementById('file-input').click()"><span class="material-symbols-rounded">add</span>写真を追加する</button>
+        <button id="upload-btn" class="btn btn-primary" onclick="startUpload()"><span class="material-symbols-rounded">cloud_upload</span>アップロードを開始する</button>
+        <button id="reset-btn" class="btn btn-secondary" onclick="resetAllSelection()"><span class="material-symbols-rounded">refresh</span>最初から選び直す</button>
+      </div>
 
       <div id="progress-container" class="progress-container">
         <div class="progress-bar-bg"><div id="progress-bar-fill" class="progress-bar-fill"></div></div>
@@ -376,7 +386,7 @@
 
     // ★★★ここにGASで新しくデプロイしたWebアプリのURLを貼り付けてください★★★
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
-
+    
     window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
 
     function initBgSlideshow() {
@@ -459,8 +469,29 @@
       navigate('confirm');
     });
 
+    // 🔗 名前入力の同期・条件付き表示機能（新機能）
+    const homeNameInput = document.getElementById('user-name');
+    const confirmNameInput = document.getElementById('confirm-user-name');
+    const userMessageInput = document.getElementById('user-message');
+    const confirmNameGroup = document.getElementById('confirm-name-group');
+
+    // 双方向に名前を同期
+    homeNameInput.addEventListener('input', (e) => { confirmNameInput.value = e.target.value; });
+    confirmNameInput.addEventListener('input', (e) => { homeNameInput.value = e.target.value; });
+
+    // メッセージが入力されたらお名前欄を表示
+    userMessageInput.addEventListener('input', (e) => {
+      if (e.target.value.trim().length > 0) {
+        confirmNameGroup.style.display = 'block';
+      } else {
+        confirmNameGroup.style.display = 'none';
+        document.getElementById('status').innerText = ''; // 空になったらエラーを消す
+      }
+    });
+
     function resetAllSelection() {
       selectedFiles = []; fileInput.value = ''; document.getElementById('user-message').value = '';
+      confirmNameGroup.style.display = 'none'; // リセット時は非表示に戻す
       document.getElementById('preview-grid').innerHTML = '';
       document.getElementById('upload-btn').style.display = 'flex';
       document.getElementById('add-btn').style.display = 'flex';
@@ -472,7 +503,7 @@
 
     function renderPreviews() {
       const grid = document.getElementById('preview-grid'); grid.innerHTML = '';
-      const userName = document.getElementById('user-name').value.trim();
+      const userName = homeNameInput.value.trim();
       const userDisplay = userName ? ` (${userName}様)` : '';
       document.getElementById('selected-summary').innerText = `${document.getElementById('table-no').value}${userDisplay} （全${selectedFiles.length}枚選択中）`;
 
@@ -531,9 +562,19 @@
 
     async function startUpload() {
       const tableNo = document.getElementById('table-no').value;
-      const userName = document.getElementById('user-name').value.trim();
-      const userMessage = document.getElementById('user-message').value.trim();
+      const userName = homeNameInput.value.trim(); // 同期されているのでここを参照すればOK
+      const userMessage = userMessageInput.value.trim();
+      
       if (selectedFiles.length === 0 || !tableNo) return;
+
+      // 🚨 バリデーション: メッセージがあるのにお名前が空の場合はストップ
+      if (userMessage.length > 0 && userName.length === 0) {
+        const st = document.getElementById('status');
+        st.innerHTML = `<span class="material-symbols-rounded" style="vertical-align:middle; font-size:1.1rem;">error</span> お祝いメッセージを送信する場合は、お名前をご入力ください`;
+        st.style.color = '#c53030';
+        confirmNameGroup.scrollIntoView({ behavior: 'smooth', block: 'center' }); // エラー箇所にスクロール
+        return;
+      }
 
       if(GAS_WEB_APP_URL.includes("ここにURLを貼り付け")) {
         alert("GASのURLが設定されていません。コード内のGAS_WEB_APP_URLを修正してください。");
@@ -542,6 +583,7 @@
 
       document.getElementById('upload-btn').style.display = 'none'; document.getElementById('add-btn').style.display = 'none'; document.getElementById('reset-btn').style.display = 'none';
       document.getElementById('progress-container').style.display = 'block';
+      document.getElementById('status').innerText = ''; // エラー表示をクリア
 
       const totalPhotos = selectedFiles.length; let compressedCount = 0; let uploadedPhotoCount = 0; let targetFolderId = null;
 
