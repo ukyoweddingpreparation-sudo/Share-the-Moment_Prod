@@ -21,12 +21,11 @@
 
   <!-- 📱 ホーム画面追加時のアプリアイコン設定 -->
   <!-- ※ 実際の画像ファイルの拡張子（.png や .jpg）に合わせて変更してください -->
-  <link rel="apple-touch-icon" href="./App-icon②.jpg">
-  <link rel="icon" href="./App-icon②.jpg">
-  <!-- フルスクリーン（アプリ風）表示にするための設定 -->
+  <link rel="apple-touch-icon" href="./App-icon②.png">
+  <link rel="icon" href="./App-icon②.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Share the Moments">
+  <meta name="apple-mobile-web-app-title" content="Wedding">
 
   <!-- 🖋 高速化＆全フォント統合 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -146,7 +145,8 @@
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .help-answer { padding: 0 14px; max-height: 0; font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; transition: all 0.3s ease; opacity: 0; }
-    .help-item.active .help-answer { padding: 0 14px 14px; max-height: 500px; opacity: 1; }
+    /* 回答文が長くなっても対応できるよう max-height を 600px に拡張 */
+    .help-item.active .help-answer { padding: 0 14px 14px; max-height: 600px; opacity: 1; }
     .help-item.active .help-icon { transform: rotate(180deg); }
     .help-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
 
@@ -319,6 +319,19 @@
         <div class="help-question">Q. エラーが出て送れません <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">電波状況が悪い場所では送信に失敗する場合があります。少し時間をおいてから再度お試しいただくか、一度に選択する枚数を減らしてお試しください。</div>
       </div>
+      <!-- 📝 追加: 送信履歴に関するQ&A -->
+      <div class="help-item" onclick="this.classList.toggle('active')">
+        <div class="help-question">Q. 送信履歴が見れなくなりました <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-answer">
+          送信履歴はご利用の端末（ブラウザ）にのみ保存される仕組みです。そのため、以下の場合は履歴がリセットされます。<br><br>
+          ・「プライベートブラウズ（シークレットモード）」で開いていた画面を閉じた場合<br>
+          ・ブラウザの閲覧履歴やキャッシュを削除した場合<br>
+          ・LINEなどのアプリ内ブラウザと、SafariやChromeなどのブラウザを行き来した場合<br>
+          ・別のスマートフォンからアクセスした場合<br><br>
+          ※履歴が消えてしまっても、送信済みの写真は新郎新婦にしっかりと届いておりますのでご安心ください。
+        </div>
+      </div>
+
       <button class="btn btn-secondary" style="margin-top:20px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
   </div>
@@ -336,8 +349,8 @@
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q','Table R'];
 
     // ★★★ここにGASで新しくデプロイしたWebアプリのURLを貼り付けてください★★★
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
-    
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/ここにURLを貼り付け/exec";
+
     window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
 
     function initBgSlideshow() {
@@ -556,4 +569,6 @@
   </script>
 </body>
 </html>
+
+
 
