@@ -20,7 +20,6 @@
   <title>Share the Moment</title>
 
   <!-- 📱 ホーム画面追加時のアプリアイコン設定 -->
-  <!-- ※ 実際の画像ファイルの拡張子（.png や .jpg）に合わせて変更してください -->
   <link rel="apple-touch-icon" href="./App-icon②.png">
   <link rel="icon" href="./App-icon②.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,7 +76,31 @@
     .en-sub { font-family: var(--font-title); font-size: 0.9rem; letter-spacing: 0.22em; color: var(--primary-gold); font-weight: 700; display: block; margin-bottom: 4px; }
     h2 { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; color: var(--text-main); letter-spacing: 0.05em; }
 
+    /* 💬 チャットエリア（気泡アニメーション追加） */
     .chat-wrapper { position: relative; background: rgba(255, 255, 255, 0.35); border: 1px solid var(--gold-border); border-radius: 16px; padding: 14px 10px; margin-bottom: 18px; box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8); overflow: hidden; }
+    
+    /* 🥂 シャンパンゴールドの気泡エフェクト */
+    .bubbles { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bubbles span {
+      position: absolute; bottom: -20px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.9), rgba(212, 175, 55, 0.3));
+      box-shadow: 0 0 4px rgba(255,255,255,0.4);
+      animation: floatBubble infinite ease-in;
+    }
+    .bubbles span:nth-child(1) { width: 10px; height: 10px; left: 15%; animation-duration: 4.5s; animation-delay: 0s; }
+    .bubbles span:nth-child(2) { width: 14px; height: 14px; left: 45%; animation-duration: 5.5s; animation-delay: 1.2s; }
+    .bubbles span:nth-child(3) { width: 8px; height: 8px; left: 75%; animation-duration: 3.8s; animation-delay: 2.5s; }
+    .bubbles span:nth-child(4) { width: 12px; height: 12px; left: 30%; animation-duration: 5s; animation-delay: 3s; }
+    .bubbles span:nth-child(5) { width: 16px; height: 16px; left: 85%; animation-duration: 6.5s; animation-delay: 0.5s; }
+    .bubbles span:nth-child(6) { width: 9px; height: 9px; left: 60%; animation-duration: 4.2s; animation-delay: 4s; }
+    @keyframes floatBubble {
+      0% { transform: translateY(0) translateX(0) scale(0.8); opacity: 0; }
+      20% { opacity: 0.8; }
+      50% { transform: translateY(-100px) translateX(8px) scale(1); }
+      80% { opacity: 0.4; }
+      100% { transform: translateY(-260px) translateX(-8px) scale(1.2); opacity: 0; }
+    }
+
     .chat-container { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 12px; }
     .chat-row { display: flex; align-items: flex-start; gap: 8px; opacity: 0; transform: translateY(12px); animation: chatAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
     .chat-row:nth-child(1) { animation-delay: 0s; } .chat-row:nth-child(2) { animation-delay: 1.5s; } .chat-row:nth-child(3) { animation-delay: 3s; }
@@ -145,7 +168,6 @@
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
     .help-answer { padding: 0 14px; max-height: 0; font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; transition: all 0.3s ease; opacity: 0; }
-    /* 回答文が長くなっても対応できるよう max-height を 600px に拡張 */
     .help-item.active .help-answer { padding: 0 14px 14px; max-height: 600px; opacity: 1; }
     .help-item.active .help-icon { transform: rotate(180deg); }
     .help-icon { transition: transform 0.3s ease; color: var(--primary-gold); }
@@ -194,6 +216,10 @@
       </div>
 
       <div class="chat-wrapper">
+        <!-- 🥂 シャンパン気泡 -->
+        <div class="bubbles">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
         <div class="chat-container">
           <div class="chat-row">
             <img src="https://drive.google.com/thumbnail?id=1_bhJPsWxdp9qnhikiRLRtwqFyjpKTs1N&sz=w200" class="chat-avatar-img" alt="Ukyo">
@@ -319,7 +345,7 @@
         <div class="help-question">Q. エラーが出て送れません <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">電波状況が悪い場所では送信に失敗する場合があります。少し時間をおいてから再度お試しいただくか、一度に選択する枚数を減らしてお試しください。</div>
       </div>
-      <!-- 📝 追加: 送信履歴に関するQ&A -->
+      <!-- 送信履歴に関するQ&A -->
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 送信履歴が見れなくなりました <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
@@ -349,7 +375,7 @@
     const tables = ['Table A','Table B','Table C','Table D','Table E','Table F','Table G','Table H','Table I','Table J','Table K','Table L','Table M','Table N','Table O','Table P','Table Q','Table R'];
 
     // ★★★ここにGASで新しくデプロイしたWebアプリのURLを貼り付けてください★★★
-    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/ここにURLを貼り付け/exec";
+    const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
 
     window.addEventListener('DOMContentLoaded', () => { initBgSlideshow(); initTableList(); });
 
@@ -569,6 +595,3 @@
   </script>
 </body>
 </html>
-
-
-
