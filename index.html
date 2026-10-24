@@ -457,7 +457,7 @@
 
       <div class="sidebar-menu-item" onclick="navigate('help')">
         <span class="material-symbols-rounded">help</span>
-        <span>お問い合わせ</span>
+        <span>ヘルプ</span>
       </div>
     </div>
   </div>
@@ -666,7 +666,7 @@
       <div class="help-item" onclick="this.classList.toggle('active')">
         <div class="help-question">Q. 写真は一度に何枚まで送れますか？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
-          一度に複数枚（推奨：10〜20枚程度）まとめて選択し、送信することができます。回数に制限はありませんので、何度でも送っていただけます。
+          一度に複数枚（推奨：5〜10枚程度）まとめて選択し、送信することができます。回数に制限はありませんので、何度でも送っていただけます。
         </div>
       </div>
 
@@ -711,7 +711,7 @@
       </div>
 
       <div class="help-item" onclick="this.classList.toggle('active')">
-        <div class="help-question">Q. 音や演出が動かないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
+        <div class="help-question">Q. アプリ内画像が表示されないときは？ <span class="material-symbols-rounded help-icon">expand_more</span></div>
         <div class="help-answer">
           お使いのブラウザ（SafariやChromeなど）のタブを一度整理していただき、ページを再読み込みしてください。
         </div>
@@ -781,23 +781,23 @@
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec";
 
     const guestData = {
-      'Table A': ['安永 民幸', '矢野 幸一', '河野 拓也', '榊田 順一', '髙田 義昭', '立花 良友', '久佛 晋ニ'],
-      'Table B': ['内山 毅一', '内山 素行', '内山 貴善', '野田 健二', '溝江 誠', '濱崎 祐和'],
-      'Table C': ['中村 勇貴', '関谷 祥太', '中村 ほのか', '村上 唯音'],
-      'Table D': ['ゲストD1', 'ゲストD2'],
-      'Table E': ['ゲストE1', 'ゲストE2'],
-      'Table F': ['ゲストF1'],
-      'Table G': ['ゲストG1'],
-      'Table H': ['ゲストH1'],
-      'Table I': ['ゲストI1'],
-      'Table J': ['ゲストJ1'],
-      'Table K': ['ゲストK1'],
-      'Table L': ['ゲストL1'],
-      'Table M': ['ゲストM1'],
-      'Table N': ['ゲストN1'],
-      'Table O': ['ゲストO1'],
-      'Table P': ['ゲストP1'],
-      'Table Q': ['ゲストQ1']
+      'Table A': ['安永 民幸 様', '矢野 幸一 様', '河野 拓也 様', '榊田 順一 様', '髙田 義昭 様', '立花 良友 様', '久佛 晋ニ 様'],
+      'Table B': ['内山 毅一 様', '内山 素行 様', '内山 貴善 様', '野田 健二 様', '溝江 誠 様', '濱崎 祐和 様'],
+      'Table C': ['中村 勇貴 様', '関谷 祥太 様', '中村 ほのか 様', '村上 唯音 様'],
+      'Table D': ['西口 知子 様', '西口 凛 様', '木下 慶 様', '望月 朋瑠 様', '望月 晴太 様', '森若 波紗 様'],
+      'Table E': ['川添 純 様', '安田 茜 様', '千々岩 晴佳 様', '橘薗 輝 様', '森 幸司 様', '佐々木 聖央 様'],
+      'Table F': ['浦塚 秀行 様', '樋口 英治 様', '堤 憲真 様', '安武 亮 様', '内田 哲司 様', '矢野 直幸 様'],
+      'Table G': ['米満 優衣 様', '前田 涼羽 様', '佐藤 佑実 様', '鬼木 陽南子 様', '磯部 育未 様'],
+      'Table H': ['中野 美紀 様', '吉冨 千尋 様', '日髙 晴稀 様', '豊福 純矢 様', '平田 拓斗 様', '山田 夢登 様', '國分 陽向 様', '江藤 拓海 様'],
+      'Table I': ['長岡 優太 様', '岡野 祥太朗 様', '蓑原 潤平 様', '西嶋 翼 様', 'NUGROHO ARDIYANTO 様', '水原 将英 様', '井元 要 様'],
+      'Table J': ['前田 椎南 様', '深江 桃樺 様', '宮下 帆華 様', '大隈 彩香 様', '江口 のぞみ 様'],
+      'Table K': ['中村 遥 様', '森重 美莉 様', '今村 美也子 様', '青柳 璃央梨 様', '木村 莉奈 様'],
+      'Table L': ['井関 裕見子 様', '長井 信子 様', '秀山 かな子 様', '秀山 達也 様', '秀山 裕史 様', '秀山 邦子 様', '秀山 佳之 様'],
+      'Table M': ['﨑村 留実子 様', '上月 うた くん', '上月 留奈 様', '児島 洋幸 様', '﨑村 智也 様'],
+      'Table N': ['吉田 重浩 様', '吉田 富美代 様', '吉田 有加 様', '吉田 龍史 様'],
+      'Table O': ['今林 忠久 様', '今林 華菜 様', '今林 洋子 様', '今林 大己 様'],
+      'Table P': ['長澤 妙子様', '長澤 英樹 様', '秀山 啓子 様', '児島 テル子 様', '﨑村 武留 様', '秀山 則之 様'],
+      'Table Q': ['今林 寿代 様', '今林 理栄子 様', '今林 篤 様']
     };
 
     let activeTableTarget = { input: 'table-no', text: 'table-trigger-text', btn: 'table-trigger' };
