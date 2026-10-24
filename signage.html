@@ -188,8 +188,11 @@
       // 写真リストを取得するGAS (Google Apps Script) のWebアプリURL
       GAS_SYNC_API_URL: "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec",
 
-      // スライドおよび定期確認の切り替え間隔（5秒 = 5000ms）
-      NORMAL_SLIDE_INTERVAL: 5000
+      // スライドが切り替わる間隔（5秒 = 5000ms）※一定に保たれます
+      SLIDE_INTERVAL: 5000,
+
+      // 裏で新着画像を確認しに行く間隔（5秒 = 5000ms）
+      POLL_INTERVAL: 5000
     };
     // =====================================================================
 
@@ -198,6 +201,7 @@
     let currentIndex = 0;
     let useFirstImage = true;
     let slideTimer = null;
+    let pollTimer = null;
     let isFirstLoad = true;
 
     // 🌟 同じメッセージが何度も表示されないようにするための管理キー
@@ -237,11 +241,15 @@
       // 初回データ取得 ＆ 描画・スプラッシュ終了
       await fetchImagesAndRefresh(true);
 
-      // 定期的にGASへ新しい写真を確認しつつスライドを進めるタイマー（5秒ごと）
-      slideTimer = setInterval(async () => {
-        await fetchImagesAndRefresh(false);
+      // 🕒 タイマー1：スライド専用（一定間隔をキープ）
+      slideTimer = setInterval(() => {
         nextSlide();
-      }, CONFIG.NORMAL_SLIDE_INTERVAL);
+      }, CONFIG.SLIDE_INTERVAL);
+
+      // 🕒 タイマー2：新着確認専用（裏でこっそりGASに問い合わせ）
+      pollTimer = setInterval(() => {
+        checkForNewImages();
+      }, CONFIG.POLL_INTERVAL);
     });
 
     // タイトル文字のバラシ＆アニメーション用Span生成
@@ -284,7 +292,7 @@
       return allBatches.flat();
     }
 
-    // 🌟 GASからのデータ定期取得（新着画像を検知したら、現在の再生位置のすぐ次に優先割り込みさせる）
+    // 初回データ取得用
     async function fetchImagesAndRefresh(isInitial = false) {
       try {
         const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
@@ -295,9 +303,8 @@
         const data = await response.json();
         
         if (data.status === 'success' && data.images.length > 0) {
-          if (isInitial || images.length === 0) {
-            // 初回起動時は全体を整理・シャッフル
-            images = organizeImages(data.images);
+          images = organizeImages(data.images);
+          if (isInitial) {
             currentIndex = 0;
             showImage(currentIndex);
 
@@ -311,21 +318,39 @@
                 }, 1800);
               }, 3500);
             }
-          } else {
-            // 🔄 定期確認時：新着画像を検知して即座に割り込ませる
-            const existingIds = new Set(images.map(img => img.id));
-            const newImages = data.images.filter(img => !existingIds.has(img.id));
-
-            if (newImages.length > 0) {
-              console.log(`✨ 新しい写真を ${newImages.length} 枚検知しました！優先割り込みします`);
-              
-              // 🌟 配列の末尾ではなく、現在再生している写真のすぐ次（currentIndex + 1）に新着画像を割り込ませる
-              images.splice(currentIndex + 1, 0, ...newImages);
-            }
           }
         }
       } catch (e) {
-        console.error('画像データ取得エラー:', e);
+        console.error('初回画像取得エラー:', e);
+      }
+    }
+
+    // 🌟 裏で新着画像を確認し、複数枚あっても時系列順に並べて綺麗に連続割り込みさせる専用関数
+    async function checkForNewImages() {
+      try {
+        const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
+          method: "GET",
+          cache: "no-store",
+          redirect: "follow"
+        });
+        const data = await response.json();
+        
+        if (data.status === 'success' && data.images.length > 0) {
+          const existingIds = new Set(images.map(img => img.id));
+          let newImages = data.images.filter(img => !existingIds.has(img.id));
+
+          if (newImages.length > 0) {
+            // 🌟 複数枚同時アップロードされた際、バラバラにならず綺麗に連続して再生されるよう古い順に並び替え
+            newImages.sort((a, b) => (a.createdTime || 0) - (b.createdTime || 0));
+
+            console.log(`✨ 新しい写真を ${newImages.length} 枚検知しました！連続して割り込みます`);
+            
+            // 現在再生中の画像のすぐ次に、新着写真を連続して挿入
+            images.splice(currentIndex + 1, 0, ...newImages);
+          }
+        }
+      } catch (e) {
+        console.error('新着確認エラー:', e);
       }
     }
 
@@ -361,7 +386,7 @@
       }
       useFirstImage = !useFirstImage;
 
-      // メッセージの吹き出し表示判定
+      // メッセージの吹き出し表示判定（同じメッセージは1回きり）
       const hasMessage = message && message.trim() !== "";
       const isFirstTimeForMessage = hasMessage && !isMessageAlreadyShown(author, message);
 
@@ -389,7 +414,7 @@
       }, 10000);
     }
 
-    // 次の画像へスライド
+    // 次の画像へスライド（一定間隔をキープ）
     function nextSlide() {
       if (images.length === 0) return;
       currentIndex = (currentIndex + 1) % images.length;
