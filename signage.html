@@ -10,10 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
 
-  <!-- Firebase SDK (Compat) -->
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
-
   <style>
     :root {
       --font-title: 'Cinzel', serif;
@@ -35,7 +31,7 @@
     #loadingScreen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(rgba(12, 11, 10, 0.5), rgba(12, 11, 10, 0.8)), 
-                  url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
+                url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
       z-index: 1000; display: flex; flex-direction: column;
       justify-content: center; align-items: center; text-align: center;
       transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1);
@@ -186,16 +182,13 @@
 
   <script>
     // =====================================================================
-    // ⚙️ 【管理者向け設定エリア】自環境に合わせて以下を変更してください
+    // ⚙️ 【管理者向け設定エリア】
     // =====================================================================
     const CONFIG = {
-      // 1. Firebase Realtime Database のURL
-      FIREBASE_DATABASE_URL: "https://signage-prod-final-default-rtdb.firebaseio.com//",
-
-      // 2. 写真リストを取得するGAS (Google Apps Script) のWebアプリURL
+      // 写真リストを取得するGAS (Google Apps Script) のWebアプリURL
       GAS_SYNC_API_URL: "https://script.google.com/macros/s/AKfycbyWbPWILu2tPTj1p2hgGr89zwQlxNG7gbQ2CWJ8HTqsCl6VbX_1OzswmeAvymEqE0xV/exec",
 
-      // 3. 通常のスライド切り替え間隔（5秒 = 5000ms）
+      // スライドおよび定期確認の切り替え間隔（5秒 = 5000ms）
       NORMAL_SLIDE_INTERVAL: 5000
     };
     // =====================================================================
@@ -231,28 +224,24 @@
         const shown = JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
         if (!shown.includes(key)) {
           shown.push(key);
-          if (shown.length > 100) shown.shift(); // 履歴が増えすぎないように制限
+          if (shown.length > 100) shown.shift();
           localStorage.setItem(SHOWN_MESSAGES_KEY, JSON.stringify(shown));
         }
       } catch (e) {}
     }
-
-    // Firebase 初期化
-    firebase.initializeApp({ databaseURL: CONFIG.FIREBASE_DATABASE_URL });
-    const db = firebase.database();
 
     window.addEventListener('DOMContentLoaded', async () => {
       // タイトル文字のアニメーション生成
       initWaveTitle("L'Éternel Moment");
 
       // 初回データ取得 ＆ 描画・スプラッシュ終了
-      await fetchImagesAndRefresh(true, false);
+      await fetchImagesAndRefresh(true);
 
-      // スライドショーのタイマー開始（5秒ごと）
-      slideTimer = setInterval(nextSlide, CONFIG.NORMAL_SLIDE_INTERVAL);
-
-      // Firebase によるリアルタイム新着監視（WebSocketリスナー）
-      initFirebaseListener();
+      // 定期的にGASへ新しい写真を確認しつつスライドを進めるタイマー（5秒ごと）
+      slideTimer = setInterval(async () => {
+        await fetchImagesAndRefresh(false);
+        nextSlide();
+      }, CONFIG.NORMAL_SLIDE_INTERVAL);
     });
 
     // タイトル文字のバラシ＆アニメーション用Span生成
@@ -267,23 +256,8 @@
       }
     }
 
-    // 1. Firebaseからのリアルタイム新着検知
-    function initFirebaseListener() {
-      const triggerRef = db.ref('trigger');
-      triggerRef.on('value', async (snapshot) => {
-        const data = snapshot.val();
-        if (data && data.timestamp) {
-          console.log('✨ 新着写真を検知！即時割り込み同期を実行します');
-          await fetchImagesAndRefresh(false, true);
-
-          clearInterval(slideTimer);
-          slideTimer = setInterval(nextSlide, CONFIG.NORMAL_SLIDE_INTERVAL);
-        }
-      });
-    }
-
-    // 2. 画像リストの整理とバッチ優先順位付け
-    function organizeImages(rawImages, isInterrupt = false) {
+    // 画像リストの整理とバッチ優先順位付け
+    function organizeImages(rawImages) {
       const batchMap = {};
       rawImages.forEach(img => {
         const bId = img.batchId || "default";
@@ -302,42 +276,28 @@
         return maxTimeB - maxTimeA;
       });
 
-      let latestBatchId = batchIds[0];
-      let latestBatchImages = batchMap[latestBatchId] || [];
-      
-      let otherBatchIds = batchIds.filter(id => id !== latestBatchId);
-      for (let i = otherBatchIds.length - 1; i > 0; i--) {
+      let allBatches = batchIds.map(id => batchMap[id]);
+      for (let i = allBatches.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [otherBatchIds[i], otherBatchIds[j]] = [otherBatchIds[j], otherBatchIds[i]];
+        [allBatches[i], allBatches[j]] = [allBatches[j], allBatches[i]];
       }
-
-      let otherImages = otherBatchIds.flatMap(id => batchMap[id]);
-
-      if (isInterrupt) {
-        return [...latestBatchImages, ...otherImages];
-      } else {
-        let allBatches = batchIds.map(id => batchMap[id]);
-        for (let i = allBatches.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [allBatches[i], allBatches[j]] = [allBatches[j], allBatches[i]];
-        }
-        return allBatches.flat();
-      }
+      return allBatches.flat();
     }
 
-    // 3. GASからのデータ取得とリフレッシュ
-    async function fetchImagesAndRefresh(isInitial = false, isInterrupt = false) {
+    // GASからのデータ定期取得とリフレッシュ
+    async function fetchImagesAndRefresh(isInitial = false) {
       try {
         const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
           method: "GET",
+          cache: "no-store",
           redirect: "follow"
         });
         const data = await response.json();
         
         if (data.status === 'success' && data.images.length > 0) {
-          images = organizeImages(data.images, isInterrupt);
+          images = organizeImages(data.images);
 
-          if (isInitial || isInterrupt) {
+          if (isInitial) {
             currentIndex = 0;
             showImage(currentIndex);
 
@@ -358,7 +318,7 @@
       }
     }
 
-    // 4. 画像とメッセージの表示処理
+    // 画像とメッセージの表示処理
     function showImage(index) {
       if (images.length === 0) return;
       const currentItem = images[index];
@@ -390,7 +350,7 @@
       }
       useFirstImage = !useFirstImage;
 
-      // 🌟 メッセージの吹き出し表示判定（同じメッセージは全体で1回のみ表示）
+      // メッセージの吹き出し表示判定
       const hasMessage = message && message.trim() !== "";
       const isFirstTimeForMessage = hasMessage && !isMessageAlreadyShown(author, message);
 
@@ -400,7 +360,7 @@
       }
     }
 
-    // 5. 吹き出しアニメーションの実行
+    // 吹き出しアニメーションの実行
     function triggerStreamComment(author, message) {
       const commentEl = document.createElement('div');
       commentEl.className = 'comment-overlay';
@@ -418,14 +378,10 @@
       }, 10000);
     }
 
-    // 6. 定期スライド送り（次の画像へ）
+    // 次の画像へスライド
     function nextSlide() {
       if (images.length === 0) return;
       currentIndex = (currentIndex + 1) % images.length;
-      
-      if (currentIndex === 0) {
-        images = organizeImages(images, false);
-      }
       showImage(currentIndex);
     }
   </script>
