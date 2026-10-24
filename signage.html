@@ -256,7 +256,7 @@
       }
     }
 
-    // 画像リストの整理とバッチ優先順位付け
+    // 初回起動時の画像リスト整理とシャッフル
     function organizeImages(rawImages) {
       const batchMap = {};
       rawImages.forEach(img => {
@@ -284,7 +284,7 @@
       return allBatches.flat();
     }
 
-    // GASからのデータ定期取得とリフレッシュ
+    // 🌟 GASからのデータ定期取得（新着画像を検知したら、現在の再生位置のすぐ次に優先割り込みさせる）
     async function fetchImagesAndRefresh(isInitial = false) {
       try {
         const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
@@ -295,9 +295,9 @@
         const data = await response.json();
         
         if (data.status === 'success' && data.images.length > 0) {
-          images = organizeImages(data.images);
-
-          if (isInitial) {
+          if (isInitial || images.length === 0) {
+            // 初回起動時は全体を整理・シャッフル
+            images = organizeImages(data.images);
             currentIndex = 0;
             showImage(currentIndex);
 
@@ -310,6 +310,17 @@
                   loadingScreen.style.display = 'none';
                 }, 1800);
               }, 3500);
+            }
+          } else {
+            // 🔄 定期確認時：新着画像を検知して即座に割り込ませる
+            const existingIds = new Set(images.map(img => img.id));
+            const newImages = data.images.filter(img => !existingIds.has(img.id));
+
+            if (newImages.length > 0) {
+              console.log(`✨ 新しい写真を ${newImages.length} 枚検知しました！優先割り込みします`);
+              
+              // 🌟 配列の末尾ではなく、現在再生している写真のすぐ次（currentIndex + 1）に新着画像を割り込ませる
+              images.splice(currentIndex + 1, 0, ...newImages);
             }
           }
         }
