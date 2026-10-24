@@ -358,18 +358,40 @@
     .info-card {
       background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 16px; padding: 12px; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-      display: flex; flex-direction: column; gap: 10px;
+      display: flex; flex-direction: column; gap: 8px;
     }
     .info-img-wrapper { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(212, 175, 55, 0.3); }
     .info-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-    .info-title { font-family: var(--font-serif); font-size: 0.9rem; font-weight: 700; color: var(--text-main); }
-    .info-desc { font-size: 0.78rem; color: var(--text-sub); line-height: 1.4; }
-    .btn-download {
-      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%); color: white;
-      padding: 10px 14px; border-radius: 12px; font-size: 0.85rem; font-weight: 700; border: none; cursor: pointer;
-      display: flex; justify-content: center; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(184,151,83,0.3); font-family: var(--font-sans);
+    
+    /* ② coming soon用のオーバーレイ */
+    .coming-soon-overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.65); /* トーンを落とす */
+      display: flex; justify-content: center; align-items: center; z-index: 10;
     }
-    .btn-download:active { transform: scale(0.97); }
+    .coming-soon-text {
+      color: #f3e5ab; font-family: var(--font-en); font-size: 1.6rem; font-weight: 700;
+      letter-spacing: 0.1em; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+    }
+
+    /* ① 長押し保存を促すテキスト */
+    .info-save-instruction {
+      font-size: 0.72rem; color: var(--primary-gold); font-weight: 700; text-align: center;
+      display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;
+    }
+
+    .info-title { font-family: var(--font-serif); font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
+    .info-desc { font-size: 0.78rem; color: var(--text-sub); line-height: 1.4; }
+
+    /* ④ 画面内スクロール（内側のフレームのみ動かす） */
+    #info-list-container {
+      max-height: 55vh; /* 画面高さの55%に制限 */
+      overflow-y: auto; /* はみ出た場合はスクロール */
+      padding-right: 4px;
+    }
+    /* スクロールバーのデザイン */
+    #info-list-container::-webkit-scrollbar { width: 4px; }
+    #info-list-container::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 4px; }
 
     .help-item { background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(255, 255, 255, 0.9); border-radius: 12px; margin-bottom: 10px; overflow: hidden; }
     .help-question { padding: 14px; font-size: 0.88rem; font-weight: 700; color: var(--text-main); display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
@@ -604,33 +626,46 @@
     <!-- 🌟 全体共有・思い出ダウンロード画面 (#info-screen) -->
     <div id="info-screen">
       <div class="title-area"><span class="en-sub">INFORMATION</span><h2>全体共有・お知らせ</h2></div>
-      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">新郎新婦からのシェア写真です✨ボタンから保存できます。</p>
+      <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">新郎新婦からのシェア写真です✨</p>
       
+      <!-- ④ スクロール用のコンテナ -->
       <div id="info-list-container">
+        
         <!-- サンプル1：集合写真 -->
         <div class="info-card">
           <div class="info-img-wrapper">
             <img src="https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000" alt="集合写真">
+            <!-- ② 画像のトーンを落とし、Coming soonを表示 -->
+            <div class="coming-soon-overlay">
+              <span class="coming-soon-text">Coming soon...</span>
+            </div>
+          </div>
+          <!-- ① 長押し保存のテキスト案内 -->
+          <div class="info-save-instruction">
+            <span class="material-symbols-rounded" style="font-size: 1rem;">touch_app</span>画像を長押しして「写真に保存」できます
           </div>
           <div class="info-title">📸 記念集合写真</div>
           <div class="info-desc">挙式・披露宴の折に撮影した記念の全体集合写真です。思い出にぜひ保存してください！</div>
-          <button class="btn-download" onclick="downloadOrShareImage('https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000', 'wedding_group_photo.jpg')">
-            <span class="material-symbols-rounded" style="color:white; font-size:1.1rem;">download</span> 写真を保存する
-          </button>
         </div>
 
-        <!-- サンプル2：当日のご案内・サプライズ用など -->
+        <!-- サンプル2：会場スナップ -->
         <div class="info-card">
           <div class="info-img-wrapper">
             <img src="https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000" alt="会場ショット">
+            <!-- ② 画像のトーンを落とし、Coming soonを表示 -->
+            <div class="coming-soon-overlay">
+              <span class="coming-soon-text">Coming soon...</span>
+            </div>
+          </div>
+          <!-- ① 長押し保存のテキスト案内 -->
+          <div class="info-save-instruction">
+            <span class="material-symbols-rounded" style="font-size: 1rem;">touch_app</span>画像を長押しして「写真に保存」できます
           </div>
           <div class="info-title">✨ 会場スナップ</div>
           <div class="info-desc">本日の会場の雰囲気をお裾分けいたします。</div>
-          <button class="btn-download" onclick="downloadOrShareImage('https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000', 'wedding_venue_snapshot.jpg')">
-            <span class="material-symbols-rounded" style="color:white; font-size:1.1rem;">download</span> 写真を保存する
-          </button>
         </div>
-      </div>
+        
+      </div> <!-- /#info-list-container -->
 
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
@@ -986,22 +1021,6 @@
     }
     function closeNameModalOnOutside(e) { if (e.target.id === 'name-modal') document.getElementById('name-modal').classList.remove('active'); }
 
-    async function downloadOrShareImage(imgUrl, fileName) {
-      try {
-        if (navigator.canShare || navigator.share) {
-          const response = await fetch(imgUrl);
-          const blob = await response.blob();
-          const file = new File([blob], fileName, { type: blob.type || 'image/jpeg' });
-          if (navigator.canShare && navigator.canShare({ files: [file] })) {
-            await navigator.share({ files: [file], title: '記念写真', text: 'SharetheMomentsからのシェア画像です✨' });
-            return;
-          }
-        }
-        const a = document.createElement('a'); a.href = imgUrl; a.target = '_blank'; a.download = fileName;
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
-      } catch (err) { console.log('Share error:', err); }
-    }
-
     function navigate(screenName, isReset = false) {
       closeSidebar();
       if(isReset) resetAllSelection();
@@ -1281,4 +1300,3 @@
   </script>
 </body>
 </html>
-
