@@ -46,11 +46,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     .material-symbols-rounded { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; font-size: 1.2rem; color: var(--primary-gold); }
 
-    html {
-      background-color: #d5c5c8;
-      width: 100%;
-      height: 100%;
-    }
+    html { background-color: #d5c5c8; width: 100%; height: 100%; }
 
     body {
       font-family: var(--font-sans); min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: center; padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom)) 16px; color: var(--text-main); position: relative; overflow-x: hidden;
@@ -73,11 +69,7 @@
       font-family: var(--font-en); font-size: 2.4rem; color: #ffffff; letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 500; text-shadow: 0 4px 20px rgba(0,0,0,0.6); 
       display: flex; justify-content: center; gap: 0.02em;
     }
-    .loading-title span {
-      display: inline-block;
-      animation: waveText 2s infinite ease-in-out;
-      animation-delay: calc(var(--i) * 0.08s);
-    }
+    .loading-title span { display: inline-block; animation: waveText 2s infinite ease-in-out; animation-delay: calc(var(--i) * 0.08s); }
     @keyframes waveText {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); color: #f3e5ab; text-shadow: 0 6px 25px rgba(212, 175, 55, 0.6); }
@@ -162,21 +154,18 @@
 
     .required-badge { background: #e11d48; color: white; padding: 3px 7px; border-radius: 6px; font-size: 0.65rem; margin-left: 8px; font-weight: 700; display: inline-block; letter-spacing: 0.05em; }
 
-    /* 入力フィールドの共通ベーススタイル */
     .input-base {
       width: 100%; padding: 12px 18px; border: 1.5px solid rgba(255, 255, 255, 0.9); border-radius: 16px; 
       font-size: 0.9rem; background: rgba(255, 255, 255, 0.65); color: var(--text-main); 
       outline: none; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02); transition: all 0.2s ease;
     }
 
-    /* 🌟 テーブルや名前を選択するトリガー（ボタン）は画像を再現した明朝体（英字＋日本語） */
     .table-trigger-btn {
       display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 600;
       font-family: var(--font-en), var(--font-serif) !important; letter-spacing: 0.05em;
     }
     .table-trigger-btn.selected { border-color: var(--primary-gold); color: var(--primary-gold); }
     
-    /* テキスト入力欄はゴシック体を維持 */
     .text-input-field { font-family: var(--font-sans) !important; }
     .text-input-field:focus { border-color: var(--primary-gold); background: rgba(255, 255, 255, 0.85); }
     .text-input-field::placeholder { color: #94a3b8; }
@@ -198,29 +187,12 @@
     .btn-add { background: rgba(255, 255, 255, 0.7); color: var(--primary-gold); border: 1px solid var(--gold-border); margin-bottom: 10px; }
     .btn-secondary { background: rgba(255, 255, 255, 0.4); color: #475569; border: 1px solid rgba(255, 255, 255, 0.6); margin-top: 10px; }
 
-    /* 🌟 ヘルプ画面の送信ボタン専用スタイル（活性・非活性） */
     #help-submit-btn {
-      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%);
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(184,151,83,0.3);
-      margin-top: 14px;
-      font-family: var(--font-sans) !important;
-      transition: all 0.3s ease;
+      background: linear-gradient(135deg, #e4cb91 0%, #b89753 100%); color: #ffffff; box-shadow: 0 4px 12px rgba(184,151,83,0.3); margin-top: 14px; font-family: var(--font-sans) !important; transition: all 0.3s ease;
     }
-    #help-submit-btn .material-symbols-rounded {
-      color: #ffffff;
-      transition: color 0.3s ease;
-    }
-    #help-submit-btn:disabled {
-      background: rgba(226, 232, 240, 0.6) !important;
-      color: #94a3b8 !important;
-      box-shadow: none !important;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-    #help-submit-btn:disabled .material-symbols-rounded {
-      color: #94a3b8 !important;
-    }
+    #help-submit-btn .material-symbols-rounded { color: #ffffff; transition: color 0.3s ease; }
+    #help-submit-btn:disabled { background: rgba(226, 232, 240, 0.6) !important; color: #94a3b8 !important; box-shadow: none !important; cursor: not-allowed; transform: none !important; }
+    #help-submit-btn:disabled .material-symbols-rounded { color: #94a3b8 !important; }
 
     .progress-container { display: none; margin: 14px 0 8px; }
     .progress-bar-bg { width: 100%; height: 8px; background: rgba(255,255,255,0.6); border-radius: 4px; margin-bottom: 8px; overflow: hidden; }
@@ -239,47 +211,29 @@
       box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1); z-index: 1001; 
       transform: translateX(-100%); transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1); 
       padding: max(28px, env(safe-area-inset-top)) 18px max(24px, env(safe-area-inset-bottom)) 18px; 
-      display: flex; flex-direction: column; justify-content: space-between;
-      overflow-y: auto;
+      display: flex; flex-direction: column; justify-content: space-between; overflow-y: auto;
     }
     .sidebar-overlay.active .sidebar-drawer { transform: translateX(0); }
     .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
     .sidebar-title { font-family: var(--font-en); font-size: 1.3rem; color: var(--primary-gold); font-weight: 700; letter-spacing: 0.1em; }
     
     .sidebar-menu-list { display: flex; flex-direction: column; gap: 8px; }
-    
-    .sidebar-menu-item, .sidebar-sub-item {
-      font-family: var(--font-en);
-      letter-spacing: 0.05em;
-    }
+    .sidebar-menu-item, .sidebar-sub-item { font-family: var(--font-en); letter-spacing: 0.05em; }
 
     .sidebar-menu-item { 
       padding: 14px; border-radius: 12px; font-size: 1.05rem; font-weight: 600; color: #333; 
       display: flex; align-items: center; gap: 12px; cursor: pointer; 
       background: rgba(247, 238, 219, 0.3); border: 1px solid rgba(212, 175, 55, 0.1); 
-      opacity: 0; transform: translateX(-25px);
-      transition: background 0.2s;
+      opacity: 0; transform: translateX(-25px); transition: background 0.2s;
     }
     .sidebar-menu-item:active { background: rgba(247, 238, 219, 0.7); }
 
-    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(1) {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.08s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.08s, background 0.2s;
-    }
-    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item.accordion-parent {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.14s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.14s, background 0.2s;
-    }
-    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(4) {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.20s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.20s, background 0.2s;
-    }
-    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s;
-    }
-    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(6) {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.32s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.32s, background 0.2s;
-    }
-    .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item {
-      opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.38s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.38s, background 0.2s;
-    }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(1) { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.08s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.08s, background 0.2s; }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item.accordion-parent { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.14s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.14s, background 0.2s; }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(4) { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.20s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.20s, background 0.2s; }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(5) { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.26s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.26s, background 0.2s; }
+    .sidebar-overlay.active .sidebar-drawer .sidebar-menu-list > .sidebar-menu-item:nth-child(6) { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.32s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.32s, background 0.2s; }
+    .sidebar-overlay.active .sidebar-drawer > .sidebar-menu-item { opacity: 1; transform: translateX(0); transition: opacity 0.4s ease 0.38s, transform 0.4s cubic-bezier(0.25, 1, 0.5, 1) 0.38s, background 0.2s; }
 
     .submenu-container { display: flex; flex-direction: column; gap: 4px; max-height: 0; overflow: hidden; transition: max-height 0.3s ease; padding-left: 12px; }
     .sidebar-menu-item.accordion-parent.active + .submenu-container { max-height: 200px; }
@@ -288,19 +242,13 @@
       padding: 10px 14px; border-radius: 10px; font-size: 0.95rem; font-weight: 600; color: #475569;
       display: flex; align-items: center; gap: 10px; cursor: pointer;
       background: rgba(255, 255, 255, 0.6); border: 1px solid rgba(212, 175, 55, 0.15);
-      opacity: 0; transform: translateX(-15px);
-      transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s;
+      opacity: 0; transform: translateX(-15px); transition: opacity 0.3s ease, transform 0.3s ease, background 0.2s;
     }
     .sidebar-sub-item:active { background: rgba(247, 238, 219, 0.8); }
 
-    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(1) {
-      opacity: 1; transform: translateX(0); transition-delay: 0.05s;
-    }
-    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(2) {
-      opacity: 1; transform: translateX(0); transition-delay: 0.10s;
-    }
+    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(1) { opacity: 1; transform: translateX(0); transition-delay: 0.05s; }
+    .sidebar-menu-item.accordion-parent.active + .submenu-container .sidebar-sub-item:nth-child(2) { opacity: 1; transform: translateX(0); transition-delay: 0.10s; }
 
-    /* プロフィールカードスタイル */
     .profile-card-wrapper {
       position: relative; width: 100%; height: 440px; border-radius: 18px; overflow: hidden;
       box-shadow: 0 10px 30px rgba(0,0,0,0.25); border: 0.5px solid rgba(212, 175, 55, 0.3);
@@ -331,8 +279,7 @@
     .profile-row {
       display: flex; justify-content: space-between; align-items: baseline;
       border-bottom: 0.5px solid rgba(212, 175, 55, 0.15); padding-bottom: 4px;
-      opacity: 0; transform: translateX(-20px);
-      animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+      opacity: 0; transform: translateX(-20px); animation: profileAppear 0.6s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
     .profile-bg-karin .profile-row { transform: translateX(20px); }
     .profile-row:nth-child(1) { animation-delay: 0.25s; }
@@ -363,10 +310,9 @@
     .info-img-wrapper { width: 100%; aspect-ratio: 4/3; border-radius: 12px; overflow: hidden; position: relative; border: 1px solid rgba(212, 175, 55, 0.3); }
     .info-img-wrapper img { width: 100%; height: 100%; object-fit: cover; }
     
-    /* ② coming soon用のオーバーレイ */
     .coming-soon-overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.65); /* トーンを落とす */
+      background: rgba(0, 0, 0, 0.65);
       display: flex; justify-content: center; align-items: center; z-index: 10;
     }
     .coming-soon-text {
@@ -374,7 +320,6 @@
       letter-spacing: 0.1em; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
     }
 
-    /* ① 長押し保存を促すテキスト */
     .info-save-instruction {
       font-size: 0.72rem; color: var(--primary-gold); font-weight: 700; text-align: center;
       display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 2px;
@@ -383,13 +328,9 @@
     .info-title { font-family: var(--font-serif); font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-top: 4px; }
     .info-desc { font-size: 0.78rem; color: var(--text-sub); line-height: 1.4; }
 
-    /* ④ 画面内スクロール（内側のフレームのみ動かす） */
     #info-list-container {
-      max-height: 55vh; /* 画面高さの55%に制限 */
-      overflow-y: auto; /* はみ出た場合はスクロール */
-      padding-right: 4px;
+      max-height: 55vh; overflow-y: auto; padding-right: 4px;
     }
-    /* スクロールバーのデザイン */
     #info-list-container::-webkit-scrollbar { width: 4px; }
     #info-list-container::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 4px; }
 
@@ -422,7 +363,6 @@
     .table-list-container::-webkit-scrollbar { width: 4px; }
     .table-list-container::-webkit-scrollbar-thumb { background: rgba(212, 175, 55, 0.4); border-radius: 4px; }
     
-    /* 🌟 リストのフォントを画像を再現した明朝体（英字＋日本語）に変更 */
     .table-list-item { 
       padding: 12px 16px; border-radius: 10px; font-size: 0.95rem; color: rgba(255, 255, 255, 0.9); 
       display: flex; align-items: center; gap: 10px; cursor: pointer; margin-bottom: 2px; letter-spacing: 0.08em;
@@ -471,8 +411,6 @@
 
           <div class="sidebar-menu-item" onclick="navigate('info')"><span class="material-symbols-rounded">photo_library</span> Information</div>
           <div class="sidebar-menu-item" onclick="navigate('history')"><span class="material-symbols-rounded">history</span> History</div>
-          
-          <!-- 🌟 メニュー内のHow to use -->
           <div class="sidebar-menu-item" onclick="navigate('howto')"><span class="material-symbols-rounded">lightbulb</span> How to use</div>
         </div>
       </div>
@@ -623,49 +561,14 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 🌟 全体共有・思い出ダウンロード画面 (#info-screen) -->
+    <!-- 🌟 全体共有・お知らせ画面 (#info-screen) : 動的生成対応 -->
     <div id="info-screen">
       <div class="title-area"><span class="en-sub">INFORMATION</span><h2>全体共有・お知らせ</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">新郎新婦からのシェア写真です✨</p>
       
-      <!-- ④ スクロール用のコンテナ -->
       <div id="info-list-container">
-        
-        <!-- サンプル1：集合写真 -->
-        <div class="info-card">
-          <div class="info-img-wrapper">
-            <img src="https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000" alt="集合写真">
-            <!-- ② 画像のトーンを落とし、Coming soonを表示 -->
-            <div class="coming-soon-overlay">
-              <span class="coming-soon-text">Coming soon...</span>
-            </div>
-          </div>
-          <!-- ① 長押し保存のテキスト案内 -->
-          <div class="info-save-instruction">
-            <span class="material-symbols-rounded" style="font-size: 1rem;">touch_app</span>画像を長押しして「写真に保存」できます
-          </div>
-          <div class="info-title">📸 記念集合写真</div>
-          <div class="info-desc">挙式・披露宴の折に撮影した記念の全体集合写真です。思い出にぜひ保存してください！</div>
-        </div>
-
-        <!-- サンプル2：会場スナップ -->
-        <div class="info-card">
-          <div class="info-img-wrapper">
-            <img src="https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000" alt="会場ショット">
-            <!-- ② 画像のトーンを落とし、Coming soonを表示 -->
-            <div class="coming-soon-overlay">
-              <span class="coming-soon-text">Coming soon...</span>
-            </div>
-          </div>
-          <!-- ① 長押し保存のテキスト案内 -->
-          <div class="info-save-instruction">
-            <span class="material-symbols-rounded" style="font-size: 1rem;">touch_app</span>画像を長押しして「写真に保存」できます
-          </div>
-          <div class="info-title">✨ 会場スナップ</div>
-          <div class="info-desc">本日の会場の雰囲気をお裾分けいたします。</div>
-        </div>
-        
-      </div> <!-- /#info-list-container -->
+        <!-- 動的に読み込まれます -->
+      </div>
 
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
@@ -678,7 +581,7 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント画面 (すべてのQ&Aを表示) -->
+    <!-- 💡 使い方のヒント画面 (すべてのQ&Aを表示・完全復元) -->
     <div id="howto-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
@@ -780,10 +683,9 @@
 
       <div class="input-group">
         <label style="display: flex; align-items: center;">問い合わせ内容 <span class="required-badge">必須</span></label>
-        <textarea id="help-content" class="input-base text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。" style="height: 100px;"></textarea>
+        <textarea id="help-content" class="input-base text-input-field" placeholder="例：写真がうまく送れません。エラーメッセージが出ます。 など..." style="height: 100px;"></textarea>
       </div>
 
-      <!-- 🌟 送信ボタン（初期状態は disabled） -->
       <button id="help-submit-btn" class="btn" onclick="submitHelp()" disabled>
         <span class="material-symbols-rounded" style="font-size: 1.1rem;">send</span> 送信する
       </button>
@@ -794,7 +696,6 @@
     </div>
   </div>
 
-  <!-- テーブル選択用モーダル -->
   <div id="table-modal" class="modal-overlay" onclick="closeTableModalOnOutside(event)">
     <div class="modal-content">
       <div class="table-modal-header">SELECT TABLE</div>
@@ -802,7 +703,6 @@
     </div>
   </div>
 
-  <!-- 名前選択用モーダル -->
   <div id="name-modal" class="modal-overlay" onclick="closeNameModalOnOutside(event)">
     <div class="modal-content">
       <div class="table-modal-header">SELECT NAME</div>
@@ -841,34 +741,22 @@
     window.addEventListener('DOMContentLoaded', () => { 
       initWaveTitle();
       initBgSlideshow(); 
-      
-      // 🌟 お問い合わせ内容入力時のバリデーションイベントを追加
       document.getElementById('help-content').addEventListener('input', checkHelpFormValidity);
 
       setTimeout(() => {
         const loader = document.getElementById('loading-screen');
         if (loader) {
           loader.style.opacity = '0';
-          setTimeout(() => { 
-            loader.style.display = 'none'; 
-            triggerChatAnimation();
-          }, 1500);
+          setTimeout(() => { loader.style.display = 'none'; triggerChatAnimation(); }, 1500);
         }
       }, 5000); 
     });
 
-    // 🌟 バリデーションチェック関数
     function checkHelpFormValidity() {
       const tableNo = document.getElementById('help-table-no').value;
       const name = document.getElementById('help-name').value;
       const content = document.getElementById('help-content').value.trim();
-      const submitBtn = document.getElementById('help-submit-btn');
-
-      if (tableNo && name && content) {
-        submitBtn.disabled = false;
-      } else {
-        submitBtn.disabled = true;
-      }
+      document.getElementById('help-submit-btn').disabled = !(tableNo && name && content);
     }
 
     function initWaveTitle() {
@@ -879,20 +767,14 @@
       for (let i = 0; i < text.length; i++) {
         const span = document.createElement('span');
         const char = text[i];
-        if (char === ' ') {
-          span.innerHTML = '&nbsp;';
-        } else {
-          span.innerText = char;
-          span.style.setProperty('--i', charIdx);
-          charIdx++;
-        }
+        if (char === ' ') { span.innerHTML = '&nbsp;'; } 
+        else { span.innerText = char; span.style.setProperty('--i', charIdx); charIdx++; }
         container.appendChild(span);
       }
     }
 
     function triggerChatAnimation() {
-      const rows = document.querySelectorAll('.chat-row');
-      rows.forEach(row => {
+      document.querySelectorAll('.chat-row').forEach(row => {
         row.classList.remove('play-animation');
         void row.offsetWidth;
         row.classList.add('play-animation');
@@ -902,11 +784,8 @@
     function triggerProfileAnimation(boxId) {
       const box = document.getElementById(boxId);
       if (!box) return;
-      const rows = box.querySelectorAll('.profile-row, .profile-name-title');
-      rows.forEach(row => {
-        row.style.animation = 'none';
-        void row.offsetWidth;
-        row.style.animation = '';
+      box.querySelectorAll('.profile-row, .profile-name-title').forEach(row => {
+        row.style.animation = 'none'; void row.offsetWidth; row.style.animation = '';
       });
     }
 
@@ -933,24 +812,15 @@
       const container = document.getElementById('table-list-container');
       container.innerHTML = '';
       const currentSelected = document.getElementById(activeTableTarget.input).value;
-
       tables.forEach(tableVal => {
         const item = document.createElement('div');
-        item.className = 'table-list-item';
-        if (tableVal === currentSelected) {
-          item.classList.add('selected');
-        }
+        item.className = 'table-list-item' + (tableVal === currentSelected ? ' selected' : '');
         item.innerHTML = `<span class="material-symbols-rounded check-mark" style="${tableVal === currentSelected ? 'visibility:visible;' : 'visibility:hidden;'} color:white; font-size:1.1rem;">check</span><span>${tableVal}</span>`;
-        
         item.onclick = () => {
           document.getElementById(activeTableTarget.input).value = tableVal;
           document.getElementById(activeTableTarget.text).innerText = `✓ ${tableVal}`;
           document.getElementById(activeTableTarget.btn).classList.add('selected');
-          
-          if(activeTableTarget.input === 'table-no') {
-            document.getElementById('select-status').innerText = '';
-          }
-          
+          if(activeTableTarget.input === 'table-no') document.getElementById('select-status').innerText = '';
           if (isHelpTableSelect && currentSelected !== tableVal) {
             const nameTrigger = document.getElementById('help-name-trigger');
             document.getElementById('help-name').value = '';
@@ -959,9 +829,7 @@
             nameTrigger.style.background = 'rgba(255, 255, 255, 0.65)';
             nameTrigger.style.color = 'var(--text-main)';
           }
-          
           if (isHelpTableSelect) checkHelpFormValidity();
-
           setTimeout(() => document.getElementById('table-modal').classList.remove('active'), 200);
         };
         container.appendChild(item);
@@ -973,25 +841,16 @@
       container.innerHTML = '';
       const currentSelected = document.getElementById('help-name').value;
       const guests = guestData[tableNo] || [];
-
-      if (guests.length === 0) {
-         container.innerHTML = '<div style="padding: 12px; color: #fff; text-align: center; font-size: 0.9rem;">ゲスト情報がありません</div>';
-         return;
-      }
-
+      if (guests.length === 0) { container.innerHTML = '<div style="padding: 12px; color: #fff; text-align: center; font-size: 0.9rem;">ゲスト情報がありません</div>'; return; }
       guests.forEach(nameVal => {
         const item = document.createElement('div');
-        item.className = 'table-list-item';
-        if (nameVal === currentSelected) item.classList.add('selected');
+        item.className = 'table-list-item' + (nameVal === currentSelected ? ' selected' : '');
         item.innerHTML = `<span class="material-symbols-rounded check-mark" style="${nameVal === currentSelected ? 'visibility:visible;' : 'visibility:hidden;'} color:white; font-size:1.1rem;">check</span><span>${nameVal}</span>`;
-        
         item.onclick = () => {
           document.getElementById('help-name').value = nameVal;
           document.getElementById('help-name-trigger-text').innerText = `✓ ${nameVal}`;
           document.getElementById('help-name-trigger').classList.add('selected');
-          
           checkHelpFormValidity();
-
           setTimeout(() => document.getElementById('name-modal').classList.remove('active'), 200);
         };
         container.appendChild(item);
@@ -1012,14 +871,61 @@
 
     function openNameModal() {
       const selectedTable = document.getElementById('help-table-no').value;
-      if (!selectedTable) {
-        alert('先にテーブル番号を選択してください。');
-        return;
-      }
+      if (!selectedTable) { alert('先にテーブル番号を選択してください。'); return; }
       renderNameList(selectedTable);
       document.getElementById('name-modal').classList.add('active');
     }
     function closeNameModalOnOutside(e) { if (e.target.id === 'name-modal') document.getElementById('name-modal').classList.remove('active'); }
+
+    async function loadInfoScreenData() {
+      const container = document.getElementById('info-list-container');
+      container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:var(--text-sub); padding:20px 0;">読み込み中...</p>`;
+      
+      try {
+        const res = await fetch(`${GAS_WEB_APP_URL}?action=get_info`);
+        const data = await res.json();
+        
+        container.innerHTML = '';
+        
+        const memorialPhotos = data.memorial || [];
+        if (memorialPhotos.length > 0) {
+          memorialPhotos.forEach(url => {
+            container.appendChild(createInfoCard(url, "📸 記念集合写真", "挙式・披露宴の折に撮影した記念の全体集合写真です。思い出にぜひ保存してください！", false));
+          });
+        } else {
+          container.appendChild(createInfoCard("https://drive.google.com/thumbnail?id=1QD7Asx0673hQPVwk1atMWHwZuGL8e4Vo&sz=w1000", "📸 記念集合写真", "挙式・披露宴の折に撮影した記念の全体集合写真です。思い出にぜひ保存してください！", true));
+        }
+
+        const snapshotPhotos = data.snapshot || [];
+        if (snapshotPhotos.length > 0) {
+          snapshotPhotos.forEach(url => {
+            container.appendChild(createInfoCard(url, "✨ 会場スナップ", "本日の会場の雰囲気をお裾分けいたします。", false));
+          });
+        } else {
+          container.appendChild(createInfoCard("https://drive.google.com/thumbnail?id=1HqntK3u1Tfsb8s7VOMrlJgPIEP7jURXH&sz=w1000", "✨ 会場スナップ", "本日の会場の雰囲気をお裾分けいたします。", true));
+        }
+
+      } catch (err) {
+        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#e11d48; padding:20px 0;">情報の取得に失敗しました。</p>`;
+      }
+    }
+
+    function createInfoCard(imgUrl, title, desc, isComingSoon) {
+      const card = document.createElement('div');
+      card.className = 'info-card';
+      card.innerHTML = `
+        <div class="info-img-wrapper">
+          <img src="${imgUrl}" alt="${title}">
+          ${isComingSoon ? '<div class="coming-soon-overlay"><span class="coming-soon-text">Coming soon...</span></div>' : ''}
+        </div>
+        <div class="info-save-instruction">
+          <span class="material-symbols-rounded" style="font-size: 1rem;">touch_app</span>画像を長押しして「写真に保存」できます
+        </div>
+        <div class="info-title">${title}</div>
+        <div class="info-desc">${desc}</div>
+      `;
+      return card;
+    }
 
     function navigate(screenName, isReset = false) {
       closeSidebar();
@@ -1038,6 +944,7 @@
       if (screenName === 'profile-ukyo') { triggerProfileAnimation('ukyo-animation-box'); }
       if (screenName === 'profile-karin') { triggerProfileAnimation('karin-animation-box'); }
       if (screenName === 'history') renderHistoryList();
+      if (screenName === 'info') loadInfoScreenData();
       window.scrollTo(0, 0);
     }
 
@@ -1072,17 +979,12 @@
     confirmNameInput.addEventListener('input', (e) => { homeNameInput.value = e.target.value; });
 
     userMessageInput.addEventListener('input', (e) => {
-      if (e.target.value.trim().length > 0) {
-        confirmNameGroup.style.display = 'block';
-      } else {
-        confirmNameGroup.style.display = 'none';
-        document.getElementById('status').innerText = '';
-      }
+      if (e.target.value.trim().length > 0) { confirmNameGroup.style.display = 'block'; } 
+      else { confirmNameGroup.style.display = 'none'; document.getElementById('status').innerText = ''; }
     });
 
     function resetAllSelection() {
-      selectedFiles = []; 
-      if (fileInput) fileInput.value = ''; 
+      selectedFiles = []; if (fileInput) fileInput.value = ''; 
       document.getElementById('user-message').value = '';
       confirmNameGroup.style.display = 'none';
       document.getElementById('upload-btn').style.display = 'flex';
@@ -1113,65 +1015,33 @@
         const history = JSON.parse(localStorage.getItem('wedding_history') || '[]'); 
         const now = new Date();
         const dateStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')}`;
-        
-        history.unshift({ 
-          id: Date.now(), 
-          date: dateStr, 
-          tableNo: tableNo, 
-          userName: userName || '匿名', 
-          count: fileDataArray.length, 
-          thumbnails: fileDataArray.map(f => f.base64Data).slice(0, 8)
-        });
-        
+        history.unshift({ id: Date.now(), date: dateStr, tableNo: tableNo, userName: userName || '匿名', count: fileDataArray.length, thumbnails: fileDataArray.map(f => f.base64Data).slice(0, 8) });
         if (history.length > 20) history.pop();
         localStorage.setItem('wedding_history', JSON.stringify(history));
       } catch (e) {}
     }
 
     function renderHistoryList() {
-      const container = document.getElementById('history-list-container'); 
-      container.innerHTML = '';
+      const container = document.getElementById('history-list-container'); container.innerHTML = '';
       const history = JSON.parse(localStorage.getItem('wedding_history') || '[]');
-      
-      if (history.length === 0) {
-        container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだ送信履歴はありません✨</p>`; 
-        return;
-      }
+      if (history.length === 0) { container.innerHTML = `<p style="text-align:center; font-size:0.85rem; color:#666; padding: 20px 0;">まだ送信履歴はありません✨</p>`; return; }
 
       history.forEach(item => {
-        const historyItem = document.createElement('div');
-        historyItem.className = 'history-item';
-
-        const summary = document.createElement('div');
-        summary.className = 'history-summary';
+        const historyItem = document.createElement('div'); historyItem.className = 'history-item';
+        const summary = document.createElement('div'); summary.className = 'history-summary';
         summary.innerHTML = `
-          <div class="history-summary-left">
-            <span class="material-symbols-rounded" style="font-size: 1.1rem;">photo_library</span>
-            <span>${item.tableNo} (${item.userName})</span>
-          </div>
-          <div class="history-summary-right">
-            <span>${item.date} [${item.count}枚]</span>
-            <span class="material-symbols-rounded history-dropdown-icon">expand_more</span>
-          </div>
+          <div class="history-summary-left"><span class="material-symbols-rounded" style="font-size: 1.1rem;">photo_library</span><span>${item.tableNo} (${item.userName})</span></div>
+          <div class="history-summary-right"><span>${item.date} [${item.count}枚]</span><span class="material-symbols-rounded history-dropdown-icon">expand_more</span></div>
         `;
-
-        const content = document.createElement('div');
-        content.className = 'history-content';
-        
-        const grid = document.createElement('div');
-        grid.className = 'history-thumb-grid';
+        const content = document.createElement('div'); content.className = 'history-content';
+        const grid = document.createElement('div'); grid.className = 'history-thumb-grid';
         item.thumbnails.forEach(src => {
-          const thumb = document.createElement('div');
-          thumb.className = 'history-thumb-item';
-          thumb.innerHTML = `<img src="${src}">`;
-          grid.appendChild(thumb);
+          const thumb = document.createElement('div'); thumb.className = 'history-thumb-item';
+          thumb.innerHTML = `<img src="${src}">`; grid.appendChild(thumb);
         });
         content.appendChild(grid);
-
         summary.onclick = () => { historyItem.classList.toggle('active'); };
-
-        historyItem.appendChild(summary);
-        historyItem.appendChild(content);
+        historyItem.appendChild(summary); historyItem.appendChild(content);
         container.appendChild(historyItem);
       });
     }
@@ -1200,17 +1070,11 @@
       const userMessage = userMessageInput.value.trim();
       
       if (selectedFiles.length === 0 || !tableNo) return;
-
       if (userMessage.length > 0 && userName.length === 0) {
         const st = document.getElementById('status');
         st.innerHTML = `<span class="material-symbols-rounded" style="vertical-align:middle; font-size:1.1rem;">error</span> お祝いメッセージを送信する場合は、お名前をご入力ください`;
         st.style.color = '#c53030';
         confirmNameGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-
-      if(GAS_WEB_APP_URL.includes("YOUR_GAS_WEB_APP_URL")) {
-        alert("GASのURLが設定されていません。コード内のGAS_WEB_APP_URLを修正してください。");
         return;
       }
 
@@ -1256,7 +1120,7 @@
             if (!res.success) throw new Error(res.error);
             targetFolderId = res.folderId;
             uploadedPhotoCount += chunk.length;
-            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`,);
+            updateProgress(30 + (uploadedPhotoCount / totalPhotos) * 65, `送信中 (${uploadedPhotoCount}/${totalPhotos}枚)...`);
           }
         }
       } catch (err) {
@@ -1272,29 +1136,19 @@
       const tableNo = document.getElementById('help-table-no').value;
       const name = document.getElementById('help-name').value;
       const content = document.getElementById('help-content').value.trim();
-
-      if (!tableNo || !name || !content) {
-        return; // バリデーションでブロックされるため本来ここには来ない
-      }
+      if (!tableNo || !name || !content) return;
       
       alert('お問い合わせを受け付けました。');
-      
-      // 送信後のフォーム初期化処理
       document.getElementById('help-table-no').value = '';
       document.getElementById('help-table-trigger-text').innerText = 'SELECT TABLE';
       document.getElementById('help-table-trigger').classList.remove('selected');
-      
       document.getElementById('help-name').value = '';
       document.getElementById('help-name-trigger-text').innerText = '先にテーブルを選択してください';
       document.getElementById('help-name-trigger').classList.remove('selected');
       document.getElementById('help-name-trigger').style.background = 'rgba(226, 232, 240, 0.6)';
       document.getElementById('help-name-trigger').style.color = '#94a3b8';
-      
       document.getElementById('help-content').value = '';
-      
-      // ボタンを再度非活性にする
       checkHelpFormValidity();
-      
       navigate('select');
     }
   </script>
