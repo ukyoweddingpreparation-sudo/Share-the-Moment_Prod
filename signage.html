@@ -66,7 +66,6 @@
     let knownImageIds = new Set();
     let isSlideshowStarted = false;
 
-    // 1. 初回データ取得とスライド開始
     async function fetchImagesInitial() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
@@ -90,7 +89,6 @@
       }
     }
 
-    // 2. 裏側で新着画像を定期チェック（ページリロードなし）
     async function checkNewImagesBackground() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
@@ -101,14 +99,13 @@
           data.images.forEach(img => {
             if (!knownImageIds.has(img.id)) {
               knownImageIds.add(img.id);
-              imageList.push(img); // 既存の再生リストに新着を追加！
+              imageList.push(img);
               hasNew = true;
             }
           });
 
           if (hasNew) {
             console.log("✨ 新着画像を裏側でスライドに追加しました！");
-            // もし待機状態から追加された場合はスライドショーを起動
             if (!isSlideshowStarted && imageList.length > 0) {
               startSlideshow();
               isSlideshowStarted = true;
@@ -120,22 +117,16 @@
       }
     }
 
-    // 3. スライドショーの制御
     function startSlideshow() {
       showNextSlide();
-
-      // 5秒ごとに画像を切り替え
       setInterval(() => {
         if (imageList.length > 0) {
           showNextSlide();
         }
       }, 5000);
-
-      // 15秒ごとに裏側で新着チェック（リロードなし）
       setInterval(checkNewImagesBackground, 15000);
     }
 
-    // 4. 次の画像を表示する処理
     function showNextSlide() {
       const container = document.getElementById('slide-container');
       const metaInfo = document.getElementById('meta-info');
@@ -150,7 +141,6 @@
       imgElem.className = 'slide-image';
       container.appendChild(imgElem);
 
-      // 投稿者名とメッセージの表示（メタデータが存在する場合のみ表示）
       let infoText = "";
       if (currentImgData.author) {
         infoText += `From: ${currentImgData.author}`;
@@ -166,12 +156,10 @@
         metaInfo.style.display = 'none';
       }
 
-      // フェードイン
       setTimeout(() => {
         imgElem.classList.add('active');
       }, 50);
 
-      // 古い画像を自動削除（メモリ・DOM負荷対策）
       const images = container.querySelectorAll('img.slide-image');
       if (images.length > 3) {
         images[0].remove();
@@ -180,7 +168,6 @@
       currentIndex++;
     }
 
-    // 初回実行
     fetchImagesInitial();
   </script>
 </body>
