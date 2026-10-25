@@ -46,6 +46,8 @@
       font-size: 1.5rem;
       z-index: 10;
       text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+      max-width: 80vw;
+      word-break: break-all;
     }
   </style>
 </head>
@@ -58,22 +60,27 @@
   <script>
     // 🌟 ご自身のGASのウェブアプリURLに書き換えてください
     const GAS_WEB_APP_URL = "https://script.google.com/macros/s/AKfycbx7KfZpUfWDkrEocp8ikhRQHRt-I7WE6MCT5yNx9V5vNbqDfrI2kJTJrGyQLWXVolqj/exec";
-    
+
     let imageList = [];
     let currentIndex = 0;
     let knownImageIds = new Set();
+    let isSlideshowStarted = false;
 
     // 1. 初回データ取得とスライド開始
     async function fetchImagesInitial() {
       try {
         const res = await fetch(GAS_WEB_APP_URL);
         const data = await res.json();
+        
         if (data.status === 'success' && data.images) {
           imageList = data.images;
           imageList.forEach(img => knownImageIds.add(img.id));
           
           if (imageList.length > 0) {
-            startSlideshow();
+            if (!isSlideshowStarted) {
+              startSlideshow();
+              isSlideshowStarted = true;
+            }
           } else {
             document.getElementById('meta-info').innerText = "写真の投稿をお待ちください...";
           }
@@ -88,6 +95,7 @@
       try {
         const res = await fetch(GAS_WEB_APP_URL);
         const data = await res.json();
+        
         if (data.status === 'success' && data.images) {
           let hasNew = false;
           data.images.forEach(img => {
@@ -97,8 +105,14 @@
               hasNew = true;
             }
           });
+
           if (hasNew) {
             console.log("✨ 新着画像を裏側でスライドに追加しました！");
+            // もし待機状態から追加された場合はスライドショーを起動
+            if (!isSlideshowStarted && imageList.length > 0) {
+              startSlideshow();
+              isSlideshowStarted = true;
+            }
           }
         }
       } catch (err) {
@@ -136,7 +150,7 @@
       imgElem.className = 'slide-image';
       container.appendChild(imgElem);
 
-      // 投稿者名とメッセージの表示
+      // 投稿者名とメッセージの表示（メタデータが存在する場合のみ表示）
       let infoText = "";
       if (currentImgData.author) {
         infoText += `From: ${currentImgData.author}`;
@@ -144,8 +158,13 @@
       if (currentImgData.message) {
         infoText += ` / ${currentImgData.message}`;
       }
-      metaInfo.innerText = infoText;
-      metaInfo.style.display = infoText ? 'block' : 'none';
+      
+      if (infoText) {
+        metaInfo.innerText = infoText;
+        metaInfo.style.display = 'block';
+      } else {
+        metaInfo.style.display = 'none';
+      }
 
       // フェードイン
       setTimeout(() => {
@@ -161,7 +180,7 @@
       currentIndex++;
     }
 
-    // 実行開始
+    // 初回実行
     fetchImagesInitial();
   </script>
 </body>
