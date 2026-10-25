@@ -3,430 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>L'Eternel Moment - Wedding Photo Signage</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,600&family=Shippori+Mincho:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-
+  <title>ウェディングフォトサイネージ</title>
   <style>
-    :root {
-      --font-title: 'Cinzel', serif;
-      --font-en: 'Cormorant Garamond', serif;
-      --font-jp: 'Shippori Mincho', serif;
-      --primary-gold: #d4af37;
+    body {
+      margin: 0;
+      padding: 0;
+      background: #000;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Noto Sans JP', sans-serif;
     }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    body, html {
-      width: 100vw; height: 100vh; overflow: hidden;
-      background-color: #0c0b0a; font-family: var(--font-jp);
-      display: flex; justify-content: center; align-items: center;
+    .slide-container {
       position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-
-    /* 🚪 起動時ラグジュアリー・スプラッシュ画面 */
-    #loadingScreen {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(rgba(12, 11, 10, 0.5), rgba(12, 11, 10, 0.8)), 
-                url('./SignageApp-bg-resorce.JPEG') center/cover no-repeat;
-      z-index: 1000; display: flex; flex-direction: column;
-      justify-content: center; align-items: center; text-align: center;
-      transition: opacity 1.8s cubic-bezier(0.25, 1, 0.5, 1);
+    img.slide-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      position: absolute;
+      transition: opacity 1s ease-in-out;
+      opacity: 0;
     }
-    #loadingScreen.fade-out { opacity: 0; pointer-events: none; }
-    #loadingScreen::after {
-      content: ''; position: absolute; top: 24px; left: 24px; right: 24px; bottom: 24px;
-      border: 1px solid rgba(212, 175, 55, 0.25); pointer-events: none;
+    img.slide-image.active {
+      opacity: 1;
     }
-
-    .splash-subtitle {
-      font-family: var(--font-en); font-size: 1rem; letter-spacing: 0.45em;
-      color: var(--primary-gold); text-transform: uppercase; margin-bottom: 16px; font-weight: 400; opacity: 0.9;
-    }
-    .splash-title {
-      font-family: var(--font-jp); font-size: 3.4rem; letter-spacing: 0.15em;
-      color: #ffffff; margin-bottom: 20px; font-weight: 400;
-      text-shadow: 0 4px 30px rgba(0,0,0,0.8); display: flex; justify-content: center;
-    }
-    .splash-title span {
-      display: inline-block; animation: waveAnimation 3.5s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 0.1s);
-    }
-    @keyframes waveAnimation {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-12px); }
-    }
-    .splash-date {
-      font-family: var(--font-en); font-size: 1.25rem; letter-spacing: 0.3em;
-      color: #e6c567; font-weight: 300; opacity: 0.95;
-    }
-
-    .loading-indicator {
-      position: absolute; bottom: 45px; right: 45px;
-      background: rgba(20, 18, 16, 0.65); backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(212, 175, 55, 0.35);
-      color: #fcfbfa; padding: 10px 22px; border-radius: 30px;
-      font-size: 0.9rem; letter-spacing: 0.12em; display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-    }
-    .spinner {
-      width: 14px; height: 14px; border: 2px solid rgba(212, 175, 55, 0.3);
-      border-top-color: var(--primary-gold); border-radius: 50%; animation: spin 0.9s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* スライドショーエリア */
-    .stage-container {
-      width: 100%; height: 100%; position: relative;
-      display: flex; justify-content: center; align-items: center;
-    }
-    .bg-blur {
-      position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px;
-      background-size: cover; background-position: center;
-      filter: blur(25px) brightness(0.45); transform: scale(1.1);
-      z-index: 1; opacity: 0; transition: opacity 1.5s ease-in-out;
-    }
-    .bg-blur.active { opacity: 1; }
-
-    .slide-image {
-      max-width: 95%; max-height: 95%; object-fit: contain;
-      position: absolute; z-index: 2; opacity: 0; transform: scale(0.95);
-      transition: opacity 1.5s ease-in-out, transform 5.5s cubic-bezier(0.25, 1, 0.5, 1);
-      border-radius: 4px; box-shadow: 0 20px 50px rgba(0,0,0,0.8);
-    }
-    .slide-image.active { opacity: 1; transform: scale(1.03); }
-
-    /* 💍 ラグジュアリーな吹き出しコメントデザイン */
-    .comment-overlay {
-      position: absolute; bottom: -140px; left: 72%; transform: translateX(-50%);
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(250, 247, 242, 0.94));
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 2px solid rgba(212, 175, 55, 0.6); color: #2c2a29;
-      padding: 28px 44px 28px 36px; border-radius: 20px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45), inset 0 0 20px rgba(255, 255, 255, 0.95), 0 0 15px rgba(212, 175, 55, 0.2);
-      max-width: 340px; text-align: left; z-index: 30; opacity: 0; pointer-events: none;
-      display: flex; flex-direction: column; gap: 8px;
-    }
-    .comment-overlay::before {
-      content: ''; position: absolute; bottom: -14px; left: 38px;
-      border-width: 14px 11px 0 11px; border-style: solid;
-      border-color: rgba(255, 255, 255, 0.96) transparent; display: block; width: 0;
-    }
-    .comment-overlay::after {
-      content: ''; position: absolute; bottom: -18px; left: 37px;
-      border-width: 16px 12px 0 12px; border-style: solid;
-      border-color: rgba(212, 175, 55, 0.6) transparent; display: block; width: 0; z-index: -1;
-    }
-    .comment-heart {
-      position: absolute; bottom: 16px; right: 22px; font-size: 1.3rem; color: var(--primary-gold);
-      animation: heartPulse 1.8s ease-in-out infinite;
-    }
-    @keyframes heartPulse {
-      0%, 100% { transform: scale(1); opacity: 0.85; }
-      50% { transform: scale(1.2); opacity: 1; text-shadow: 0 0 12px rgba(212, 175, 55, 0.7); }
-    }
-    .comment-overlay.animate-stream-comment {
-      animation: weddingCommentAscent 10s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-    @keyframes weddingCommentAscent {
-      0% { opacity: 0; transform: translateX(-50%) translateY(40px) scale(0.92); }
-      12% { opacity: 1; transform: translateX(-50%) translateY(-30px) scale(1); }
-      80% { opacity: 1; transform: translateX(-50%) translateY(-420px) scale(1); }
-      100% { opacity: 0; transform: translateX(-50%) translateY(-520px) scale(0.95); }
-    }
-    .comment-author {
-      font-family: var(--font-en); font-size: 1.05rem; letter-spacing: 0.2em;
-      color: #9a7b38; text-transform: uppercase; font-weight: 600;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .comment-author::before { content: '✨'; font-size: 0.85rem; }
-    .comment-text {
-      font-size: 1.2rem; letter-spacing: 0.05em; line-height: 1.6;
-      color: #2c2a29; font-weight: 400; padding-right: 25px;
-    }
-
-    .signage-footer {
-      position: absolute; bottom: 25px; left: 40px; z-index: 10;
-      color: rgba(255,255,255,0.8); font-family: var(--font-en);
-      letter-spacing: 0.2em; font-size: 1.1rem; text-shadow: 0 2px 8px rgba(0,0,0,0.8);
+    .meta-info {
+      position: absolute;
+      bottom: 30px;
+      left: 30px;
+      color: #fff;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 15px 25px;
+      border-radius: 8px;
+      font-size: 1.5rem;
+      z-index: 10;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
     }
   </style>
 </head>
 <body>
 
-  <!-- 🚪 起動画面 -->
-  <div id="loadingScreen">
-    <div class="splash-subtitle">REAL-TIME PHOTO & MESSAGE SYNC</div>
-    <div class="splash-title" id="waveTitle"></div>
-    <div class="splash-date">October 25, 2026</div>
-
-    <div class="loading-indicator">
-      <div class="spinner"></div>
-      <span id="loadingText">システム接続中...</span>
-    </div>
-  </div>
-
-  <div class="stage-container" id="slideContainer">
-    <div class="bg-blur" id="bg-blur-1"></div>
-    <div class="bg-blur" id="bg-blur-2"></div>
-    <img id="slide-img-1" class="slide-image" alt="Slide 1">
-    <img id="slide-img-2" class="slide-image" alt="Slide 2">
-  </div>
-
-  <div class="signage-footer">
-    <span>L'Éternel Moment — Share the Moments</span>
+  <div class="slide-container" id="slide-container">
+    <div class="meta-info" id="meta-info">写真を読み込み中...</div>
   </div>
 
   <script>
-    // =====================================================================
-    // ⚙️ 【管理者向け設定エリア】
-    // =====================================================================
-    const CONFIG = {
-      // 写真リストを取得するGAS (Google Apps Script) のWebアプリURL
-      GAS_SYNC_API_URL: "https://script.google.com/macros/s/AKfycbx7KfZpUfWDkrEocp8ikhRQHRt-I7WE6MCT5yNx9V5vNbqDfrI2kJTJrGyQLWXVolqj/exec",
-
-      // スライドが切り替わる間隔（5秒 = 5000ms）※絶対に一定に保たれます
-      SLIDE_INTERVAL: 5000,
-
-      // 裏で新着画像を確認しに行く間隔（5秒 = 5000ms）
-      POLL_INTERVAL: 5000
-    };
-    // =====================================================================
-
-    // 状態管理変数
-    let images = [];
-    let pendingImages = []; // 🌟 新着画像を安全にストックする待機キュー
+    // 🌟 ご自身のGASのウェブアプリURLに書き換えてください
+    const GAS_WEB_APP_URL = "AKfycbx7KfZpUfWDkrEocp8ikhRQHRt-I7WE6MCT5yNx9V5vNbqDfrI2kJTJrGyQLWXVolqj";
+    
+    let imageList = [];
     let currentIndex = 0;
-    let useFirstImage = true;
-    let slideTimer = null;
-    let pollTimer = null;
-    let isFirstLoad = true;
+    let knownImageIds = new Set();
 
-    // 🌟 同じメッセージが何度も表示されないようにするための管理キー
-    const SHOWN_MESSAGES_KEY = "wedding_shown_messages_v1";
-    const memoryShownMessages = new Set();
-
-    function isMessageAlreadyShown(author, message) {
-      const key = `${author}_${message}`;
-      if (memoryShownMessages.has(key)) return true;
+    // 1. 初回データ取得とスライド開始
+    async function fetchImagesInitial() {
       try {
-        const shown = JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
-        if (shown.includes(key)) {
-          memoryShownMessages.add(key);
-          return true;
+        const res = await fetch(GAS_WEB_APP_URL);
+        const data = await res.json();
+        if (data.status === 'success' && data.images) {
+          imageList = data.images;
+          imageList.forEach(img => knownImageIds.add(img.id));
+          
+          if (imageList.length > 0) {
+            startSlideshow();
+          } else {
+            document.getElementById('meta-info').innerText = "写真の投稿をお待ちください...";
+          }
         }
-      } catch (e) {}
-      return false;
-    }
-
-    function markMessageAsShown(author, message) {
-      const key = `${author}_${message}`;
-      memoryShownMessages.add(key);
-      try {
-        const shown = JSON.parse(localStorage.getItem(SHOWN_MESSAGES_KEY) || '[]');
-        if (!shown.includes(key)) {
-          shown.push(key);
-          if (shown.length > 100) shown.shift();
-          localStorage.setItem(SHOWN_MESSAGES_KEY, JSON.stringify(shown));
-        }
-      } catch (e) {}
-    }
-
-    window.addEventListener('DOMContentLoaded', async () => {
-      // タイトル文字のアニメーション生成
-      initWaveTitle("L'Éternel Moment");
-
-      // 初回データ取得 ＆ 描画・スプラッシュ終了
-      await fetchImagesAndRefresh(true);
-
-      // 🕒 タイマー1：スライド専用（常に正確な一定間隔で画像が切り替わります）
-      slideTimer = setInterval(() => {
-        nextSlide();
-      }, CONFIG.SLIDE_INTERVAL);
-
-      // 🕒 タイマー2：新着確認専用（裏でこっそりGASに問い合わせ、新着を安全に蓄積します）
-      pollTimer = setInterval(() => {
-        checkForNewImages();
-      }, CONFIG.POLL_INTERVAL);
-    });
-
-    // タイトル文字のバラシ＆アニメーション用Span生成
-    function initWaveTitle(titleText) {
-      const titleContainer = document.getElementById('waveTitle');
-      titleContainer.innerHTML = '';
-      for (let i = 0; i < titleText.length; i++) {
-        const span = document.createElement('span');
-        span.style.setProperty('--i', i);
-        span.textContent = titleText[i] === ' ' ? '\u00A0' : titleText[i];
-        titleContainer.appendChild(span);
+      } catch (err) {
+        console.error("初期読み込みエラー:", err);
       }
     }
 
-    // 初回起動時の画像リスト整理とシャッフル
-    function organizeImages(rawImages) {
-      const batchMap = {};
-      rawImages.forEach(img => {
-        const bId = img.batchId || "default";
-        if (!batchMap[bId]) batchMap[bId] = [];
-        batchMap[bId].push(img);
-      });
-
-      Object.keys(batchMap).forEach(bId => {
-        batchMap[bId].sort((a, b) => (a.createdTime || 0) - (b.createdTime || 0));
-      });
-
-      let batchIds = Object.keys(batchMap);
-      batchIds.sort((a, b) => {
-        const maxTimeA = Math.max(...batchMap[a].map(img => img.createdTime || 0));
-        const maxTimeB = Math.max(...batchMap[b].map(img => img.createdTime || 0));
-        return maxTimeB - maxTimeA;
-      });
-
-      let allBatches = batchIds.map(id => batchMap[id]);
-      for (let i = allBatches.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [allBatches[i], allBatches[j]] = [allBatches[j], allBatches[i]];
-      }
-      return allBatches.flat();
-    }
-
-    // 初回データ取得用
-    async function fetchImagesAndRefresh(isInitial = false) {
+    // 2. 裏側で新着画像を定期チェック（ページリロードなし）
+    async function checkNewImagesBackground() {
       try {
-        const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
-          method: "GET",
-          cache: "no-store",
-          redirect: "follow"
-        });
-        const data = await response.json();
-        
-        if (data.status === 'success' && data.images.length > 0) {
-          images = organizeImages(data.images);
-          if (isInitial) {
-            currentIndex = 0;
-            showImage(currentIndex);
-
-            if (isFirstLoad) {
-              isFirstLoad = false;
-              setTimeout(() => {
-                const loadingScreen = document.getElementById('loadingScreen');
-                loadingScreen.classList.add('fade-out');
-                setTimeout(() => {
-                  loadingScreen.style.display = 'none';
-                }, 1800);
-              }, 3500);
+        const res = await fetch(GAS_WEB_APP_URL);
+        const data = await res.json();
+        if (data.status === 'success' && data.images) {
+          let hasNew = false;
+          data.images.forEach(img => {
+            if (!knownImageIds.has(img.id)) {
+              knownImageIds.add(img.id);
+              imageList.push(img); // 既存の再生リストに新着を追加！
+              hasNew = true;
             }
+          });
+          if (hasNew) {
+            console.log("✨ 新着画像を裏側でスライドに追加しました！");
           }
         }
-      } catch (e) {
-        console.error('初回画像取得エラー:', e);
+      } catch (err) {
+        console.error("バックグラウンド更新エラー:", err);
       }
     }
 
-    // 🌟 裏で新着画像を確認し、安全な待機キュー（pendingImages）に時系列順で溜め込む関数
-    async function checkForNewImages() {
-      try {
-        const response = await fetch(CONFIG.GAS_SYNC_API_URL, {
-          method: "GET",
-          cache: "no-store",
-          redirect: "follow"
-        });
-        const data = await response.json();
-        
-        if (data.status === 'success' && data.images.length > 0) {
-          // 既存のメイン画像リストおよびすでに待機中のリストに含まれないものを抽出
-          const knownIds = new Set([...images.map(img => img.id), ...pendingImages.map(img => img.id)]);
-          let newImages = data.images.filter(img => !knownIds.has(img.id));
+    // 3. スライドショーの制御
+    function startSlideshow() {
+      showNextSlide();
 
-          if (newImages.length > 0) {
-            // 古い順（時系列順）にきれいに並び替え
-            newImages.sort((a, b) => (a.createdTime || 0) - (b.createdTime || 0));
-            console.log(`✨ 新しい写真を ${newImages.length} 枚検知しました。待機キューに追加します`);
-            // 待機キューの末尾に追加
-            pendingImages.push(...newImages);
-          }
+      // 5秒ごとに画像を切り替え
+      setInterval(() => {
+        if (imageList.length > 0) {
+          showNextSlide();
         }
-      } catch (e) {
-        console.error('新着確認エラー:', e);
-      }
+      }, 5000);
+
+      // 15秒ごとに裏側で新着チェック（リロードなし）
+      setInterval(checkNewImagesBackground, 15000);
     }
 
-    // 画像とメッセージの表示処理
-    function showImage(index) {
-      if (images.length === 0) return;
-      const currentItem = images[index];
-      const imageUrl = currentItem.url;
-      const message = currentItem.message;
-      const author = currentItem.author;
+    // 4. 次の画像を表示する処理
+    function showNextSlide() {
+      const container = document.getElementById('slide-container');
+      const metaInfo = document.getElementById('meta-info');
 
-      const blurEl1 = document.getElementById('bg-blur-1');
-      const blurEl2 = document.getElementById('bg-blur-2');
-      const imgEl1 = document.getElementById('slide-img-1');
-      const imgEl2 = document.getElementById('slide-img-2');
+      if (imageList.length === 0) return;
 
-      if (useFirstImage) {
-        blurEl1.style.backgroundImage = `url('${imageUrl}')`;
-        blurEl1.classList.add('active');
-        blurEl2.classList.remove('active');
+      currentIndex = (currentIndex >= imageList.length) ? 0 : currentIndex;
+      const currentImgData = imageList[currentIndex];
 
-        imgEl1.src = imageUrl;
-        imgEl1.classList.add('active');
-        imgEl2.classList.remove('active');
-      } else {
-        blurEl2.style.backgroundImage = `url('${imageUrl}')`;
-        blurEl2.classList.add('active');
-        blurEl1.classList.remove('active');
+      const imgElem = document.createElement('img');
+      imgElem.src = currentImgData.url;
+      imgElem.className = 'slide-image';
+      container.appendChild(imgElem);
 
-        imgEl2.src = imageUrl;
-        imgEl2.classList.add('active');
-        imgEl1.classList.remove('active');
+      // 投稿者名とメッセージの表示
+      let infoText = "";
+      if (currentImgData.author) {
+        infoText += `From: ${currentImgData.author}`;
       }
-      useFirstImage = !useFirstImage;
-
-      // メッセージの吹き出し表示判定（同じメッセージは1回きり）
-      const hasMessage = message && message.trim() !== "";
-      const isFirstTimeForMessage = hasMessage && !isMessageAlreadyShown(author, message);
-
-      if (isFirstTimeForMessage) {
-        markMessageAsShown(author, message);
-        triggerStreamComment(author, message);
+      if (currentImgData.message) {
+        infoText += ` / ${currentImgData.message}`;
       }
-    }
+      metaInfo.innerText = infoText;
+      metaInfo.style.display = infoText ? 'block' : 'none';
 
-    // 吹き出しアニメーションの実行
-    function triggerStreamComment(author, message) {
-      const commentEl = document.createElement('div');
-      commentEl.className = 'comment-overlay';
-      commentEl.innerHTML = `
-        <div class="comment-author">${author ? author : 'Guest'}さん からのメッセージ</div>
-        <div class="comment-text">${message}</div>
-        <div class="comment-heart">♡</div>
-      `;
-      document.body.appendChild(commentEl);
-
-      commentEl.classList.add('animate-stream-comment');
-
+      // フェードイン
       setTimeout(() => {
-        commentEl.remove();
-      }, 10000);
-    }
+        imgElem.classList.add('active');
+      }, 50);
 
-    // 次の画像へスライド（待機キューに新着があれば、インデックスを狂わせず自然に最優先で差し込みます）
-    function nextSlide() {
-      if (images.length === 0) return;
-
-      // 🌟 もし新着の待機画像があれば、現在の再生位置のすぐ次に安全に挿入して消化していく
-      if (pendingImages.length > 0) {
-        const nextNewImg = pendingImages.shift(); // キューから1枚取り出す
-        images.splice(currentIndex + 1, 0, nextNewImg); // 安全に次の位置に挿入
+      // 古い画像を自動削除（メモリ・DOM負荷対策）
+      const images = container.querySelectorAll('img.slide-image');
+      if (images.length > 3) {
+        images[0].remove();
       }
 
-      currentIndex = (currentIndex + 1) % images.length;
-      showImage(currentIndex);
+      currentIndex++;
     }
+
+    // 実行開始
+    fetchImagesInitial();
   </script>
 </body>
 </html>
