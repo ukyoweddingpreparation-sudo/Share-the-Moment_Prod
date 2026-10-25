@@ -301,7 +301,6 @@
     .profile-quote { font-size: 0.75rem; font-weight: 400; color: #f5f2eb; line-height: 1.4; font-style: italic; background: rgba(0, 0, 0, 0.3); padding: 7px 9px; border-radius: 6px; border-left: 2px solid #d4af37; }
     .profile-bg-karin .profile-quote { border-left: none; border-right: 2px solid #d4af37; text-align: right; }
 
-    /* Information（全体共有）画面のスタイル */
     .info-card {
       background: rgba(255, 255, 255, 0.65); border: 1px solid rgba(255, 255, 255, 0.9);
       border-radius: 16px; padding: 12px; margin-bottom: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.04);
@@ -437,7 +436,7 @@
             <img src="https://drive.google.com/thumbnail?id=1YltAsMQaI43mQpEjM6xms6eptHQymKiq&sz=w200" class="chat-avatar-img" alt="Ukyo">
             <div class="chat-content">
               <span class="chat-name">Ukyo</span>
-              <div class="chat-bubble">私たちの写真は勿論、当日の会場の様子なども大歓迎！</div>
+              <div class="chat-bubble">私たちの情報は勿論、当日の会場の様子なども大歓迎！</div>
             </div>
           </div>
           <div class="chat-row chat-right">
@@ -561,7 +560,7 @@
       <button class="btn btn-secondary" style="margin-top: 14px;" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 🌟 全体共有・お知らせ画面 (#info-screen) : 動的生成対応 -->
+    <!-- 🌟 全体共有・お知らせ画面 (#info-screen) -->
     <div id="info-screen">
       <div class="title-area"><span class="en-sub">INFORMATION</span><h2>全体共有・お知らせ</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:14px;">新郎新婦からのシェア写真です✨</p>
@@ -581,7 +580,7 @@
       <button class="btn btn-secondary" onclick="navigate('select')"><span class="material-symbols-rounded">home</span>ホームに戻る</button>
     </div>
 
-    <!-- 💡 使い方のヒント画面 (すべてのQ&Aを表示・完全復元) -->
+    <!-- 💡 使い方のヒント画面 -->
     <div id="howto-screen">
       <div class="title-area"><span class="en-sub">HOW TO USE</span><h2>使い方のヒント</h2></div>
       <p style="text-align:center; font-size:0.8rem; color:var(--text-sub); margin-bottom:18px;">よくあるご質問と使い方をまとめました。</p>
@@ -1132,24 +1131,54 @@
       }
     }
 
-    function submitHelp() {
+    async function submitHelp() {
       const tableNo = document.getElementById('help-table-no').value;
       const name = document.getElementById('help-name').value;
       const content = document.getElementById('help-content').value.trim();
       if (!tableNo || !name || !content) return;
       
-      alert('お問い合わせを受け付けました。');
-      document.getElementById('help-table-no').value = '';
-      document.getElementById('help-table-trigger-text').innerText = 'SELECT TABLE';
-      document.getElementById('help-table-trigger').classList.remove('selected');
-      document.getElementById('help-name').value = '';
-      document.getElementById('help-name-trigger-text').innerText = '先にテーブルを選択してください';
-      document.getElementById('help-name-trigger').classList.remove('selected');
-      document.getElementById('help-name-trigger').style.background = 'rgba(226, 232, 240, 0.6)';
-      document.getElementById('help-name-trigger').style.color = '#94a3b8';
-      document.getElementById('help-content').value = '';
-      checkHelpFormValidity();
-      navigate('select');
+      const submitBtn = document.getElementById('help-submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "送信中...";
+
+      try {
+        const response = await fetch(GAS_WEB_APP_URL, {
+          method: "POST",
+          redirect: "follow",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({
+            type: "inquiry",
+            tableNo: tableNo,
+            userName: name,
+            userMessage: content
+          })
+        });
+
+        const result = await response.json();
+        if (result.success) {
+          alert('お問い合わせを受け付けました。スタッフが確認いたします。');
+          
+          document.getElementById('help-table-no').value = '';
+          document.getElementById('help-table-trigger-text').innerText = 'SELECT TABLE';
+          document.getElementById('help-table-trigger').classList.remove('selected');
+          document.getElementById('help-name').value = '';
+          document.getElementById('help-name-trigger-text').innerText = '先にテーブルを選択してください';
+          document.getElementById('help-name-trigger').classList.remove('selected');
+          document.getElementById('help-name-trigger').style.background = 'rgba(226, 232, 240, 0.6)';
+          document.getElementById('help-name-trigger').style.color = '#94a3b8';
+          document.getElementById('help-content').value = '';
+          checkHelpFormValidity();
+          navigate('select');
+        } else {
+          alert('送信に失敗しました。時間をおいて再度お試しください。');
+        }
+      } catch (err) {
+        console.error(err);
+        alert('通信エラーが発生しました。');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="material-symbols-rounded" style="font-size: 1.1rem;">send</span> 送信する';
+      }
     }
   </script>
 </body>
